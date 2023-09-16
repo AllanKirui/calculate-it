@@ -17,6 +17,7 @@ module.exports = {
         "mango-tango": "#f28e40",
         liver: "#6b321e",
         "sandy-brown": "#f2a05e",
+        "seal-brown": "#492513",
         "pearl-copper": "#7d3c28",
       },
     },
