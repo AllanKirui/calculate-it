@@ -7,4 +7,12 @@
   body {
     @apply font-viga bg-navajo-white text-seal-brown;
   }
+
+  .links-wrapper li {
+    @apply hover:bg-sandy-brown rounded-md duration-300;
+  }
+
+  .links-wrapper li a {
+    @apply inline-block py-1 px-3;
+  }
 }
