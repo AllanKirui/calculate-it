@@ -19,6 +19,8 @@ module.exports = {
         "sandy-brown": "#f2a05e",
         "seal-brown": "#492513",
         "pearl-copper": "#7d3c28",
+        "macaroni-and-cheese": "#fac791",
+        "mellow-apricot": "#f6b377",
       },
     },
   },
