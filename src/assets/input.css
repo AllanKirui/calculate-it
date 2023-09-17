@@ -5,14 +5,10 @@
 
 @layer base {
   body {
-    @apply font-viga bg-navajo-white text-seal-brown;
-  }
-
-  .links-wrapper li {
-    @apply hover:bg-sandy-brown rounded-md duration-300;
+    @apply font-viga bg-navajo-white text-liver;
   }
 
   .links-wrapper li a {
-    @apply inline-block py-1 px-3;
+    @apply py-1 px-3 hover:bg-macaroni-and-cheese rounded-md duration-300;
   }
 }
