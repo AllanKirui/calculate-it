@@ -35,3 +35,13 @@
     @apply bg-mango-tango sm:hover:bg-sandy-brown text-seal-brown;
   }
 }
+
+/* custom styles */
+/* scrollbar styles */
+.horizontally-scrollable::-webkit-scrollbar {
+  height: 6px;
+}
+
+.horizontally-scrollable:hover::-webkit-scrollbar-thumb {
+  background-color: #f2a05e;
+}
