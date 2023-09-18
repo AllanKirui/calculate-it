@@ -11,6 +11,10 @@
   .links-wrapper li a {
     @apply flex flex-col items-center gap-1 py-1 px-3 hover:bg-macaroni-and-cheese rounded-md duration-300;
   }
+
+  .links-wrapper li a.active {
+    @apply bg-macaroni-and-cheese sm:hover:bg-mellow-apricot;
+  }
 }
 
 @layer components {
