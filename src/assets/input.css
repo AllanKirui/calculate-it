@@ -9,7 +9,7 @@
   }
 
   .links-wrapper li a {
-    @apply py-1 px-3 hover:bg-macaroni-and-cheese rounded-md duration-300;
+    @apply flex flex-col items-center gap-1 py-1 px-3 hover:bg-macaroni-and-cheese rounded-md duration-300;
   }
 }
 
