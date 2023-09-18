@@ -12,3 +12,26 @@
     @apply py-1 px-3 hover:bg-macaroni-and-cheese rounded-md duration-300;
   }
 }
+
+@layer components {
+  /* button styles */
+  .btn {
+    @apply py-2.5 w-full rounded-lg shadow-sm duration-200;
+  }
+
+  .btn-numbers {
+    @apply bg-navajo-white sm:hover:bg-macaroni-and-cheese outline outline-sandy-brown outline-2 -outline-offset-2;
+  }
+
+  .btn-operators {
+    @apply bg-mellow-apricot sm:hover:bg-macaroni-and-cheese;
+  }
+
+  .btn-equals {
+    @apply bg-liver sm:hover:bg-seal-brown text-navajo-white;
+  }
+
+  .btn-clear {
+    @apply bg-mango-tango sm:hover:bg-sandy-brown text-seal-brown;
+  }
+}
