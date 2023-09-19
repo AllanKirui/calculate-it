@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import ViewMath from "@/views/ViewMath.vue";
-import ViewAge from "@/views/ViewAge.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,7 +17,7 @@ const router = createRouter({
     {
       path: "/age",
       name: "age",
-      component: ViewAge,
+      component: () => import("../views/ViewAge.vue"),
     },
   ],
 });
