@@ -11,13 +11,13 @@
       <div class="mt-3">
         <ul class="links-wrapper flex gap-4 text-lg">
           <li>
-            <RouterLink to="math" :class="[$route.name === 'math' ? 'active' : '']">
+            <RouterLink to="math">
               <img src="../assets/img/calculator.svg" width="24" height="24" alt="">
               <span class="">Math</span>
             </RouterLink>
           </li>
           <li>
-            <RouterLink to="age" :class="[$route.name === 'age' ? 'active' : '']">
+            <RouterLink to="age">
               <img src="../assets/img/age.svg" width="24" height="24" alt="">
               <span class="">Age</span>
             </RouterLink>
