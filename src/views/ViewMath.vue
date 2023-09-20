@@ -124,4 +124,10 @@ const appendNumber = (number) => {
     mathData.result = integerDisplay
   }
 }
+
+const clear = () => {
+  mathData.operation = ""
+  mathData.result = ""
+  integerPortion.value = ""
+}
 </script>
