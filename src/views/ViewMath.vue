@@ -113,8 +113,8 @@ const appendNumber = (number) => {
   if (decimalNumbers != null) {
     mathData.operation = `${integerDisplay}.${decimalNumbers}`
 
-    // Don't show the decimal part if it's only zero after the point i.e 3.0 just equals 3
-    if (decimalNumbers.length === 1 && decimalNumbers === "0") {
+    // Don't show the decimal part if it's only zeros after the point i.e 3.0 or 3.0000 just equals 3
+    if (decimalNumbers.length > 0 && parseFloat(decimalNumbers) === 0) {
       mathData.result = integerDisplay
     } else if (decimalNumbers.length > 0) {
       mathData.result = `${integerDisplay}.${decimalNumbers}`
