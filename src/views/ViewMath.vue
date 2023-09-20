@@ -15,10 +15,10 @@
     <div class="text-right">
       <div v-if="mathData.operation">
         <!-- Operation -->
-        <h2 class="text-3xl md:text-4xl text-navajo-white">{{ mathData.operation }}</h2>
+        <h2 class="text-3xl md:text-[40px] text-navajo-white">{{ mathData.operation }}</h2>
 
         <!-- Result -->
-        <h3 class="mt-1 text-2xl md:text-3xl">= {{ mathData.result }}</h3>
+        <h3 class="mt-1 text-2xl md:text-[26px]">= {{ mathData.result }}</h3>
       </div>
       <div v-else>
         <!-- Default Result -->
