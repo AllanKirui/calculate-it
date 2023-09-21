@@ -11,18 +11,18 @@
       <span class="ml-5">6 x 7 = 42</span>
     </div>
 
-    <!-- Current Operation -->
+    <!-- Current Expression -->
     <div class="text-right">
-      <div v-if="mathData.currentOperand">
+      <div v-if="mathData.expression">
         <!-- Current Operand -->
-        <h2 class="text-3xl md:text-[40px] text-navajo-white">{{ mathData.currentOperand }}</h2>
+        <h2 class="text-3xl md:text-[40px] text-navajo-white">{{ mathData.expression }}</h2>
 
         <!-- Result -->
         <h3 class="mt-1 text-2xl md:text-[26px]">= {{ mathData.result }}</h3>
       </div>
       <div v-else>
         <!-- Default Result -->
-        <h2 class="text-3xl md:text-4xl text-navajo-white">{{ mathData.defaultResult }}</h2>
+        <h2 class="text-3xl md:text-[40px] text-navajo-white">{{ mathData.defaultResult }}</h2>
       </div>
     </div>
   </div>
@@ -33,25 +33,25 @@
     <button @click="clear" class="btn btn-clear">AC</button>
     <button class="btn btn-operators">C</button>
     <button class="btn btn-operators">%</button>
-    <button class="btn btn-operators">÷</button>
+    <button @click="setOperation('÷')" class="btn btn-operators">÷</button>
 
     <!-- Row 2 Buttons -->
     <button @click="appendNumber(7)" class="btn btn-numbers">7</button>
     <button @click="appendNumber(8)" class="btn btn-numbers">8</button>
     <button @click="appendNumber(9)" class="btn btn-numbers">9</button>
-    <button class="btn btn-operators">×</button>
+    <button @click="setOperation('×')" class="btn btn-operators">×</button>
 
     <!-- Row 3 Buttons -->
     <button @click="appendNumber(4)" class="btn btn-numbers">4</button>
     <button @click="appendNumber(5)" class="btn btn-numbers">5</button>
     <button @click="appendNumber(6)" class="btn btn-numbers">6</button>
-    <button class="btn btn-operators">-</button>
+    <button @click="setOperation('-')" class="btn btn-operators">-</button>
 
     <!-- Row 4 Buttons -->
     <button @click="appendNumber(1)" class="btn btn-numbers">1</button>
     <button @click="appendNumber(2)" class="btn btn-numbers">2</button>
     <button @click="appendNumber(3)" class="btn btn-numbers">3</button>
-    <button class="btn btn-operators">+</button>
+    <button @click="setOperation('+')" class="btn btn-operators">+</button>
 
     <!-- Row 5 Buttons -->
     <button @click="appendNumber(0)" class="col-start-2 btn btn-numbers">0</button>
@@ -68,9 +68,10 @@ const integerPortion = ref("")
 
 // reactive data object for related math data
 const mathData = reactive({
-  operation: null,
+  expression: null,
   currentOperand: "",
   previousOperand: "",
+  operation: "",
   result: "",
   defaultResult: 0,
   history: null,
@@ -80,8 +81,11 @@ const mathData = reactive({
   Methods
 */
 const appendNumber = (number) => {
-  // return if zero is clicked and there is no operand
-  if (number === 0 && !mathData.currentOperand) return
+  // reset the integerPortion ref
+  if (mathData.previousOperand !== "" && mathData.currentOperand === "") integerPortion.value = ""
+
+  // return if zero is clicked and there is no previous operand or current operand
+  if (number === 0 && mathData.currentOperand === "" && mathData.previousOperand === "") return
 
   // if the number already contains a decimal point return
   if (number === "." && mathData.currentOperand.includes(".")) return
@@ -125,11 +129,86 @@ const appendNumber = (number) => {
     mathData.currentOperand = integerDisplay
     mathData.result = integerDisplay
   }
+
+  updateDisplay()
+}
+
+const setOperation = (operation) => {
+  mathData.previousOperand = ""
+
+  if (mathData.currentOperand === "") return;
+
+  if (mathData.previousOperand !== "") {
+    compute()
+  }
+
+  mathData.operation = operation
+  mathData.previousOperand = mathData.currentOperand
+  mathData.currentOperand = ""
+
+  updateDisplay()
+}
+
+const updateDisplay = () => {
+  if (mathData.previousOperand && mathData.operation && mathData.currentOperand) {
+    mathData.expression = `${mathData.previousOperand}${mathData.operation}${mathData.currentOperand}`
+  } else if (mathData.previousOperand && mathData.operation) {
+    mathData.expression = `${mathData.previousOperand}${mathData.operation}`
+  } else if (mathData.currentOperand) {
+    mathData.expression = mathData.currentOperand
+  }
+
+  compute()
+}
+
+const compute = () => {
+  let result
+  const prev = removeCommas(mathData.previousOperand)
+  const current = removeCommas(mathData.currentOperand)
+
+  if (isNaN(prev) || isNaN(current)) return
+
+  switch (mathData.operation) {
+    case "+":
+      result = prev + current
+      break;
+    case "-":
+      result = prev - current
+      break;
+    case "×":
+      result = prev * current
+      break;
+    case "÷":
+      result = prev / current
+      break;
+    default:
+      return;
+  }
+
+  // make the result comma separated with a max of 7 fraction digits
+  mathData.result = result.toLocaleString("en", {
+    maximumFractionDigits: 7,
+  })
+
+  mathData.currentOperand = mathData.result
 }
 
 const clear = () => {
   mathData.currentOperand = ""
   mathData.result = ""
   integerPortion.value = ""
+}
+
+const removeCommas = (stringNumber) => {
+  if (!stringNumber.includes(',')) {
+    return parseFloat(stringNumber)
+  }
+
+  let num = ""
+  let stringArr = stringNumber.split(",")
+
+  stringArr.forEach((string) => num += string)
+
+  return parseFloat(num)
 }
 </script>
