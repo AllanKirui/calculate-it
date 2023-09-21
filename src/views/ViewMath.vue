@@ -13,9 +13,9 @@
 
     <!-- Current Operation -->
     <div class="text-right">
-      <div v-if="mathData.operation">
-        <!-- Operation -->
-        <h2 class="text-3xl md:text-[40px] text-navajo-white">{{ mathData.operation }}</h2>
+      <div v-if="mathData.currentOperand">
+        <!-- Current Operand -->
+        <h2 class="text-3xl md:text-[40px] text-navajo-white">{{ mathData.currentOperand }}</h2>
 
         <!-- Result -->
         <h3 class="mt-1 text-2xl md:text-[26px]">= {{ mathData.result }}</h3>
@@ -68,7 +68,9 @@ const integerPortion = ref("")
 
 // reactive data object for related math data
 const mathData = reactive({
-  operation: "",
+  operation: null,
+  currentOperand: "",
+  previousOperand: "",
   result: "",
   defaultResult: 0,
   history: null,
@@ -78,11 +80,11 @@ const mathData = reactive({
   Methods
 */
 const appendNumber = (number) => {
-  // return if zero is clicked and there is no operation
-  if (number === 0 && !mathData.operation) return
+  // return if zero is clicked and there is no operand
+  if (number === 0 && !mathData.currentOperand) return
 
   // if the number already contains a decimal point return
-  if (number === "." && mathData.operation.includes(".")) return
+  if (number === "." && mathData.currentOperand.includes(".")) return
 
   // convert the number to a string 
   let stringNumber = number.toString()
@@ -103,7 +105,7 @@ const appendNumber = (number) => {
   }
 
   // if the decimal point is the first button to be clicked add a zero before it
-  if (number == "." && isNaN(integerNumbers)) {
+  if (number === "." && isNaN(integerNumbers)) {
     integerPortion.value = "0."
     integerDisplay = "0"
     mathData.result = integerDisplay
@@ -111,7 +113,7 @@ const appendNumber = (number) => {
 
   // handle displaying any decimal digits
   if (decimalNumbers != null) {
-    mathData.operation = `${integerDisplay}.${decimalNumbers}`
+    mathData.currentOperand = `${integerDisplay}.${decimalNumbers}`
 
     // Don't show the decimal part if it's only zeros after the point i.e 3.0 or 3.0000 just equals 3
     if (decimalNumbers.length > 0 && parseFloat(decimalNumbers) === 0) {
@@ -120,13 +122,13 @@ const appendNumber = (number) => {
       mathData.result = `${integerDisplay}.${decimalNumbers}`
     }
   } else {
-    mathData.operation = integerDisplay
+    mathData.currentOperand = integerDisplay
     mathData.result = integerDisplay
   }
 }
 
 const clear = () => {
-  mathData.operation = ""
+  mathData.currentOperand = ""
   mathData.result = ""
   integerPortion.value = ""
 }
