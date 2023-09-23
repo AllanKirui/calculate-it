@@ -84,8 +84,8 @@ const appendNumber = (number) => {
   // reset the integerPortion ref
   if (mathData.previousOperand !== "" && mathData.currentOperand === "") integerPortion.value = ""
 
-  // return if zero is clicked and there is no previous operand or current operand
-  if (number === 0 && mathData.currentOperand === "" && mathData.previousOperand === "") return
+  // return if zero is clicked and there are no previous and current operands
+  if (number === 0 && !mathData.currentOperand && !mathData.previousOperand) return
 
   // if the number already contains a decimal point return
   if (number === "." && mathData.currentOperand.includes(".")) return
@@ -134,13 +134,16 @@ const appendNumber = (number) => {
 }
 
 const setOperation = (operation) => {
+  // reset values
   mathData.previousOperand = ""
+  integerPortion.value = ""
 
-  if (mathData.currentOperand === "") return;
+  // if an operator is clicked and there is no previous operand or current operand
+  if (mathData.currentOperand === "" && mathData.previousOperand === "") mathData.currentOperand = "0"
 
-  if (mathData.previousOperand !== "") {
-    compute()
-  }
+  if (mathData.currentOperand === "") return
+
+  if (mathData.previousOperand !== "") compute()
 
   mathData.operation = operation
   mathData.previousOperand = mathData.currentOperand
@@ -163,8 +166,12 @@ const updateDisplay = () => {
 
 const compute = () => {
   let result
-  const prev = removeCommas(mathData.previousOperand)
-  const current = removeCommas(mathData.currentOperand)
+  let prev = removeCommas(mathData.previousOperand)
+  let current = removeCommas(mathData.currentOperand)
+
+  if (prev === 0 && isNaN(current)) {
+    current = 0
+  }
 
   if (isNaN(prev) || isNaN(current)) return
 
@@ -180,6 +187,7 @@ const compute = () => {
       break;
     case "÷":
       result = prev / current
+      if (isNaN(result)) result = 0
       break;
     default:
       return;
