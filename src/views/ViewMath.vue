@@ -134,6 +134,15 @@ const appendNumber = (number) => {
 }
 
 const setOperation = (operation) => {
+  // allow the user to change an operation once it has been set e.g. if the
+  // expression is something like 5x, pressing any other operator (+) will
+  // only update the operator resulting in 5+
+  if (mathData.previousOperand && mathData.currentOperand === "") {
+    mathData.operation = operation
+    updateDisplay()
+    return
+  }
+
   // reset values
   mathData.previousOperand = ""
   integerPortion.value = ""
