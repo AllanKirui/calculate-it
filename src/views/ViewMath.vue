@@ -30,8 +30,9 @@
   <!-- The Buttons -->
   <div class="grid grid-cols-4 grid-rows-4 gap-2 text-2xl mt-3">
     <!-- Row 1 Buttons -->
-    <button @click="clear" class="btn btn-clear">AC</button>
-    <button class="btn btn-operators">C</button>
+    <button v-if="!mathData.expression" @click="clear('all')" class="btn btn-clear">AC</button>
+    <button v-else @click="clear" class="btn btn-operators">C</button>
+    <button class="btn btn-operators">&lt;</button>
     <button class="btn btn-operators">%</button>
     <button @click="setOperation('÷')" class="btn btn-operators">÷</button>
 
@@ -210,10 +211,15 @@ const compute = () => {
   mathData.currentOperand = mathData.result
 }
 
-const clear = () => {
+const clear = (type) => {
+  if (type === "all") mathData.history = null
+
+  integerPortion.value = ""
   mathData.currentOperand = ""
   mathData.result = ""
-  integerPortion.value = ""
+  mathData.previousOperand = ""
+  mathData.operation = ""
+  mathData.expression = null
 }
 
 const removeCommas = (stringNumber) => {
