@@ -7,18 +7,23 @@
     <div class="absolute top-4 right-0 w-5 h-8 bg-liver blur-lg z-10"></div>
 
     <!-- Previous Operations -->
-    <div v-if="mathData.history" class="horizontally-scrollable pb-1 text-right whitespace-nowrap overflow-x-auto">
-      <span class="ml-5">6 x 7 = 42</span>
+    <div v-if="mathData.history"
+      class="horizontally-scrollable pb-1 text-right whitespace-nowrap overflow-x-auto transition-all duration-500 ease-in">
+      <span v-for="expression in mathData.history" :key="expression" class="ml-4">{{ expression }}</span>
     </div>
 
     <!-- Current Expression -->
     <div class="text-right">
       <div v-if="mathData.expression">
         <!-- Current Operand -->
-        <h2 class="text-3xl md:text-[40px] text-navajo-white">{{ mathData.expression }}</h2>
+        <h2 class="text-navajo-white duration-200"
+          :class="[mathData.hasEvaluated ? 'text-2xl md:text-[26px]' : 'text-3xl md:text-[40px]']">{{ mathData.expression
+          }}</h2>
 
         <!-- Result -->
-        <h3 class="mt-1 text-2xl md:text-[26px]">= {{ mathData.result }}</h3>
+        <h3 class="mt-1 duration-200"
+          :class="[mathData.hasEvaluated ? 'text-3xl md:text-[40px] text-navajo-white' : 'text-2xl md:text-[26px]']">= {{
+            mathData.result }}</h3>
       </div>
       <div v-else>
         <!-- Default Result -->
@@ -57,7 +62,7 @@
     <!-- Row 5 Buttons -->
     <button @click="appendNumber(0)" class="col-start-2 btn btn-numbers">0</button>
     <button @click="appendNumber('.')" class="btn btn-numbers">.</button>
-    <button class="btn btn-equals">=</button>
+    <button @click="evaluateExpression" class="btn btn-equals">=</button>
   </div>
 </template>
 
@@ -74,6 +79,7 @@ const mathData = reactive({
   previousOperand: "",
   operation: "",
   result: "",
+  hasEvaluated: false,
   defaultResult: 0,
   history: null,
 })
@@ -82,6 +88,13 @@ const mathData = reactive({
   Methods
 */
 const appendNumber = (number) => {
+  // if the expression has been evaluated, store the expression and clear the screen
+  if (mathData.hasEvaluated) {
+    storeExpression()
+    clear()
+  }
+  mathData.hasEvaluated = false
+
   // reset the integerPortion ref
   if (mathData.previousOperand !== "" && mathData.currentOperand === "") integerPortion.value = ""
 
@@ -135,6 +148,10 @@ const appendNumber = (number) => {
 }
 
 const setOperation = (operation) => {
+  // if the expression has been evaluated, store the expression
+  if (mathData.hasEvaluated) storeExpression()
+  mathData.hasEvaluated = false
+
   // allow the user to change an operation once it has been set e.g. if the
   // expression is something like 5x, pressing any other operator (+) will
   // only update the operator resulting in 5+
@@ -209,6 +226,23 @@ const compute = () => {
   })
 
   mathData.currentOperand = mathData.result
+}
+
+const evaluateExpression = () => {
+  mathData.hasEvaluated = true
+}
+
+const storeExpression = () => {
+  let fullExpression = `${mathData.expression} = ${mathData.result}`
+
+  // if the history array has existing elements, add more to it
+  if (mathData.history && mathData.history[0]) {
+    mathData.history.push(fullExpression)
+    return
+  }
+
+  // otherwise create the history array and add the first item
+  mathData.history = new Array(fullExpression)
 }
 
 const clear = (type) => {
