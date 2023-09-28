@@ -36,8 +36,8 @@
   <div class="grid grid-cols-4 grid-rows-4 gap-2 text-2xl mt-3">
     <!-- Row 1 Buttons -->
     <button v-if="!mathData.expression" @click="clear('all')" class="btn btn-clear">AC</button>
-    <button v-else @click="clear" class="btn btn-operators">C</button>
-    <button class="btn btn-operators">&lt;</button>
+    <button v-else @click="clear" class="btn btn-clear">C</button>
+    <button @click="backspace" class="btn btn-operators">&laquo;</button>
     <button class="btn btn-operators">%</button>
     <button @click="setOperation('÷')" class="btn btn-operators">÷</button>
 
@@ -102,14 +102,14 @@ const appendNumber = (number) => {
   if (number === 0 && !mathData.currentOperand && !mathData.previousOperand) return
 
   // if the number already contains a decimal point return
-  if (number === "." && mathData.currentOperand.includes(".")) return
+  if (number === "." && integerPortion.value.includes(".")) return
 
   // convert the number to a string 
   let stringNumber = number.toString()
   integerPortion.value += stringNumber
 
   // get the Integer and Decimal parts of a number e.g 3.142
-  let integerNumbers = parseFloat(integerPortion.value.split(".")[0]) // integer = 3
+  let integerNumbers = removeCommas(integerPortion.value.split(".")[0]) // integer = 3
   let decimalNumbers = integerPortion.value.split(".")[1] // decimal = 142
   let integerDisplay
 
@@ -256,6 +256,67 @@ const clear = (type) => {
   mathData.expression = null
 }
 
+const backspace = () => {
+  if (mathData.hasEvaluated) return
+  if (mathData.expression == null) return
+
+  // remove the last character from the expression shown on the calc display
+  mathData.expression = mathData.expression.slice(0, -1)
+
+  if (mathData.expression === "") {
+    clear()
+    return
+  }
+
+  // if there is an operation, split the expression by it getting the previous and current operands
+  if (mathData.operation !== "" && mathData.expression.includes(mathData.operation)) {
+    let previous = mathData.expression.split(mathData.operation)[0]
+    let current = mathData.expression.split(mathData.operation)[1] ? mathData.expression.split(mathData.operation)[1] : ""
+
+    mathData.previousOperand = previous
+    mathData.currentOperand = current
+    integerPortion.value = mathData.currentOperand
+
+    // remove any comma seperators from the current operand
+    if (mathData.currentOperand.includes(",")) {
+      removeCommasFromCurrentOperand()
+    }
+
+    if (previous && current === "") mathData.result = previous
+
+    updateDisplay()
+    return
+  }
+
+  mathData.currentOperand = mathData.expression
+  mathData.previousOperand = ""
+  mathData.operation = ""
+
+  // If only the current operand is available, update appropriate props
+  if (mathData.currentOperand !== "") {
+    integerPortion.value = mathData.currentOperand
+    mathData.result = mathData.currentOperand
+
+    // if the currentOperand holds something like 3. the result should show 3 instead of 3.
+    if (mathData.currentOperand.endsWith(".")) {
+      mathData.result = mathData.currentOperand.slice(0, -1)
+    }
+
+    // remove any comma seperators from the current operand
+    if (mathData.currentOperand.includes(",")) {
+      removeCommasFromCurrentOperand()
+
+      mathData.result = mathData.currentOperand
+
+      if (mathData.currentOperand.endsWith(".")) {
+        mathData.result = mathData.currentOperand.slice(0, -1)
+      }
+    }
+  }
+
+  updateDisplay()
+}
+
 const removeCommas = (stringNumber) => {
   if (!stringNumber.includes(',')) {
     return parseFloat(stringNumber)
@@ -267,5 +328,25 @@ const removeCommas = (stringNumber) => {
   stringArr.forEach((string) => num += string)
 
   return parseFloat(num)
+}
+
+const removeCommasFromCurrentOperand = () => {
+  let numWithoutCommas = removeCommas(mathData.currentOperand).toString()
+  let numWithCommas = ""
+
+  if (numWithoutCommas.includes(".")) {
+    numWithCommas = parseFloat(numWithoutCommas).toLocaleString("en", {
+      maximumFractionDigits: 7,
+    })
+  } else {
+    numWithCommas = parseFloat(numWithoutCommas).toLocaleString("en", {
+      maximumFractionDigits: 0,
+    })
+  }
+
+  if (mathData.expression.endsWith(".") && !numWithCommas.includes(".")) numWithCommas += "."
+
+  mathData.currentOperand = numWithCommas
+  integerPortion.value = mathData.currentOperand
 }
 </script>
