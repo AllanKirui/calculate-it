@@ -233,6 +233,8 @@ const evaluateExpression = () => {
 }
 
 const storeExpression = () => {
+  if (!mathData.expression) return
+
   let fullExpression = `${mathData.expression} = ${mathData.result}`
 
   // if the history array has existing elements, add more to it
