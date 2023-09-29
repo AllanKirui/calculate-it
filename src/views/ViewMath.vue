@@ -259,6 +259,10 @@ const clear = (type) => {
 const backspace = () => {
   if (mathData.hasEvaluated) return
   if (mathData.expression == null) return
+  if (mathData.expression === "0.") {
+    clear()
+    return
+  }
 
   // remove the last character from the expression shown on the calc display
   mathData.expression = mathData.expression.slice(0, -1)
