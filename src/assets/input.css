@@ -20,7 +20,7 @@
 @layer components {
   /* button styles */
   .btn {
-    @apply py-2.5 w-full rounded-lg shadow-sm duration-200;
+    @apply py-2.5 w-full rounded-xl md:rounded-lg shadow-sm duration-200;
   }
 
   .btn-numbers {
@@ -42,10 +42,39 @@
 
 /* custom styles */
 /* scrollbar styles */
-.horizontally-scrollable::-webkit-scrollbar {
-  height: 6px;
+/* .vertically-scrollable::-webkit-scrollbar {
+  width: 4px;
+} */
+
+.scrollable::-webkit-scrollbar {
+  width: 4px;
+  height: 0;
 }
 
-.horizontally-scrollable:hover::-webkit-scrollbar-thumb {
+.scrollable:hover::-webkit-scrollbar-thumb {
   background-color: #f2a05e;
+}
+
+.scrollable.links-wrapper::-webkit-scrollbar {
+  height: 4px;
+}
+
+.scrollable.links-wrapper:hover::-webkit-scrollbar-thumb {
+  background-color: #fac791;
+}
+
+@media (min-width: 768px) {
+  .scrollable::-webkit-scrollbar {
+    width: 0;
+    height: 5px;
+  }
+}
+
+/* calculator screen & button container heights */
+.display-container {
+  min-height: calc(45vh - 16px);
+}
+
+.buttons-container {
+  min-height: calc(55vh - 28px);
 }
