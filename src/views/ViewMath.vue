@@ -1,15 +1,16 @@
 <template>
   <!-- The Output -->
   <div
-    class="overflow-x-hidden relative flex flex-col justify-end gap-2 min-h-[150px] p-5 bg-liver text-sandy-brown rounded-xl">
+    class="display-container md:min-h-[150px] overflow-x-hidden relative flex flex-col justify-end gap-2 p-5 bg-liver text-sandy-brown rounded-xl">
     <!-- Blurred Left & Right Edges For Previous Operations -->
     <div class="absolute top-4 left-4 w-5 h-8 bg-liver blur-md z-10"></div>
     <div class="absolute top-4 right-0 w-5 h-8 bg-liver blur-lg z-10"></div>
 
     <!-- Previous Operations -->
     <div v-if="mathData.history"
-      class="horizontally-scrollable pb-1 text-right whitespace-nowrap overflow-x-auto transition-all duration-500 ease-in">
-      <span v-for="expression in mathData.history" :key="expression" class="ml-4">{{ expression }}</span>
+      class="scrollable flex flex-col md:block pr-1 md:pr-0 md:pb-1 text-right whitespace-nowrap max-h-32 overflow-y-auto md:overflow-x-auto">
+      <span v-for="expression in mathData.history" :key="expression" class="mb-2 md:mb-0 md:ml-4 text-lg">{{ expression
+      }}</span>
     </div>
 
     <!-- Current Expression -->
@@ -17,23 +18,23 @@
       <div v-if="mathData.expression">
         <!-- Current Operand -->
         <h2 class="text-navajo-white duration-200"
-          :class="[mathData.hasEvaluated ? 'text-2xl md:text-[26px]' : 'text-3xl md:text-[40px]']">{{ mathData.expression
+          :class="[mathData.hasEvaluated ? 'text-2xl md:text-[26px]' : 'text-4xl md:text-[40px]']">{{ mathData.expression
           }}</h2>
 
         <!-- Result -->
-        <h3 class="mt-1 duration-200"
-          :class="[mathData.hasEvaluated ? 'text-3xl md:text-[40px] text-navajo-white' : 'text-2xl md:text-[26px]']">= {{
+        <h3 class="md:mt-1 duration-200"
+          :class="[mathData.hasEvaluated ? 'text-4xl md:text-[40px] text-navajo-white' : 'text-2xl md:text-[26px]']">= {{
             mathData.result }}</h3>
       </div>
       <div v-else>
         <!-- Default Result -->
-        <h2 class="text-3xl md:text-[40px] text-navajo-white">{{ mathData.defaultResult }}</h2>
+        <h2 class="text-4xl md:text-[40px] text-navajo-white">{{ mathData.defaultResult }}</h2>
       </div>
     </div>
   </div>
 
   <!-- The Buttons -->
-  <div class="grid grid-cols-4 grid-rows-4 gap-2 text-2xl mt-3">
+  <div class="buttons-container md:min-h-full grid grid-cols-4 grid-rows-5 gap-2 text-2xl mt-3">
     <!-- Row 1 Buttons -->
     <button v-if="!mathData.expression" @click="clear('all')" class="btn btn-clear">AC</button>
     <button v-else @click="clear" class="btn btn-clear">C</button>
