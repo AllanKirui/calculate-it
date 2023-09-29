@@ -4,12 +4,16 @@
     <nav class="flex flex-col items-center">
       <!-- Nav Top -->
       <div class="flex justify-between">
-        <h1 class="text-5xl">Calculate It!</h1>
+        <h1 class="text-4xl md:text-5xl">Calculate It!</h1>
       </div>
 
       <!-- Nav Bottom -->
-      <div class="mt-3">
-        <ul class="links-wrapper flex gap-4 text-lg">
+      <div class="relative mt-3 overflow-x-hidden w-full">
+        <!-- Blurred Left & Right Edges to Hint at Horizontal Scrolling on Mobile Screens -->
+        <div class="md:hidden absolute -top-2 bottom-0 -left-1 w-3 h-full bg-mellow-apricot blur-sm z-10"></div>
+        <div class="md:hidden absolute -top-2 bottom-0 -right-1 w-3 h-full bg-mellow-apricot blur-sm z-10"></div>
+
+        <ul class="links-wrapper scrollable pb-1 px-4 flex gap-4 md:justify-center md:text-lg overflow-x-auto">
           <li>
             <RouterLink to="math">
               <img src="../assets/img/calculator.svg" width="24" height="24" alt="">
