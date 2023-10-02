@@ -78,3 +78,24 @@
 .buttons-container {
   min-height: calc(55vh - 28px);
 }
+
+/* animation styles for expressions added to the history container */
+.expressions-wrapper div {
+  @apply scrollable flex flex-col md:block pr-1 md:pr-0 md:pb-1 text-right whitespace-nowrap max-h-48 md:max-h-full overflow-y-auto md:overflow-x-auto;
+}
+
+.expressions-enter-from {
+  opacity: 0;
+}
+
+.expressions-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.expressions-enter-to {
+  opacity: 1;
+}
+
+.expressions-move {
+  transition: all 0.3s ease;
+}
