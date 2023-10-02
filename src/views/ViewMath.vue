@@ -1,7 +1,7 @@
 <template>
   <!-- The Output -->
   <div
-    class="display-container md:min-h-[150px] overflow-x-hidden relative flex flex-col justify-end gap-2 p-5 bg-liver text-sandy-brown rounded-xl">
+    class="display-container md:min-h-[156px] overflow-x-hidden relative flex flex-col justify-end gap-2 p-5 bg-liver text-sandy-brown rounded-xl">
     <!-- Blurred Left & Right Edges For Previous Operations -->
     <div class="absolute top-4 left-4 w-5 h-8 bg-liver blur-md z-10"></div>
     <div class="absolute top-4 right-0 w-5 h-8 bg-liver blur-lg z-10"></div>
