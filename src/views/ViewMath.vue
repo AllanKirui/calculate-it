@@ -7,10 +7,13 @@
     <div class="absolute top-4 right-0 w-5 h-8 bg-liver blur-lg z-10"></div>
 
     <!-- Previous Operations -->
-    <div v-if="mathData.history"
-      class="scrollable flex flex-col md:block pr-1 md:pr-0 md:pb-1 text-right whitespace-nowrap max-h-32 overflow-y-auto md:overflow-x-auto">
-      <span v-for="expression in mathData.history" :key="expression" class="mb-2 md:mb-0 md:ml-4 text-lg">{{ expression
-      }}</span>
+    <!-- use the transition-group component to animate the expressions being added to the history -->
+    <div class="expressions-wrapper">
+      <transition-group tag="div" name="expressions">
+        <span class="inline-block mb-2 md:mb-0 md:ml-4 text-lg" v-for="expression in mathData.history" :key="expression">
+          {{ expression }}
+        </span>
+      </transition-group>
     </div>
 
     <!-- Current Expression -->
