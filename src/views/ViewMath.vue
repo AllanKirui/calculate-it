@@ -6,6 +6,11 @@
     <div class="absolute top-4 left-4 w-5 h-8 bg-liver blur-md z-10"></div>
     <div class="absolute top-4 right-0 w-5 h-8 bg-liver blur-lg z-10"></div>
 
+    <!-- Background Text -->
+    <div class="absolute top-5 md:top-1/2 md:-translate-y-1/2"><span
+        class="text-pearl-copper text-4xl sm:text-5xl md:text-7xl">{{ $route.name }}</span>
+    </div>
+
     <!-- Previous Operations -->
     <!-- use the transition-group component to animate the expressions being added to the history -->
     <div class="expressions-wrapper" ref="historyRef">
