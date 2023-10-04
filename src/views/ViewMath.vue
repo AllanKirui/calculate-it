@@ -8,7 +8,7 @@
 
     <!-- Previous Operations -->
     <!-- use the transition-group component to animate the expressions being added to the history -->
-    <div class="expressions-wrapper">
+    <div class="expressions-wrapper" ref="historyRef">
       <transition-group tag="div" name="expressions">
         <span class="inline-block mb-2 md:mb-0 md:ml-4 text-lg" v-for="expression in mathData.history" :key="expression">
           {{ expression }}
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
 // integer part of a float i.e 3.142 => 3
 const integerPortion = ref("")
@@ -86,6 +86,25 @@ const mathData = reactive({
   hasEvaluated: false,
   defaultResult: 0,
   history: null,
+})
+
+// convert the template ref into a data ref
+const historyRef = ref(null)
+
+// watch the history array, and scroll newly added elements into view
+watch(() => mathData.history, (newExpression) => {
+  if (newExpression) {
+
+    // watch the length of the history array
+    watch(() => mathData.history.length, (newLength) => {
+      if (newLength) {
+        let lastPosition = newLength - 1
+
+        // scroll the last <span> element into view
+        historyRef.value.children[0].children[lastPosition].scrollIntoView()
+      }
+    })
+  }
 })
 
 /* 
