@@ -44,10 +44,9 @@
   <!-- The Buttons -->
   <div class="buttons-container md:min-h-full grid grid-cols-4 grid-rows-5 gap-2 text-2xl mt-3">
     <!-- Row 1 Buttons -->
-    <button v-if="!mathData.expression" @click="clear('all')" class="btn btn-clear">AC</button>
-    <button v-else @click="clear" class="btn btn-clear">C</button>
+    <button @click="clear('all')" class="btn btn-clear">AC</button>
+    <button @click="clear" class="btn btn-operators">C</button>
     <button @click="backspace" class="btn btn-operators">&laquo;</button>
-    <button class="btn btn-operators">%</button>
     <button @click="setOperation('÷')" class="btn btn-operators">÷</button>
 
     <!-- Row 2 Buttons -->
@@ -276,14 +275,14 @@ const storeExpression = () => {
 }
 
 const clear = (type) => {
-  if (type === "all") mathData.history = null
-
   integerPortion.value = ""
   mathData.currentOperand = ""
   mathData.result = ""
   mathData.previousOperand = ""
   mathData.operation = ""
   mathData.expression = null
+
+  if (type === "all") mathData.history = null
 }
 
 const backspace = () => {
