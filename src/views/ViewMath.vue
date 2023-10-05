@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch } from 'vue';
+import { onBeforeMount, reactive, ref, watch } from 'vue';
 
 // integer part of a float i.e 3.142 => 3
 const integerPortion = ref("")
@@ -109,6 +109,12 @@ watch(() => mathData.history, (newExpression) => {
       }
     })
   }
+})
+
+// retrieve any locally stored math data
+onBeforeMount(() => {
+  if (!localStorage) return
+  getStoredMathData()
 })
 
 /* 
@@ -216,6 +222,7 @@ const updateDisplay = () => {
   }
 
   compute()
+  storeMathDataLocally()
 }
 
 const compute = () => {
@@ -257,6 +264,7 @@ const compute = () => {
 
 const evaluateExpression = () => {
   mathData.hasEvaluated = true
+  storeMathDataLocally()
 }
 
 const storeExpression = () => {
@@ -274,6 +282,36 @@ const storeExpression = () => {
   mathData.history = new Array(fullExpression)
 }
 
+const storeMathDataLocally = () => {
+  if (!localStorage) return
+
+  localStorage.setItem("mathData", JSON.stringify({
+    integerPortion: integerPortion.value ?? "",
+    expression: mathData.expression ?? null,
+    currentOperand: mathData.currentOperand ?? "",
+    previousOperand: mathData.previousOperand ?? "",
+    operation: mathData.operation ?? "",
+    result: mathData.result ?? "",
+    hasEvaluated: mathData.hasEvaluated ?? false,
+    history: mathData.history ?? null
+  }))
+}
+
+const getStoredMathData = () => {
+  const storedMathData = JSON.parse(localStorage.getItem("mathData"))
+
+  if (storedMathData) {
+    integerPortion.value = storedMathData.integerPortion
+    mathData.expression = storedMathData.expression
+    mathData.currentOperand = storedMathData.currentOperand
+    mathData.previousOperand = storedMathData.previousOperand
+    mathData.operation = storedMathData.operation
+    mathData.result = storedMathData.result
+    mathData.hasEvaluated = storedMathData.hasEvaluated
+    mathData.history = storedMathData.history
+  }
+}
+
 const clear = (type) => {
   integerPortion.value = ""
   mathData.currentOperand = ""
@@ -281,8 +319,11 @@ const clear = (type) => {
   mathData.previousOperand = ""
   mathData.operation = ""
   mathData.expression = null
+  mathData.hasEvaluated = false
 
   if (type === "all") mathData.history = null
+
+  storeMathDataLocally()
 }
 
 const backspace = () => {
