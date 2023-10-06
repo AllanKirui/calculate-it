@@ -5,7 +5,7 @@
 
 @layer base {
   body {
-    @apply font-viga bg-navajo-white text-liver;
+    @apply font-viga bg-navajo-white text-liver body-scrollable;
   }
 
   .links-wrapper li a {
@@ -45,6 +45,15 @@
 /* .vertically-scrollable::-webkit-scrollbar {
   width: 4px;
 } */
+
+.body-scrollable::-webkit-scrollbar {
+  width: 6px;
+  height: 0;
+}
+
+.body-scrollable::-webkit-scrollbar-thumb {
+  background-color: #f28e40;
+}
 
 .scrollable::-webkit-scrollbar {
   width: 4px;
