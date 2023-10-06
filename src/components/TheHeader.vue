@@ -3,7 +3,7 @@
   <header>
     <nav class="flex flex-col items-center">
       <!-- Nav Top -->
-      <div class="flex justify-between">
+      <div class="hidden md:block">
         <h1 class="text-4xl md:text-5xl">Calculate It!</h1>
       </div>
 
