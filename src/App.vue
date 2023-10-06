@@ -1,10 +1,8 @@
 <template>
   <!-- Global Container -->
-  <div class="container h-screen max-w-4xl mx-auto">
-    <div class="pt-5 md:py-10">
-      <TheHeader />
-      <TheCalculator />
-    </div>
+  <div class="container h-screen max-w-4xl mx-auto md:py-10">
+    <TheHeader />
+    <TheCalculator />
   </div>
 </template>
 
