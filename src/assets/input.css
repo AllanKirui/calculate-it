@@ -42,10 +42,6 @@
 
 /* custom styles */
 /* scrollbar styles */
-/* .vertically-scrollable::-webkit-scrollbar {
-  width: 4px;
-} */
-
 .body-scrollable::-webkit-scrollbar {
   width: 6px;
   height: 0;
