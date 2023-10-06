@@ -10,8 +10,8 @@
       <!-- Nav Bottom -->
       <div class="relative mt-3 overflow-x-hidden w-full">
         <!-- Blurred Left & Right Edges to Hint at Horizontal Scrolling on Mobile Screens -->
-        <div class="md:hidden absolute -top-2 bottom-0 -left-1 w-3 h-full bg-mellow-apricot blur-sm z-10"></div>
-        <div class="md:hidden absolute -top-2 bottom-0 -right-1 w-3 h-full bg-mellow-apricot blur-sm z-10"></div>
+        <div class="nav-blur nav-blur-left"></div>
+        <div class="nav-blur nav-blur-right"></div>
 
         <ul class="links-wrapper scrollable pb-1 px-4 flex gap-4 md:justify-center md:text-lg overflow-x-auto">
           <li>
