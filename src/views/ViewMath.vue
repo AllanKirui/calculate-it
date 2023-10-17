@@ -8,7 +8,7 @@
 
     <!-- Background Text -->
     <div class="absolute top-5 md:top-1/2 md:-translate-y-1/2"><span
-        class="text-pearl-copper text-4xl sm:text-5xl md:text-7xl">{{ $route.name }}</span>
+      class="text-pearl-copper text-4xl sm:text-5xl md:text-7xl">{{ $route.name }}</span>
     </div>
 
     <!-- Previous Operations -->
@@ -32,7 +32,7 @@
         <!-- Result -->
         <h3 class="md:mt-1 duration-200"
           :class="[mathData.hasEvaluated ? 'text-4xl md:text-[40px] text-navajo-white' : 'text-2xl md:text-[26px]']">= {{
-            mathData.result }}</h3>
+          mathData.result }}</h3>
       </div>
       <div v-else>
         <!-- Default Result -->
@@ -42,7 +42,10 @@
   </div>
 
   <!-- The Buttons -->
-  <div class="buttons-container md:min-h-full grid grid-cols-4 grid-rows-5 gap-2 text-2xl mt-3">
+  <div
+    ref="buttonsContainerRef"
+    class="buttons-container md:min-h-full grid grid-cols-4 grid-rows-5 gap-2 text-2xl mt-3"
+  >
     <!-- Row 1 Buttons -->
     <button @click="clear('all')" class="btn btn-clear">AC</button>
     <button @click="clear" class="btn btn-operators">C</button>
@@ -75,7 +78,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, reactive, ref, watch } from 'vue';
+import { onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
 
 // integer part of a float i.e 3.142 => 3
 const integerPortion = ref("")
@@ -94,21 +97,22 @@ const mathData = reactive({
 
 // convert the template ref into a data ref
 const historyRef = ref(null)
+const buttonsContainerRef = ref(null)
 
 // watch the history array, and scroll newly added elements into view
 watch(() => mathData.history, (newExpression) => {
-  if (newExpression) {
+    if (newExpression) {
 
-    // watch the length of the history array
-    watch(() => mathData.history.length, (newLength) => {
-      if (newLength) {
-        let lastPosition = newLength - 1
+      // watch the length of the history array
+      watch(() => mathData.history.length, (newLength) => {
+          if (newLength) {
+            let lastPosition = newLength - 1
 
-        // scroll the last <span> element into view
-        historyRef.value.children[0].children[lastPosition].scrollIntoView()
-      }
-    })
-  }
+            // scroll the last <span> element into view
+            historyRef.value.children[0].children[lastPosition].scrollIntoView()
+          }
+        })
+    }
 })
 
 // retrieve any locally stored math data
@@ -117,7 +121,45 @@ onBeforeMount(() => {
   getStoredMathData()
 })
 
-/* 
+// set up a listener on the buttons once the component is mounted
+onMounted(() => {
+  const buttons = []
+  
+  for (let i = 0; i < buttonsContainerRef.value.children.length; i++) {
+    buttons.push(buttonsContainerRef.value.children[i])
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const target = e.target
+      const rect = target.getBoundingClientRect()
+
+      // get the position of the mouse within the browser
+      const x = e.clientX
+      const y = e.clientY
+
+      // get the position of the button's top and left edges
+      const buttonTop = rect.top
+      const buttonLeft = rect.left
+
+      // calculate the position of the mouse within the button
+      const xInside = x - buttonLeft
+      const yInside = y - buttonTop
+
+      // create a circle element to fill the button
+      const circle = document.createElement("span")
+      circle.classList.add("circle")
+      circle.style.top = `${yInside}px`
+      circle.style.left = `${xInside}px`
+
+      e.target.appendChild(circle)
+
+      setTimeout(() => circle.remove(), 500)
+    });
+  });
+});
+
+/*
   Methods
 */
 const appendNumber = (number) => {
@@ -137,7 +179,7 @@ const appendNumber = (number) => {
   // if the number already contains a decimal point return
   if (number === "." && integerPortion.value.includes(".")) return
 
-  // convert the number to a string 
+  // convert the number to a string
   let stringNumber = number.toString()
   integerPortion.value += stringNumber
 
