@@ -20,27 +20,57 @@
 @layer components {
   /* button styles */
   .btn {
-    @apply py-2.5 w-full rounded-xl md:rounded-lg shadow-sm duration-200;
+    @apply relative py-2.5 w-full rounded-xl md:rounded-lg shadow-sm duration-200 overflow-hidden;
   }
 
   .btn-numbers {
-    @apply bg-navajo-white sm:hover:bg-macaroni-and-cheese outline outline-sandy-brown outline-2 -outline-offset-2;
+    @apply bg-navajo-white outline outline-sandy-brown outline-2 -outline-offset-2;
   }
 
   .btn-operators {
-    @apply bg-mellow-apricot sm:hover:bg-macaroni-and-cheese;
+    @apply bg-mellow-apricot;
   }
 
   .btn-equals {
-    @apply bg-liver sm:hover:bg-seal-brown text-navajo-white;
+    @apply bg-liver text-navajo-white;
   }
 
   .btn-clear {
-    @apply bg-mango-tango sm:hover:bg-sandy-brown text-seal-brown;
+    @apply bg-mango-tango text-seal-brown;
+  }
+
+  .btn .circle {
+    @apply absolute w-14 h-14 md:w-20 md:h-20 rounded-full;
+    transform: translate(-50%, -50%) scale(0);
+    animation: circleScaleUp 0.5s ease-out;
+  }
+
+  .btn.btn-numbers .circle {
+    @apply bg-sandy-brown;
+  }
+
+  .btn.btn-operators .circle {
+    @apply bg-mango-tango;
+  }
+
+  .btn.btn-clear .circle {
+    @apply bg-liver;
+  }
+
+  .btn.btn-equals .circle {
+    @apply bg-sandy-brown;
   }
 }
 
 /* custom styles */
+/* Button Ripple Effect */
+@keyframes circleScaleUp {
+  to {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
 /* scrollbar styles */
 .body-scrollable::-webkit-scrollbar {
   width: 6px;
