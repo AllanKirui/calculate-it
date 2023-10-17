@@ -153,41 +153,7 @@ onBeforeMount(() => {
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  const buttons = []
-
-  for (let i = 0; i < buttonsContainerRef.value.children.length; i++) {
-    buttons.push(buttonsContainerRef.value.children[i])
-  }
-
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const target = e.target
-      const rect = target.getBoundingClientRect()
-
-      // get the position of the mouse within the browser
-      const x = e.clientX
-      const y = e.clientY
-
-      // get the position of the button's top and left edges
-      const buttonTop = rect.top
-      const buttonLeft = rect.left
-
-      // calculate the position of the mouse within the button
-      const xInside = x - buttonLeft
-      const yInside = y - buttonTop
-
-      // create a circle element to fill the button
-      const circle = document.createElement("span")
-      circle.classList.add("circle")
-      circle.style.top = `${yInside}px`
-      circle.style.left = `${xInside}px`
-
-      e.target.appendChild(circle)
-
-      setTimeout(() => circle.remove(), 500)
-    })
-  })
-
+  showRippleEffectOnButtonClick()
   listenForKeyboardInputs()
 })
 
@@ -572,6 +538,43 @@ const listenForKeyboardInputs = () => {
       default:
         return
     }
+  })
+}
+
+const showRippleEffectOnButtonClick = () => {
+  const buttons = []
+
+  for (let i = 0; i < buttonsContainerRef.value.children.length; i++) {
+    buttons.push(buttonsContainerRef.value.children[i])
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const target = e.target
+      const rect = target.getBoundingClientRect()
+
+      // get the position of the mouse within the browser
+      const x = e.clientX
+      const y = e.clientY
+
+      // get the position of the button's top and left edges
+      const buttonTop = rect.top
+      const buttonLeft = rect.left
+
+      // calculate the position of the mouse within the button
+      const xInside = x - buttonLeft
+      const yInside = y - buttonTop
+
+      // create a circle element to fill the button
+      const circle = document.createElement("span")
+      circle.classList.add("circle")
+      circle.style.top = `${yInside}px`
+      circle.style.left = `${xInside}px`
+
+      e.target.appendChild(circle)
+
+      setTimeout(() => circle.remove(), 500)
+    })
   })
 }
 </script>
