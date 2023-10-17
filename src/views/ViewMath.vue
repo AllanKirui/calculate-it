@@ -1,21 +1,28 @@
 <template>
   <!-- The Output -->
   <div
-    class="display-container md:min-h-[160px] overflow-x-hidden relative flex flex-col justify-end gap-2 p-5 bg-liver text-sandy-brown rounded-xl">
+    class="display-container md:min-h-[160px] overflow-x-hidden relative flex flex-col justify-end gap-2 p-5 bg-liver text-sandy-brown rounded-xl"
+  >
     <!-- Blurred Left & Right Edges For Previous Operations -->
     <div class="absolute top-4 left-4 w-5 h-8 bg-liver blur-md z-10"></div>
     <div class="absolute top-4 right-0 w-5 h-8 bg-liver blur-lg z-10"></div>
 
     <!-- Background Text -->
-    <div class="absolute top-5 md:top-1/2 md:-translate-y-1/2"><span
-      class="text-pearl-copper text-4xl sm:text-5xl md:text-7xl">{{ $route.name }}</span>
+    <div class="absolute top-5 md:top-1/2 md:-translate-y-1/2">
+      <span class="text-pearl-copper text-4xl sm:text-5xl md:text-7xl">{{
+        $route.name
+      }}</span>
     </div>
 
     <!-- Previous Operations -->
     <!-- use the transition-group component to animate the expressions being added to the history -->
     <div class="expressions-wrapper z-20" ref="historyRef">
       <transition-group tag="div" name="expressions">
-        <span class="inline-block mb-2 md:mb-0 md:ml-4 text-lg" v-for="expression in mathData.history" :key="expression">
+        <span
+          class="inline-block mb-2 md:mb-0 md:ml-4 text-lg"
+          v-for="expression in mathData.history"
+          :key="expression"
+        >
           {{ expression }}
         </span>
       </transition-group>
@@ -25,18 +32,34 @@
     <div class="text-right">
       <div v-if="mathData.expression">
         <!-- Current Operand -->
-        <h2 class="text-navajo-white duration-200"
-          :class="[mathData.hasEvaluated ? 'text-2xl md:text-[26px]' : 'text-4xl md:text-[40px]']">{{ mathData.expression
-          }}</h2>
+        <h2
+          class="text-navajo-white duration-200"
+          :class="[
+            mathData.hasEvaluated
+              ? 'text-2xl md:text-[26px]'
+              : 'text-4xl md:text-[40px]'
+          ]"
+        >
+          {{ mathData.expression }}
+        </h2>
 
         <!-- Result -->
-        <h3 class="md:mt-1 duration-200"
-          :class="[mathData.hasEvaluated ? 'text-4xl md:text-[40px] text-navajo-white' : 'text-2xl md:text-[26px]']">= {{
-          mathData.result }}</h3>
+        <h3
+          class="md:mt-1 duration-200"
+          :class="[
+            mathData.hasEvaluated
+              ? 'text-4xl md:text-[40px] text-navajo-white'
+              : 'text-2xl md:text-[26px]'
+          ]"
+        >
+          = {{ mathData.result }}
+        </h3>
       </div>
       <div v-else>
         <!-- Default Result -->
-        <h2 class="text-4xl md:text-[40px] text-navajo-white">{{ mathData.defaultResult }}</h2>
+        <h2 class="text-4xl md:text-[40px] text-navajo-white">
+          {{ mathData.defaultResult }}
+        </h2>
       </div>
     </div>
   </div>
@@ -71,14 +94,16 @@
     <button @click="setOperation('+')" class="btn btn-operators">+</button>
 
     <!-- Row 5 Buttons -->
-    <button @click="appendNumber(0)" class="col-start-2 btn btn-numbers">0</button>
+    <button @click="appendNumber(0)" class="col-start-2 btn btn-numbers">
+      0
+    </button>
     <button @click="appendNumber('.')" class="btn btn-numbers">.</button>
     <button @click="evaluateExpression" class="btn btn-equals">=</button>
   </div>
 </template>
 
 <script setup>
-import { onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
+import { onBeforeMount, onMounted, reactive, ref, watch } from "vue"
 
 // integer part of a float i.e 3.142 => 3
 const integerPortion = ref("")
@@ -92,7 +117,7 @@ const mathData = reactive({
   result: "",
   hasEvaluated: false,
   defaultResult: 0,
-  history: null,
+  history: null
 })
 
 // convert the template ref into a data ref
@@ -100,20 +125,25 @@ const historyRef = ref(null)
 const buttonsContainerRef = ref(null)
 
 // watch the history array, and scroll newly added elements into view
-watch(() => mathData.history, (newExpression) => {
+watch(
+  () => mathData.history,
+  (newExpression) => {
     if (newExpression) {
-
       // watch the length of the history array
-      watch(() => mathData.history.length, (newLength) => {
+      watch(
+        () => mathData.history.length,
+        (newLength) => {
           if (newLength) {
             let lastPosition = newLength - 1
 
             // scroll the last <span> element into view
             historyRef.value.children[0].children[lastPosition].scrollIntoView()
           }
-        })
+        }
+      )
     }
-})
+  }
+)
 
 // retrieve any locally stored math data
 onBeforeMount(() => {
@@ -124,7 +154,7 @@ onBeforeMount(() => {
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
   const buttons = []
-  
+
   for (let i = 0; i < buttonsContainerRef.value.children.length; i++) {
     buttons.push(buttonsContainerRef.value.children[i])
   }
@@ -155,9 +185,9 @@ onMounted(() => {
       e.target.appendChild(circle)
 
       setTimeout(() => circle.remove(), 500)
-    });
-  });
-});
+    })
+  })
+})
 
 /*
   Methods
@@ -171,10 +201,12 @@ const appendNumber = (number) => {
   mathData.hasEvaluated = false
 
   // reset the integerPortion ref
-  if (mathData.previousOperand !== "" && mathData.currentOperand === "") integerPortion.value = ""
+  if (mathData.previousOperand !== "" && mathData.currentOperand === "")
+    integerPortion.value = ""
 
   // return if zero is clicked and there are no previous and current operands
-  if (number === 0 && !mathData.currentOperand && !mathData.previousOperand) return
+  if (number === 0 && !mathData.currentOperand && !mathData.previousOperand)
+    return
 
   // if the number already contains a decimal point return
   if (number === "." && integerPortion.value.includes(".")) return
@@ -193,7 +225,7 @@ const appendNumber = (number) => {
     integerDisplay = ""
   } else {
     integerDisplay = integerNumbers.toLocaleString("en", {
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 0
     })
   }
 
@@ -241,7 +273,8 @@ const setOperation = (operation) => {
   integerPortion.value = ""
 
   // if an operator is clicked and there is no previous operand or current operand
-  if (mathData.currentOperand === "" && mathData.previousOperand === "") mathData.currentOperand = "0"
+  if (mathData.currentOperand === "" && mathData.previousOperand === "")
+    mathData.currentOperand = "0"
 
   if (mathData.currentOperand === "") return
 
@@ -255,7 +288,11 @@ const setOperation = (operation) => {
 }
 
 const updateDisplay = () => {
-  if (mathData.previousOperand && mathData.operation && mathData.currentOperand) {
+  if (
+    mathData.previousOperand &&
+    mathData.operation &&
+    mathData.currentOperand
+  ) {
     mathData.expression = `${mathData.previousOperand}${mathData.operation}${mathData.currentOperand}`
   } else if (mathData.previousOperand && mathData.operation) {
     mathData.expression = `${mathData.previousOperand}${mathData.operation}`
@@ -281,24 +318,24 @@ const compute = () => {
   switch (mathData.operation) {
     case "+":
       result = prev + current
-      break;
+      break
     case "-":
       result = prev - current
-      break;
+      break
     case "×":
       result = prev * current
-      break;
+      break
     case "÷":
       result = prev / current
       if (isNaN(result)) result = 0
-      break;
+      break
     default:
-      return;
+      return
   }
 
   // make the result comma separated with a max of 7 fraction digits
   mathData.result = result.toLocaleString("en", {
-    maximumFractionDigits: 7,
+    maximumFractionDigits: 7
   })
 
   mathData.currentOperand = mathData.result
@@ -327,16 +364,19 @@ const storeExpression = () => {
 const storeMathDataLocally = () => {
   if (!localStorage) return
 
-  localStorage.setItem("mathData", JSON.stringify({
-    integerPortion: integerPortion.value ?? "",
-    expression: mathData.expression ?? null,
-    currentOperand: mathData.currentOperand ?? "",
-    previousOperand: mathData.previousOperand ?? "",
-    operation: mathData.operation ?? "",
-    result: mathData.result ?? "",
-    hasEvaluated: mathData.hasEvaluated ?? false,
-    history: mathData.history ?? null
-  }))
+  localStorage.setItem(
+    "mathData",
+    JSON.stringify({
+      integerPortion: integerPortion.value ?? "",
+      expression: mathData.expression ?? null,
+      currentOperand: mathData.currentOperand ?? "",
+      previousOperand: mathData.previousOperand ?? "",
+      operation: mathData.operation ?? "",
+      result: mathData.result ?? "",
+      hasEvaluated: mathData.hasEvaluated ?? false,
+      history: mathData.history ?? null
+    })
+  )
 }
 
 const getStoredMathData = () => {
@@ -385,9 +425,14 @@ const backspace = () => {
   }
 
   // if there is an operation, split the expression by it getting the previous and current operands
-  if (mathData.operation !== "" && mathData.expression.includes(mathData.operation)) {
+  if (
+    mathData.operation !== "" &&
+    mathData.expression.includes(mathData.operation)
+  ) {
     let previous = mathData.expression.split(mathData.operation)[0]
-    let current = mathData.expression.split(mathData.operation)[1] ? mathData.expression.split(mathData.operation)[1] : ""
+    let current = mathData.expression.split(mathData.operation)[1]
+      ? mathData.expression.split(mathData.operation)[1]
+      : ""
 
     mathData.previousOperand = previous
     mathData.currentOperand = current
@@ -434,14 +479,14 @@ const backspace = () => {
 }
 
 const removeCommas = (stringNumber) => {
-  if (!stringNumber.includes(',')) {
+  if (!stringNumber.includes(",")) {
     return parseFloat(stringNumber)
   }
 
   let num = ""
   let stringArr = stringNumber.split(",")
 
-  stringArr.forEach((string) => num += string)
+  stringArr.forEach((string) => (num += string))
 
   return parseFloat(num)
 }
@@ -452,15 +497,16 @@ const removeCommasFromCurrentOperand = () => {
 
   if (numWithoutCommas.includes(".")) {
     numWithCommas = parseFloat(numWithoutCommas).toLocaleString("en", {
-      maximumFractionDigits: 7,
+      maximumFractionDigits: 7
     })
   } else {
     numWithCommas = parseFloat(numWithoutCommas).toLocaleString("en", {
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 0
     })
   }
 
-  if (mathData.expression.endsWith(".") && !numWithCommas.includes(".")) numWithCommas += "."
+  if (mathData.expression.endsWith(".") && !numWithCommas.includes("."))
+    numWithCommas += "."
 
   mathData.currentOperand = numWithCommas
   integerPortion.value = mathData.currentOperand

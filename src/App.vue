@@ -7,6 +7,6 @@
 </template>
 
 <script setup>
-import TheHeader from './components/TheHeader.vue';
-import TheCalculator from './components/TheCalculator.vue';
+import TheHeader from "./components/TheHeader.vue"
+import TheCalculator from "./components/TheCalculator.vue"
 </script>
