@@ -153,7 +153,7 @@ onBeforeMount(() => {
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  showRippleEffectOnButtonClick()
+  showRippleEffectOnButtons()
   listenForKeyboardInputs()
 })
 
@@ -485,75 +485,75 @@ const listenForKeyboardInputs = () => {
     // check which key was pressed and append the number or set operation
     switch (e.key) {
       case "0":
-        showRippleEffectOnButtonClick("0")
+        showRippleEffectOnButtons("0")
         appendNumber(0)
         break
       case "1":
-        showRippleEffectOnButtonClick("1")
+        showRippleEffectOnButtons("1")
         appendNumber(1)
         break
       case "2":
-        showRippleEffectOnButtonClick("2")
+        showRippleEffectOnButtons("2")
         appendNumber(2)
         break
       case "3":
-        showRippleEffectOnButtonClick("3")
+        showRippleEffectOnButtons("3")
         appendNumber(3)
         break
       case "4":
-        showRippleEffectOnButtonClick("4")
+        showRippleEffectOnButtons("4")
         appendNumber(4)
         break
       case "5":
-        showRippleEffectOnButtonClick("5")
+        showRippleEffectOnButtons("5")
         appendNumber(5)
         break
       case "6":
-        showRippleEffectOnButtonClick("6")
+        showRippleEffectOnButtons("6")
         appendNumber(6)
         break
       case "7":
-        showRippleEffectOnButtonClick("7")
+        showRippleEffectOnButtons("7")
         appendNumber(7)
         break
       case "8":
-        showRippleEffectOnButtonClick("8")
+        showRippleEffectOnButtons("8")
         appendNumber(8)
         break
       case "9":
-        showRippleEffectOnButtonClick("9")
+        showRippleEffectOnButtons("9")
         appendNumber(9)
         break
       case ".":
-        showRippleEffectOnButtonClick(".")
+        showRippleEffectOnButtons(".")
         appendNumber(".")
         break
       case "+":
-        showRippleEffectOnButtonClick("+")
+        showRippleEffectOnButtons("+")
         setOperation("+")
         break
       case "-":
-        showRippleEffectOnButtonClick("-")
+        showRippleEffectOnButtons("-")
         setOperation("-")
         break
       case "*":
-        showRippleEffectOnButtonClick("×")
+        showRippleEffectOnButtons("×")
         setOperation("×")
         break
       case "/":
-        showRippleEffectOnButtonClick("÷")
+        showRippleEffectOnButtons("÷")
         setOperation("÷")
         break
       case "Backspace":
-        showRippleEffectOnButtonClick("Backspace")
+        showRippleEffectOnButtons("Backspace")
         backspace()
         break
       case "Enter":
-        showRippleEffectOnButtonClick("=")
+        showRippleEffectOnButtons("=")
         evaluateExpression()
         break
       case "=":
-        showRippleEffectOnButtonClick("=")
+        showRippleEffectOnButtons("=")
         evaluateExpression()
         break
       default:
@@ -562,7 +562,7 @@ const listenForKeyboardInputs = () => {
   })
 }
 
-const showRippleEffectOnButtonClick = (keyboardInput) => {
+const showRippleEffectOnButtons = (keyboardInput) => {
   const buttons = []
 
   for (let i = 0; i < buttonsContainerRef.value.children.length; i++) {
@@ -574,8 +574,8 @@ const showRippleEffectOnButtonClick = (keyboardInput) => {
     if (keyboardInput === btn.innerText) {
       setRippleForKeyboardInputs(btn)
       return
-    } else if (keyboardInput === "Backspace") {
-      if (btn.innerText === "«") setRippleForKeyboardInputs(btn)
+    } else if (keyboardInput === "Backspace" && btn.innerText === "«") {
+      setRippleForKeyboardInputs(btn)
       return
     }
 
