@@ -153,3 +153,21 @@
 .expressions-move {
   transition: all 0.3s ease;
 }
+
+/* dropdown styles */
+.dropdown-container {
+  @apply w-[90%] px-4 md:px-2 py-2 md:py-1 absolute left-1/2 -translate-x-1/2 flex justify-between items-center text-4xl md:text-[40px] text-sandy-brown cursor-pointer;
+}
+
+.top-dropdown {
+  @apply top-20 sm:top-24 md:top-8 z-50;
+}
+
+.bottom-dropdown {
+  @apply top-48 md:top-28 z-40;
+}
+
+.top-dropdown.active,
+.bottom-dropdown.active {
+  @apply text-navajo-white;
+}
