@@ -1,25 +1,30 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router"
 
-import ViewMath from "@/views/ViewMath.vue";
+import ViewMath from "@/views/ViewMath.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
-      redirect: "/math",
+      redirect: "/math"
     },
     {
       path: "/math",
       name: "math",
-      component: ViewMath,
+      component: ViewMath
     },
     {
       path: "/age",
       name: "age",
-      component: () => import("../views/ViewAge.vue"),
+      component: () => import("../views/ViewAge.vue")
     },
-  ],
-});
+    {
+      path: "/mass",
+      name: "mass",
+      component: () => import("../views/ViewMass.vue")
+    }
+  ]
+})
 
-export default router;
+export default router
