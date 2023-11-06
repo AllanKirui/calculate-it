@@ -69,7 +69,7 @@
           </MenuItem>
           <MenuItem v-slot="{ active }">
             <a
-              @click="$emit('setActiveUnit', 'lb')"
+              @click="$emit('setActiveUnit', 'oz')"
               href="#"
               :class="[active ? 'bg-mellow-apricot' : '', 'block px-4 py-2']"
               >Ounce oz</a
