@@ -16,6 +16,7 @@
         <ul
           class="links-wrapper scrollable pb-1 px-4 flex gap-4 md:justify-center md:text-lg overflow-x-auto"
         >
+          <!-- Basic Math Calculator -->
           <li>
             <RouterLink to="math">
               <img
@@ -27,6 +28,7 @@
               <span class="">Math</span>
             </RouterLink>
           </li>
+
           <li>
             <RouterLink to="age">
               <img src="../assets/img/age.svg" width="24" height="24" alt="" />
@@ -53,11 +55,12 @@
             </a>
           </li>
 
+          <!-- Mass Converter -->
           <li>
-            <a href="#">
+            <RouterLink to="mass">
               <img src="../assets/img/mass.svg" width="24" height="24" alt="" />
               <span class="">Mass</span>
-            </a>
+            </RouterLink>
           </li>
 
           <li>
@@ -83,11 +86,6 @@
               <span class="">Currency</span>
             </a>
           </li>
-
-          <!-- <li><a href="#">Length</a></li>
-          <li><a href="#">Mass</a></li>
-          <li><a href="#">Temperature</a></li>
-          <li><a href="#">Currency</a></li> -->
         </ul>
       </div>
     </nav>
