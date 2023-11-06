@@ -11,7 +11,10 @@
       :active-unit="topActiveUnit"
       @setActiveUnit="setActiveUnitTop"
     />
-    <h2 class="result">0</h2>
+    <div class="relative">
+      <h2 class="result">0</h2>
+      <span class="absolute right-0 text-xs md:text-sm">{{ topUnitName }}</span>
+    </div>
   </div>
 
   <!-- Bottom Units -->
@@ -25,7 +28,12 @@
       :active-unit="bottomActiveUnit"
       @setActiveUnit="setActiveUnitBottom"
     />
-    <h2 class="result">0</h2>
+    <div class="relative">
+      <h2 class="result">0</h2>
+      <span class="absolute right-0 text-xs md:text-sm">{{
+        bottomUnitName
+      }}</span>
+    </div>
   </div>
 
   <!-- The Output -->
@@ -74,11 +82,66 @@
 
 <script setup>
 import TheDropdown from "@/components/ui/TheDropdown.vue"
-import { ref } from "vue"
+import { ref, watch } from "vue"
 
 const activeDropdown = ref("top")
 const topActiveUnit = ref("kg")
 const bottomActiveUnit = ref("lb")
+const topUnitName = ref("Kilogram")
+const bottomUnitName = ref("Pound")
+
+// when a user changes units, update the unit name below the result
+watch(
+  () => topActiveUnit.value,
+  (newUnit) => {
+    switch (newUnit) {
+      case "t":
+        topUnitName.value = "Tonne"
+        break
+      case "g":
+        topUnitName.value = "Gram"
+        break
+      case "mg":
+        topUnitName.value = "Milligram"
+        break
+      case "lb":
+        topUnitName.value = "Pound"
+        break
+      case "oz":
+        topUnitName.value = "Ounce"
+        break
+      default:
+        topUnitName.value = "Kilogram"
+        break
+    }
+  }
+)
+
+watch(
+  () => bottomActiveUnit.value,
+  (newUnit) => {
+    switch (newUnit) {
+      case "t":
+        bottomUnitName.value = "Tonne"
+        break
+      case "kg":
+        bottomUnitName.value = "Kilogram"
+        break
+      case "g":
+        bottomUnitName.value = "Gram"
+        break
+      case "mg":
+        bottomUnitName.value = "Milligram"
+        break
+      case "oz":
+        bottomUnitName.value = "Ounce"
+        break
+      default:
+        bottomUnitName.value = "Pound"
+        break
+    }
+  }
+)
 
 /*
   Methods
