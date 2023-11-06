@@ -164,7 +164,7 @@
 }
 
 .bottom-dropdown {
-  @apply top-48 md:top-28 z-40;
+  @apply top-48 md:top-[100px] z-40;
 }
 
 .top-dropdown.active,
