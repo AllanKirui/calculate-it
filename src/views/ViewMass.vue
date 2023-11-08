@@ -12,7 +12,9 @@
       @setActiveUnit="setActiveUnitTop"
     />
     <div class="relative">
-      <h2 class="result">0</h2>
+      <h2 class="result">
+        {{ massData.topUnitValue || massData.defaultResult }}
+      </h2>
       <span class="absolute right-0 text-xs md:text-sm">{{ topUnitName }}</span>
     </div>
   </div>
@@ -29,7 +31,9 @@
       @setActiveUnit="setActiveUnitBottom"
     />
     <div class="relative">
-      <h2 class="result">0</h2>
+      <h2 class="result">
+        {{ massData.bottomUnitValue || massData.defaultResult }}
+      </h2>
       <span class="absolute right-0 text-xs md:text-sm">{{
         bottomUnitName
       }}</span>
@@ -82,7 +86,9 @@
 
 <script setup>
 import TheDropdown from "@/components/ui/TheDropdown.vue"
-import { ref, watch } from "vue"
+import { ref, reactive, watch, inject } from "vue"
+
+const removeCommas = inject("removeCommas")
 
 const activeDropdown = ref("top")
 const topActiveUnit = ref("kg")
@@ -90,19 +96,24 @@ const bottomActiveUnit = ref("lb")
 const topUnitName = ref("Kilogram")
 const bottomUnitName = ref("Pound")
 
+// integer part of a float i.e 3.142 => 3
+const topUnitIntegerPortion = ref("")
+const bottomUnitIntegerPortion = ref("")
+
+// reactive data object for related math data
+const massData = reactive({
+  topUnitValue: "",
+  bottomUnitValue: "",
+  defaultResult: 0
+})
+
 // when a user changes units, update the unit name below the result
 watch(
   () => topActiveUnit.value,
   (newUnit) => {
     switch (newUnit) {
-      case "t":
-        topUnitName.value = "Tonne"
-        break
       case "g":
         topUnitName.value = "Gram"
-        break
-      case "mg":
-        topUnitName.value = "Milligram"
         break
       case "lb":
         topUnitName.value = "Pound"
@@ -121,17 +132,11 @@ watch(
   () => bottomActiveUnit.value,
   (newUnit) => {
     switch (newUnit) {
-      case "t":
-        bottomUnitName.value = "Tonne"
-        break
       case "kg":
         bottomUnitName.value = "Kilogram"
         break
       case "g":
         bottomUnitName.value = "Gram"
-        break
-      case "mg":
-        bottomUnitName.value = "Milligram"
         break
       case "oz":
         bottomUnitName.value = "Ounce"
@@ -143,9 +148,95 @@ watch(
   }
 )
 
+// TODO might do this inside the compute function: when the value of a unit changes, calculate the equivalent
+// value of the corresponding unit
+watch(
+  () => massData.topUnitValue,
+  (newValue) => {
+    // TODO calculate the value for the bottom unit
+  }
+)
+
+watch(
+  () => massData.bottomUnitValue,
+  (newValue) => {
+    // TODO calculate the value for the top unit
+  }
+)
+
 /*
   Methods
 */
+const appendNumber = (number) => {
+  // return if zero is clicked when either the top or bottom unit values are zero
+  // and if the number already contains a decimal point return
+  if (activeDropdown.value === "top") {
+    if (number === 0 && !massData.topUnitValue) return
+    if (number === "." && topUnitIntegerPortion.value.includes(".")) return
+  } else {
+    if (number === 0 && !massData.bottomUnitValue) return
+    if (number === "." && bottomUnitIntegerPortion.value.includes(".")) return
+  }
+
+  // convert the number to a string
+  let stringNumber = number.toString()
+  if (activeDropdown.value === "top") {
+    topUnitIntegerPortion.value += stringNumber
+  } else {
+    bottomUnitIntegerPortion.value += stringNumber
+  }
+
+  // get the Integer and Decimal parts of a number e.g 3.142
+  let integerNumbers
+  let decimalNumbers
+  let integerDisplay
+
+  if (activeDropdown.value === "top") {
+    integerNumbers = removeCommas(topUnitIntegerPortion.value.split(".")[0]) // integer = 3
+    decimalNumbers = topUnitIntegerPortion.value.split(".")[1] // decimal = 142
+  } else {
+    integerNumbers = removeCommas(bottomUnitIntegerPortion.value.split(".")[0])
+    decimalNumbers = bottomUnitIntegerPortion.value.split(".")[1]
+  }
+
+  // check if integerNumbers holds an actual number and convert that to a string
+  if (isNaN(integerNumbers)) {
+    integerDisplay = ""
+  } else {
+    integerDisplay = integerNumbers.toLocaleString("en", {
+      maximumFractionDigits: 0
+    })
+  }
+
+  // if the decimal point is the first button to be clicked add a zero before it
+  if (number === "." && isNaN(integerNumbers)) {
+    if (activeDropdown.value === "top") {
+      topUnitIntegerPortion.value = "0."
+      integerDisplay = "0"
+    } else {
+      bottomUnitIntegerPortion.value = "0."
+      integerDisplay = "0"
+    }
+  }
+
+  // handle displaying any decimal digits
+  if (decimalNumbers != null) {
+    if (activeDropdown.value === "top") {
+      massData.topUnitValue = `${integerDisplay}.${decimalNumbers}`
+    } else {
+      massData.bottomUnitValue = `${integerDisplay}.${decimalNumbers}`
+    }
+  } else {
+    if (activeDropdown.value === "top") {
+      massData.topUnitValue = integerDisplay
+    } else {
+      massData.bottomUnitValue = integerDisplay
+    }
+  }
+
+  // TODO call compute() here
+}
+
 const setActiveUnitTop = (unit) => {
   topActiveUnit.value = unit
 }
