@@ -29,14 +29,6 @@
         <div class="py-1">
           <MenuItem v-slot="{ active }">
             <a
-              @click="$emit('setActiveUnit', 't')"
-              href="#"
-              :class="[active ? 'bg-mellow-apricot' : '', 'block px-4 py-2']"
-              >Tonne t</a
-            >
-          </MenuItem>
-          <MenuItem v-slot="{ active }">
-            <a
               @click="$emit('setActiveUnit', 'kg')"
               href="#"
               :class="[active ? 'bg-mellow-apricot' : '', 'block px-4 py-2']"
@@ -49,14 +41,6 @@
               href="#"
               :class="[active ? 'bg-mellow-apricot' : '', 'block px-4 py-2']"
               >Gram g</a
-            >
-          </MenuItem>
-          <MenuItem v-slot="{ active }">
-            <a
-              @click="$emit('setActiveUnit', 'mg')"
-              href="#"
-              :class="[active ? 'bg-mellow-apricot' : '', 'block px-4 py-2']"
-              >Milligram mg</a
             >
           </MenuItem>
           <MenuItem v-slot="{ active }">
