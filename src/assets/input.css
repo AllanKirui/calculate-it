@@ -36,7 +36,7 @@
   }
 
   .btn-clear {
-    @apply bg-mango-tango text-seal-brown;
+    @apply bg-neon-carrot text-seal-brown;
   }
 
   .btn .circle {
@@ -156,7 +156,7 @@
 
 /* dropdown styles */
 .dropdown-container {
-  @apply w-[90%] px-4 md:px-2 py-2 md:py-1 absolute left-1/2 -translate-x-1/2 flex justify-between items-center text-4xl md:text-[40px] text-sandy-brown cursor-pointer;
+  @apply w-[90%] px-4 md:px-2 py-2 md:py-1 absolute left-1/2 -translate-x-1/2 flex justify-between items-center gap-4 text-4xl md:text-[40px] text-navajo-white cursor-pointer;
 }
 
 .top-dropdown {
@@ -167,7 +167,6 @@
   @apply top-48 md:top-[100px] z-40;
 }
 
-.top-dropdown.active,
-.bottom-dropdown.active {
-  @apply text-navajo-white;
+.dropdown-container .result.active {
+  @apply text-neon-carrot;
 }
