@@ -6,11 +6,11 @@ module.exports = {
       sm: "480px",
       md: "768px",
       lg: "976px",
-      xl: "1440px",
+      xl: "1440px"
     },
     extend: {
       fontFamily: {
-        viga: ["Viga"],
+        viga: ["Viga"]
       },
       colors: {
         "navajo-white": "#fedaaa",
@@ -21,8 +21,9 @@ module.exports = {
         "pearl-copper": "#7d3c28",
         "macaroni-and-cheese": "#fac791",
         "mellow-apricot": "#f6b377",
-      },
-    },
+        "neon-carrot": "#ff9f3e"
+      }
+    }
   },
-  plugins: [],
-};
+  plugins: []
+}
