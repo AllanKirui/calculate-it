@@ -96,6 +96,8 @@ const bottomUnitIntegerPortion = ref("")
 const massData = reactive({
   hasTopUnitChanged: false,
   hasBottomUnitChanged: false,
+  hasConvertedToTopEquiv: false,
+  hasConvertedToBottomEquiv: false,
   topUnitValue: "",
   bottomUnitValue: "",
   defaultResult: 0
@@ -202,7 +204,8 @@ watch(
 watch(
   () => massData.topUnitValue,
   (newValue) => {
-    if (massData.hasBottomUnitChanged) return
+    if (massData.hasBottomUnitChanged || massData.hasConvertedToBottomEquiv)
+      return
 
     // calculate the value for the bottom unit
     massData.bottomUnitValue = convertTopUnitToBottomEquiv(newValue)
@@ -212,10 +215,19 @@ watch(
 watch(
   () => massData.bottomUnitValue,
   (newValue) => {
-    if (massData.hasTopUnitChanged) return
+    if (massData.hasTopUnitChanged || massData.hasConvertedToTopEquiv) return
 
     // calculate the value for the top unit
     massData.topUnitValue = convertBottomUnitToTopEquiv(newValue)
+  }
+)
+
+// when the activeDropdown changes, reset the following flags
+watch(
+  () => activeDropdown.value,
+  (newValue) => {
+    massData.hasConvertedToTopEquiv = false
+    massData.hasConvertedToBottomEquiv = false
   }
 )
 
@@ -223,6 +235,13 @@ watch(
   Methods
 */
 const appendNumber = (number) => {
+  // the hasConvertedTo... flag prevents the 2 watcher methods above from running twice
+  if (activeDropdown.value === "top") {
+    massData.hasConvertedToTopEquiv = true
+  } else if (activeDropdown.value === "bottom") {
+    massData.hasConvertedToBottomEquiv = true
+  }
+
   // return if zero is clicked when either the top or bottom unit values are zero
   // and if the number already contains a decimal point return
   if (activeDropdown.value === "top") {
@@ -291,86 +310,11 @@ const appendNumber = (number) => {
 }
 
 const convertTopUnitToBottomEquiv = (unitValue) => {
-  let convertedValue
-
   // convert the string number to a number
   let topUnitValue = removeCommas(unitValue)
 
-  // check the active unit on the bottom dropdown
-  let topUnit = topActiveUnit.value
-  let bottomUnit = bottomActiveUnit.value
-
-  // convert the bottom unit based on the active units on the top dropdown
-  switch (bottomUnit) {
-    case "lb":
-      switch (topUnit) {
-        case "kg":
-          convertedValue = conversionRates.oneKilo.poundEquiv * topUnitValue
-          break
-        case "g":
-          convertedValue = conversionRates.oneGram.poundEquiv * topUnitValue
-          break
-        case "oz":
-          convertedValue = conversionRates.oneOunce.poundEquiv * topUnitValue
-          break
-        default:
-          convertedValue = conversionRates.onePound.poundEquiv * topUnitValue
-          break
-      }
-      break
-    case "g":
-      switch (topUnit) {
-        case "kg":
-          convertedValue = conversionRates.oneKilo.gramEquiv * topUnitValue
-          break
-        case "g":
-          convertedValue = conversionRates.oneGram.gramEquiv * topUnitValue
-          break
-        case "oz":
-          convertedValue = conversionRates.oneOunce.gramEquiv * topUnitValue
-          break
-        default:
-          convertedValue = conversionRates.onePound.gramEquiv * topUnitValue
-          break
-      }
-      break
-    case "oz":
-      switch (topUnit) {
-        case "kg":
-          convertedValue = conversionRates.oneKilo.ounceEquiv * topUnitValue
-          break
-        case "g":
-          convertedValue = conversionRates.oneGram.ounceEquiv * topUnitValue
-          break
-        case "oz":
-          convertedValue = conversionRates.oneOunce.ounceEquiv * topUnitValue
-          break
-        default:
-          convertedValue = conversionRates.onePound.ounceEquiv * topUnitValue
-          break
-      }
-      break
-    case "kg":
-      switch (topUnit) {
-        case "kg":
-          convertedValue = conversionRates.oneKilo.kilogramEquiv * topUnitValue
-          break
-        case "g":
-          convertedValue = conversionRates.oneGram.kilogramEquiv * topUnitValue
-          break
-        case "oz":
-          convertedValue = conversionRates.oneOunce.kilogramEquiv * topUnitValue
-          break
-        default:
-          convertedValue = conversionRates.onePound.kilogramEquiv * topUnitValue
-          break
-      }
-      break
-  }
-
-  convertedValue = convertedValue.toLocaleString("en", {
-    maximumFractionDigits: 7
-  })
+  let dropdown = "top"
+  let convertedValue = convertValues(dropdown, topUnitValue)
 
   return !isNaN(parseFloat(convertedValue))
     ? convertedValue
@@ -378,82 +322,99 @@ const convertTopUnitToBottomEquiv = (unitValue) => {
 }
 
 const convertBottomUnitToTopEquiv = (unitValue) => {
-  let convertedValue
-
   // convert the string number to a number
   let bottomUnitValue = removeCommas(unitValue)
 
-  // check the active unit on the top dropdown
-  let topUnit = topActiveUnit.value
-  let bottomUnit = bottomActiveUnit.value
+  let dropdown = "bottom"
+  let convertedValue = convertValues(dropdown, bottomUnitValue)
 
-  // convert the bottom unit based on the active units on the top dropdown
-  switch (topUnit) {
+  return !isNaN(parseFloat(convertedValue))
+    ? convertedValue
+    : massData.defaultResult
+}
+
+const convertValues = (dropdown, unitValue) => {
+  let activeUnitValue, activeUnit1, activeUnit2, convertedValue
+
+  activeUnitValue = unitValue
+
+  // check the active unit on the top and bottom dropdowns
+  if (dropdown === "top") {
+    activeUnit1 = bottomActiveUnit.value
+    activeUnit2 = topActiveUnit.value
+  } else {
+    activeUnit1 = topActiveUnit.value
+    activeUnit2 = bottomActiveUnit.value
+  }
+
+  // convert the top/bottom unit values based on the active
+  // units on the adjacent dropdown
+  switch (activeUnit1) {
     case "lb":
-      switch (bottomUnit) {
+      switch (activeUnit2) {
         case "kg":
-          convertedValue = conversionRates.oneKilo.poundEquiv * bottomUnitValue
+          convertedValue = conversionRates.oneKilo.poundEquiv * activeUnitValue
           break
         case "g":
-          convertedValue = conversionRates.oneGram.poundEquiv * bottomUnitValue
+          convertedValue = conversionRates.oneGram.poundEquiv * activeUnitValue
           break
         case "oz":
-          convertedValue = conversionRates.oneOunce.poundEquiv * bottomUnitValue
+          convertedValue = conversionRates.oneOunce.poundEquiv * activeUnitValue
           break
         default:
-          convertedValue = conversionRates.onePound.poundEquiv * bottomUnitValue
+          convertedValue = conversionRates.onePound.poundEquiv * activeUnitValue
           break
       }
       break
     case "g":
-      switch (bottomUnit) {
+      switch (activeUnit2) {
         case "kg":
-          convertedValue = conversionRates.oneKilo.gramEquiv * bottomUnitValue
+          convertedValue = conversionRates.oneKilo.gramEquiv * activeUnitValue
           break
         case "g":
-          convertedValue = conversionRates.oneGram.gramEquiv * bottomUnitValue
+          convertedValue = conversionRates.oneGram.gramEquiv * activeUnitValue
           break
         case "oz":
-          convertedValue = conversionRates.oneOunce.gramEquiv * bottomUnitValue
+          convertedValue = conversionRates.oneOunce.gramEquiv * activeUnitValue
           break
         default:
-          convertedValue = conversionRates.onePound.gramEquiv * bottomUnitValue
+          convertedValue = conversionRates.onePound.gramEquiv * activeUnitValue
           break
       }
       break
     case "oz":
-      switch (bottomUnit) {
+      switch (activeUnit2) {
         case "kg":
-          convertedValue = conversionRates.oneKilo.ounceEquiv * bottomUnitValue
+          convertedValue = conversionRates.oneKilo.ounceEquiv * activeUnitValue
           break
         case "g":
-          convertedValue = conversionRates.oneGram.ounceEquiv * bottomUnitValue
+          convertedValue = conversionRates.oneGram.ounceEquiv * activeUnitValue
           break
         case "oz":
-          convertedValue = conversionRates.oneOunce.ounceEquiv * bottomUnitValue
+          convertedValue = conversionRates.oneOunce.ounceEquiv * activeUnitValue
           break
         default:
-          convertedValue = conversionRates.onePound.ounceEquiv * bottomUnitValue
+          convertedValue = conversionRates.onePound.ounceEquiv * activeUnitValue
           break
       }
       break
     case "kg":
-      switch (bottomUnit) {
+      switch (activeUnit2) {
         case "kg":
           convertedValue =
-            conversionRates.oneKilo.kilogramEquiv * bottomUnitValue
+            conversionRates.oneKilo.kilogramEquiv * activeUnitValue
           break
         case "g":
           convertedValue =
-            conversionRates.oneGram.kilogramEquiv * bottomUnitValue
+            conversionRates.oneGram.kilogramEquiv * activeUnitValue
           break
         case "oz":
           convertedValue =
-            conversionRates.oneOunce.kilogramEquiv * bottomUnitValue
+            conversionRates.oneOunce.kilogramEquiv * activeUnitValue
           break
         default:
           convertedValue =
-            conversionRates.onePound.kilogramEquiv * bottomUnitValue
+            conversionRates.onePound.kilogramEquiv * activeUnitValue
           break
       }
       break
@@ -463,9 +424,7 @@ const convertBottomUnitToTopEquiv = (unitValue) => {
     maximumFractionDigits: 7
   })
 
-  return !isNaN(parseFloat(convertedValue))
-    ? convertedValue
-    : massData.defaultResult
+  return convertedValue
 }
 
 const setActiveUnitTop = (unit) => {
