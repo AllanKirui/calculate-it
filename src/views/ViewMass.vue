@@ -152,6 +152,8 @@ watch(
 
     massData.hasTopUnitChanged = true
 
+    if (!massData.topUnitValue && !massData.bottomUnitValue) return
+
     // if there was a previous unit value and the unit type changes
     // re-calculate the equivalent e.g. if top unit is 'kg' with a value of 5
     // and bottom unit is 'lb', and then top unit gets changed to 'g',
@@ -187,6 +189,8 @@ watch(
     }
 
     massData.hasBottomUnitChanged = true
+
+    if (!massData.topUnitValue && !massData.bottomUnitValue) return
 
     if (activeDropdown.value === "bottom") {
       massData.topUnitValue = convertBottomUnitToTopEquiv(
@@ -228,6 +232,8 @@ watch(
   (newValue) => {
     massData.hasConvertedToTopEquiv = false
     massData.hasConvertedToBottomEquiv = false
+    massData.hasTopUnitChanged = false
+    massData.hasBottomUnitChanged = false
 
     // reset the value that was previously entered for a unit
     topUnitIntegerPortion.value = ""
