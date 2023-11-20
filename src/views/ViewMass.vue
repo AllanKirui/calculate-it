@@ -91,8 +91,10 @@ const topUnitName = ref("Kilogram")
 const bottomUnitName = ref("Pound")
 
 // integer part of a float i.e 3.142 => 3
-const topUnitIntegerPortion = ref("")
-const bottomUnitIntegerPortion = ref("")
+const integerPortion = reactive({
+  topUnit: "",
+  bottomUnit: ""
+})
 
 // reactive data object for related math data
 const massData = reactive({
@@ -238,8 +240,8 @@ watch(
     massData.hasBottomUnitChanged = false
 
     // reset the value that was previously entered for a unit
-    topUnitIntegerPortion.value = ""
-    bottomUnitIntegerPortion.value = ""
+    integerPortion.topUnit = ""
+    integerPortion.bottomUnit = ""
   }
 )
 
@@ -258,18 +260,18 @@ const appendNumber = (number) => {
   // and if the number already contains a decimal point return
   if (activeDropdown.value === "top") {
     if (number === 0 && !massData.topUnitValue) return
-    if (number === "." && topUnitIntegerPortion.value.includes(".")) return
+    if (number === "." && integerPortion.topUnit.includes(".")) return
   } else {
     if (number === 0 && !massData.bottomUnitValue) return
-    if (number === "." && bottomUnitIntegerPortion.value.includes(".")) return
+    if (number === "." && integerPortion.bottomUnit.includes(".")) return
   }
 
   // convert the number to a string
   let stringNumber = number.toString()
   if (activeDropdown.value === "top") {
-    topUnitIntegerPortion.value += stringNumber
+    integerPortion.topUnit += stringNumber
   } else {
-    bottomUnitIntegerPortion.value += stringNumber
+    integerPortion.bottomUnit += stringNumber
   }
 
   // get the Integer and Decimal parts of a number e.g 3.142
@@ -278,11 +280,11 @@ const appendNumber = (number) => {
   let integerDisplay
 
   if (activeDropdown.value === "top") {
-    integerNumbers = removeCommas(topUnitIntegerPortion.value.split(".")[0]) // integer = 3
-    decimalNumbers = topUnitIntegerPortion.value.split(".")[1] // decimal = 142
+    integerNumbers = removeCommas(integerPortion.topUnit.split(".")[0]) // integer = 3
+    decimalNumbers = integerPortion.topUnit.split(".")[1] // decimal = 142
   } else {
-    integerNumbers = removeCommas(bottomUnitIntegerPortion.value.split(".")[0])
-    decimalNumbers = bottomUnitIntegerPortion.value.split(".")[1]
+    integerNumbers = removeCommas(integerPortion.bottomUnit.split(".")[0])
+    decimalNumbers = integerPortion.bottomUnit.split(".")[1]
   }
 
   // check if integerNumbers holds an actual number and convert that to a string
@@ -297,10 +299,10 @@ const appendNumber = (number) => {
   // if the decimal point is the first button to be clicked add a zero before it
   if (number === "." && isNaN(integerNumbers)) {
     if (activeDropdown.value === "top") {
-      topUnitIntegerPortion.value = "0."
+      integerPortion.topUnit = "0."
       integerDisplay = "0"
     } else {
-      bottomUnitIntegerPortion.value = "0."
+      integerPortion.bottomUnit = "0."
       integerDisplay = "0"
     }
   }
@@ -448,20 +450,10 @@ const setActiveUnitBottom = (unit) => {
 }
 
 const clear = () => {
-  const integerPortion = {
-    topUnit: topUnitIntegerPortion,
-    bottomUnit: bottomUnitIntegerPortion
-  }
-
   clearAll(massData, integerPortion)
 }
 
 const backspace = () => {
-  const integerPortion = {
-    topUnit: topUnitIntegerPortion,
-    bottomUnit: bottomUnitIntegerPortion
-  }
-
   clearChars(activeDropdown, massData, integerPortion)
 }
 </script>
