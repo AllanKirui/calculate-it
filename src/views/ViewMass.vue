@@ -53,7 +53,7 @@
     <button @click="appendNumber(7)" class="btn btn-numbers">7</button>
     <button @click="appendNumber(8)" class="btn btn-numbers">8</button>
     <button @click="appendNumber(9)" class="btn btn-numbers">9</button>
-    <button @click="clear('all')" class="btn btn-clear row-span-2">AC</button>
+    <button @click="clear" class="btn btn-clear row-span-2">AC</button>
 
     <!-- Row 2 Buttons -->
     <button @click="appendNumber(4)" class="btn btn-numbers">4</button>
@@ -81,6 +81,8 @@ import TheDropdown from "@/components/ui/TheDropdown.vue"
 import { ref, reactive, watch, inject } from "vue"
 
 const removeCommas = inject("removeCommas")
+const clearAll = inject("clearAll")
+const clearChars = inject("clearChars")
 
 const activeDropdown = ref("top")
 const topActiveUnit = ref("kg")
@@ -443,5 +445,23 @@ const setActiveUnitTop = (unit) => {
 
 const setActiveUnitBottom = (unit) => {
   bottomActiveUnit.value = unit
+}
+
+const clear = () => {
+  const integerPortion = {
+    topUnit: topUnitIntegerPortion,
+    bottomUnit: bottomUnitIntegerPortion
+  }
+
+  clearAll(massData, integerPortion)
+}
+
+const backspace = () => {
+  const integerPortion = {
+    topUnit: topUnitIntegerPortion,
+    bottomUnit: bottomUnitIntegerPortion
+  }
+
+  clearChars(activeDropdown, massData, integerPortion)
 }
 </script>
