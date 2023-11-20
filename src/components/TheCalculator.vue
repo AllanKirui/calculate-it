@@ -46,7 +46,10 @@ const clearChars = (activeDropdown, converter, integerPortion) => {
   }
 
   // remove any comma seperators and handle deleting chars from numbers with decimals
-  if (converter.topUnitValue.includes(",")) {
+  if (
+    converter.topUnitValue.includes(",") ||
+    converter.bottomUnitValue.includes(",")
+  ) {
     removeCommasFromUnitValues(activeDropdown, converter, integerPortion)
   }
 }

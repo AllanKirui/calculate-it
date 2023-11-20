@@ -98,6 +98,7 @@ const integerPortion = reactive({
 
 // reactive data object for related math data
 const massData = reactive({
+  hasSwitchedActiveDropdown: false,
   hasTopUnitChanged: false,
   hasBottomUnitChanged: false,
   hasConvertedToTopEquiv: false,
@@ -230,10 +231,11 @@ watch(
   }
 )
 
-// when the activeDropdown changes, reset the following flags
+// when the activeDropdown changes, update the following flags
 watch(
   () => activeDropdown.value,
   (newValue) => {
+    massData.hasSwitchedActiveDropdown = true
     massData.hasConvertedToTopEquiv = false
     massData.hasConvertedToBottomEquiv = false
     massData.hasTopUnitChanged = false
@@ -255,6 +257,9 @@ const appendNumber = (number) => {
   } else if (activeDropdown.value === "bottom") {
     massData.hasConvertedToBottomEquiv = true
   }
+
+  // reset the flag that checks if the active dropdown has changed
+  massData.hasSwitchedActiveDropdown = false
 
   // return if zero is clicked when either the top or bottom unit values are zero
   // and if the number already contains a decimal point return
@@ -450,10 +455,14 @@ const setActiveUnitBottom = (unit) => {
 }
 
 const clear = () => {
+  if (!massData.topUnitValue && !massData.bottomUnitValue) return
+
   clearAll(massData, integerPortion)
 }
 
 const backspace = () => {
+  if (!massData.topUnitValue && !massData.bottomUnitValue) return
+
   clearChars(activeDropdown, massData, integerPortion)
 }
 </script>
