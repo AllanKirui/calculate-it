@@ -254,8 +254,10 @@ const appendNumber = (number) => {
   // the hasConvertedTo... flag prevents the 2 watcher methods above from running twice
   if (activeDropdown.value === "top") {
     massData.hasConvertedToTopEquiv = true
+    massData.hasBottomUnitChanged = false
   } else if (activeDropdown.value === "bottom") {
     massData.hasConvertedToBottomEquiv = true
+    massData.hasTopUnitChanged = false
   }
 
   // reset the flag that checks if the active dropdown has changed
