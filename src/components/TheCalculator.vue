@@ -27,8 +27,8 @@ const removeCommas = (stringNumber) => {
 }
 
 const clearAll = (converter, integerPortion) => {
-  integerPortion.topUnit.value = ""
-  integerPortion.bottomUnit.value = ""
+  integerPortion.topUnit = ""
+  integerPortion.bottomUnit = ""
   converter.topUnitValue = ""
   converter.bottomUnitValue = ""
 
@@ -39,10 +39,10 @@ const clearChars = (activeDropdown, converter, integerPortion) => {
   // remove the last character from the expression shown on the calc display
   if (activeDropdown.value === "top") {
     converter.topUnitValue = converter.topUnitValue.slice(0, -1)
-    integerPortion.topUnit.value = converter.topUnitValue
+    integerPortion.topUnit = converter.topUnitValue
   } else {
     converter.bottomUnitValue = converter.bottomUnitValue.slice(0, -1)
-    integerPortion.bottomUnit.value = converter.bottomUnitValue
+    integerPortion.bottomUnit = converter.bottomUnitValue
   }
 
   // remove any comma seperators and handle deleting chars from numbers with decimals
@@ -80,13 +80,13 @@ const removeCommasFromUnitValues = (
       numWithCommas += "."
 
     converter.topUnitValue = numWithCommas
-    integerPortion.topUnit.value = converter.topUnitValue
+    integerPortion.topUnit = converter.topUnitValue
   } else {
     if (converter.bottomUnitValue.endsWith(".") && !numWithCommas.includes("."))
       numWithCommas += "."
 
     converter.bottomUnitValue = numWithCommas
-    integerPortion.bottomUnit.value = converter.bottomUnitValue
+    integerPortion.bottomUnit = converter.bottomUnitValue
   }
 }
 
