@@ -85,6 +85,10 @@ const removeCommas = inject("removeCommas")
 const clearAll = inject("clearAll")
 const clearChars = inject("clearChars")
 const listenForKeyboardInputs = inject("listenForKeyboardInputs")
+const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
+
+// convert the template ref into a data ref
+const buttonsContainerRef = ref(null)
 
 const activeDropdown = ref("top")
 const topActiveUnit = ref("kg")
@@ -251,7 +255,13 @@ watch(
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(activeDropdown, massData, integerPortion)
+  listenForKeyboardInputs(
+    activeDropdown,
+    massData,
+    integerPortion,
+    buttonsContainerRef
+  )
+  showRippleEffectOnButtons(buttonsContainerRef)
 })
 
 /*

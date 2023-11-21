@@ -176,7 +176,12 @@ const removeCommasFromUnitValues = (
   }
 }
 
-const listenForKeyboardInputs = (activeDropdown, converter, integerPortion) => {
+const listenForKeyboardInputs = (
+  activeDropdown,
+  converter,
+  integerPortion,
+  buttonsRef
+) => {
   window.addEventListener("keyup", (e) => {
     // check which key was pressed and append the number or set operation
     const validKeys = [
@@ -195,7 +200,7 @@ const listenForKeyboardInputs = (activeDropdown, converter, integerPortion) => {
     const keyPressed = e.key
 
     if (validKeys.includes(keyPressed)) {
-      // TODO showRippleEffectOnButtons("0")
+      showRippleEffectOnButtons(buttonsRef, keyPressed)
 
       // check if the key pressed is not a number. In this case, 'Backspace'
       if (isNaN(+keyPressed)) {
@@ -208,9 +213,73 @@ const listenForKeyboardInputs = (activeDropdown, converter, integerPortion) => {
   })
 }
 
+const showRippleEffectOnButtons = (buttonsRef, keyboardInput) => {
+  const buttons = []
+
+  for (let i = 0; i < buttonsRef.value.children.length; i++) {
+    buttons.push(buttonsRef.value.children[i])
+  }
+
+  buttons.forEach((btn) => {
+    // show ripple effects on buttons when input is from the keyboard
+    if (keyboardInput === btn.innerText) {
+      setRippleForKeyboardInputs(btn)
+      return
+    } else if (keyboardInput === "Backspace" && btn.innerText === "«") {
+      setRippleForKeyboardInputs(btn)
+      return
+    }
+
+    // show ripple effects on buttons when input is from a click
+    btn.addEventListener("click", (e) => setRippleForClickedButton(e))
+  })
+}
+
+const setRippleForKeyboardInputs = (btn) => {
+  const rect = btn.getBoundingClientRect()
+
+  // create a circle element to fill the button
+  const circle = document.createElement("span")
+  circle.classList.add("circle")
+  circle.style.top = `50%`
+  circle.style.left = `50%`
+
+  btn.appendChild(circle)
+
+  setTimeout(() => circle.remove(), 350)
+}
+
+const setRippleForClickedButton = (e) => {
+  const target = e.target
+  const rect = target.getBoundingClientRect()
+
+  // get the position of the mouse within the browser
+  const x = e.clientX
+  const y = e.clientY
+
+  // get the position of the button's top and left edges
+  const buttonTop = rect.top
+  const buttonLeft = rect.left
+
+  // calculate the position of the mouse within the button
+  const xInside = x - buttonLeft
+  const yInside = y - buttonTop
+
+  // create a circle element to fill the button
+  const circle = document.createElement("span")
+  circle.classList.add("circle")
+  circle.style.top = `${yInside}px`
+  circle.style.left = `${xInside}px`
+
+  e.target.appendChild(circle)
+
+  setTimeout(() => circle.remove(), 350)
+}
+
 provide("appendNumber", appendNumber)
 provide("removeCommas", removeCommas)
 provide("clearAll", clearAll)
 provide("clearChars", clearChars)
 provide("listenForKeyboardInputs", listenForKeyboardInputs)
+provide("showRippleEffectOnButtons", showRippleEffectOnButtons)
 </script>
