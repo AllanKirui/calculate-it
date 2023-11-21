@@ -176,8 +176,41 @@ const removeCommasFromUnitValues = (
   }
 }
 
+const listenForKeyboardInputs = (activeDropdown, converter, integerPortion) => {
+  window.addEventListener("keyup", (e) => {
+    // check which key was pressed and append the number or set operation
+    const validKeys = [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "Backspace"
+    ]
+    const keyPressed = e.key
+
+    if (validKeys.includes(keyPressed)) {
+      // TODO showRippleEffectOnButtons("0")
+
+      // check if the key pressed is not a number. In this case, 'Backspace'
+      if (isNaN(+keyPressed)) {
+        clearChars(activeDropdown, converter, integerPortion)
+        return
+      }
+
+      appendNumber(keyPressed, activeDropdown, converter, integerPortion)
+    }
+  })
+}
+
 provide("appendNumber", appendNumber)
 provide("removeCommas", removeCommas)
 provide("clearAll", clearAll)
 provide("clearChars", clearChars)
+provide("listenForKeyboardInputs", listenForKeyboardInputs)
 </script>

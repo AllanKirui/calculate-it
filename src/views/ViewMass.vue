@@ -78,12 +78,13 @@
 
 <script setup>
 import TheDropdown from "@/components/ui/TheDropdown.vue"
-import { ref, reactive, watch, inject } from "vue"
+import { ref, reactive, watch, inject, onMounted } from "vue"
 
 const appendNumberToConverter = inject("appendNumber")
 const removeCommas = inject("removeCommas")
 const clearAll = inject("clearAll")
 const clearChars = inject("clearChars")
+const listenForKeyboardInputs = inject("listenForKeyboardInputs")
 
 const activeDropdown = ref("top")
 const topActiveUnit = ref("kg")
@@ -247,6 +248,11 @@ watch(
     integerPortion.bottomUnit = ""
   }
 )
+
+// set up a listener on the buttons once the component is mounted
+onMounted(() => {
+  listenForKeyboardInputs(activeDropdown, massData, integerPortion)
+})
 
 /*
   Methods
