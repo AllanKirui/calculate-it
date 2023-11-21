@@ -332,6 +332,8 @@ const appendNumber = (number) => {
 }
 
 const convertTopUnitToBottomEquiv = (unitValue) => {
+  if (!unitValue) return
+
   // convert the string number to a number
   let topUnitValue = removeCommas(unitValue)
 
@@ -344,6 +346,8 @@ const convertTopUnitToBottomEquiv = (unitValue) => {
 }
 
 const convertBottomUnitToTopEquiv = (unitValue) => {
+  if (!unitValue) return
+
   // convert the string number to a number
   let bottomUnitValue = removeCommas(unitValue)
 
