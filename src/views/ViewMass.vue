@@ -80,6 +80,7 @@
 import TheDropdown from "@/components/ui/TheDropdown.vue"
 import { ref, reactive, watch, inject } from "vue"
 
+const appendNumberToConverter = inject("appendNumber")
 const removeCommas = inject("removeCommas")
 const clearAll = inject("clearAll")
 const clearChars = inject("clearChars")
@@ -251,84 +252,7 @@ watch(
   Methods
 */
 const appendNumber = (number) => {
-  // the hasConvertedTo... flag prevents the watcher methods above
-  // for topUnitValue and bottomUnitValue from running twice
-  if (activeDropdown.value === "top") {
-    massData.hasConvertedToTopEquiv = true
-    massData.hasBottomUnitChanged = false
-  } else if (activeDropdown.value === "bottom") {
-    massData.hasConvertedToBottomEquiv = true
-    massData.hasTopUnitChanged = false
-  }
-
-  // reset the flag that checks if the active dropdown has changed
-  massData.hasSwitchedActiveDropdown = false
-
-  // return if zero is clicked when either the top or bottom unit values are zero
-  // and if the number already contains a decimal point return
-  if (activeDropdown.value === "top") {
-    if (number === 0 && !massData.topUnitValue) return
-    if (number === "." && integerPortion.topUnit.includes(".")) return
-  } else {
-    if (number === 0 && !massData.bottomUnitValue) return
-    if (number === "." && integerPortion.bottomUnit.includes(".")) return
-  }
-
-  // convert the number to a string
-  let stringNumber = number.toString()
-  if (activeDropdown.value === "top") {
-    integerPortion.topUnit += stringNumber
-  } else {
-    integerPortion.bottomUnit += stringNumber
-  }
-
-  // get the Integer and Decimal parts of a number e.g 3.142
-  let integerNumbers
-  let decimalNumbers
-  let integerDisplay
-
-  if (activeDropdown.value === "top") {
-    integerNumbers = removeCommas(integerPortion.topUnit.split(".")[0]) // integer = 3
-    decimalNumbers = integerPortion.topUnit.split(".")[1] // decimal = 142
-  } else {
-    integerNumbers = removeCommas(integerPortion.bottomUnit.split(".")[0])
-    decimalNumbers = integerPortion.bottomUnit.split(".")[1]
-  }
-
-  // check if integerNumbers holds an actual number and convert that to a string
-  if (isNaN(integerNumbers)) {
-    integerDisplay = ""
-  } else {
-    integerDisplay = integerNumbers.toLocaleString("en", {
-      maximumFractionDigits: 0
-    })
-  }
-
-  // if the decimal point is the first button to be clicked add a zero before it
-  if (number === "." && isNaN(integerNumbers)) {
-    if (activeDropdown.value === "top") {
-      integerPortion.topUnit = "0."
-      integerDisplay = "0"
-    } else {
-      integerPortion.bottomUnit = "0."
-      integerDisplay = "0"
-    }
-  }
-
-  // handle displaying any decimal digits
-  if (decimalNumbers != null) {
-    if (activeDropdown.value === "top") {
-      massData.topUnitValue = `${integerDisplay}.${decimalNumbers}`
-    } else {
-      massData.bottomUnitValue = `${integerDisplay}.${decimalNumbers}`
-    }
-  } else {
-    if (activeDropdown.value === "top") {
-      massData.topUnitValue = integerDisplay
-    } else {
-      massData.bottomUnitValue = integerDisplay
-    }
-  }
+  appendNumberToConverter(number, activeDropdown, massData, integerPortion)
 }
 
 const convertTopUnitToBottomEquiv = (unitValue) => {

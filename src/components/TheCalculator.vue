@@ -13,6 +13,89 @@ import { provide } from "vue"
 /* 
   Methods
 */
+// method for appending numbers to the converters,
+// different from the appendNumber() in ViewMath.vue
+const appendNumber = (number, activeDropdown, converter, integerPortion) => {
+  // the hasConvertedTo... flag prevents the watcher methods for topUnitValue
+  // and bottomUnitValue from running twice inside child components
+  if (activeDropdown.value === "top") {
+    converter.hasConvertedToTopEquiv = true
+    converter.hasBottomUnitChanged = false
+  } else if (activeDropdown.value === "bottom") {
+    converter.hasConvertedToBottomEquiv = true
+    converter.hasTopUnitChanged = false
+  }
+
+  // reset the flag that checks if the active dropdown has changed
+  converter.hasSwitchedActiveDropdown = false
+
+  // return if zero is clicked when either the top or bottom unit values are zero
+  // and if the number already contains a decimal point return
+  if (activeDropdown.value === "top") {
+    if (number === 0 && !converter.topUnitValue) return
+    if (number === "." && integerPortion.topUnit.includes(".")) return
+  } else {
+    if (number === 0 && !converter.bottomUnitValue) return
+    if (number === "." && integerPortion.bottomUnit.includes(".")) return
+  }
+
+  // convert the number to a string
+  let stringNumber = number.toString()
+  if (activeDropdown.value === "top") {
+    integerPortion.topUnit += stringNumber
+  } else {
+    integerPortion.bottomUnit += stringNumber
+  }
+
+  // get the Integer and Decimal parts of a number e.g 3.142
+  let integerNumbers
+  let decimalNumbers
+  let integerDisplay
+
+  if (activeDropdown.value === "top") {
+    integerNumbers = removeCommas(integerPortion.topUnit.split(".")[0]) // integer = 3
+    decimalNumbers = integerPortion.topUnit.split(".")[1] // decimal = 142
+  } else {
+    integerNumbers = removeCommas(integerPortion.bottomUnit.split(".")[0])
+    decimalNumbers = integerPortion.bottomUnit.split(".")[1]
+  }
+
+  // check if integerNumbers holds an actual number and convert that to a string
+  if (isNaN(integerNumbers)) {
+    integerDisplay = ""
+  } else {
+    integerDisplay = integerNumbers.toLocaleString("en", {
+      maximumFractionDigits: 0
+    })
+  }
+
+  // if the decimal point is the first button to be clicked add a zero before it
+  if (number === "." && isNaN(integerNumbers)) {
+    if (activeDropdown.value === "top") {
+      integerPortion.topUnit = "0."
+      integerDisplay = "0"
+    } else {
+      integerPortion.bottomUnit = "0."
+      integerDisplay = "0"
+    }
+  }
+
+  // handle displaying any decimal digits
+  if (decimalNumbers != null) {
+    if (activeDropdown.value === "top") {
+      converter.topUnitValue = `${integerDisplay}.${decimalNumbers}`
+    } else {
+      converter.bottomUnitValue = `${integerDisplay}.${decimalNumbers}`
+    }
+  } else {
+    if (activeDropdown.value === "top") {
+      converter.topUnitValue = integerDisplay
+    } else {
+      converter.bottomUnitValue = integerDisplay
+    }
+  }
+}
+
 const removeCommas = (stringNumber) => {
   if (!stringNumber.includes(",")) {
     return parseFloat(stringNumber)
@@ -93,6 +176,7 @@ const removeCommasFromUnitValues = (
   }
 }
 
+provide("appendNumber", appendNumber)
 provide("removeCommas", removeCommas)
 provide("clearAll", clearAll)
 provide("clearChars", clearChars)
