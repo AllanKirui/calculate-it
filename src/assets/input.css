@@ -54,7 +54,7 @@
   }
 
   .btn.btn-clear .circle {
-    @apply bg-liver;
+    @apply bg-navajo-white;
   }
 
   .btn.btn-equals .circle {
