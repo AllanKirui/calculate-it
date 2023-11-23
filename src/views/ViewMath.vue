@@ -103,7 +103,9 @@
 </template>
 
 <script setup>
-import { onBeforeMount, onMounted, reactive, ref, watch } from "vue"
+import { onBeforeMount, onMounted, reactive, ref, watch, inject } from "vue"
+
+const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
 
 // integer part of a float i.e 3.142 => 3
 const integerPortion = ref("")
@@ -153,7 +155,7 @@ onBeforeMount(() => {
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  showRippleEffectOnButtons()
+  showRippleEffectOnButtons(buttonsContainerRef)
   listenForKeyboardInputs()
 })
 
@@ -483,144 +485,55 @@ const removeCommasFromCurrentOperand = () => {
 const listenForKeyboardInputs = () => {
   window.addEventListener("keyup", (e) => {
     // check which key was pressed and append the number or set operation
-    switch (e.key) {
-      case "0":
-        showRippleEffectOnButtons("0")
-        appendNumber(0)
-        break
-      case "1":
-        showRippleEffectOnButtons("1")
-        appendNumber(1)
-        break
-      case "2":
-        showRippleEffectOnButtons("2")
-        appendNumber(2)
-        break
-      case "3":
-        showRippleEffectOnButtons("3")
-        appendNumber(3)
-        break
-      case "4":
-        showRippleEffectOnButtons("4")
-        appendNumber(4)
-        break
-      case "5":
-        showRippleEffectOnButtons("5")
-        appendNumber(5)
-        break
-      case "6":
-        showRippleEffectOnButtons("6")
-        appendNumber(6)
-        break
-      case "7":
-        showRippleEffectOnButtons("7")
-        appendNumber(7)
-        break
-      case "8":
-        showRippleEffectOnButtons("8")
-        appendNumber(8)
-        break
-      case "9":
-        showRippleEffectOnButtons("9")
-        appendNumber(9)
-        break
-      case ".":
-        showRippleEffectOnButtons(".")
-        appendNumber(".")
-        break
-      case "+":
-        showRippleEffectOnButtons("+")
-        setOperation("+")
-        break
-      case "-":
-        showRippleEffectOnButtons("-")
-        setOperation("-")
-        break
-      case "*":
-        showRippleEffectOnButtons("×")
-        setOperation("×")
-        break
-      case "/":
-        showRippleEffectOnButtons("÷")
-        setOperation("÷")
-        break
-      case "Backspace":
-        showRippleEffectOnButtons("Backspace")
-        backspace()
-        break
-      case "Enter":
-        showRippleEffectOnButtons("=")
-        evaluateExpression()
-        break
-      case "=":
-        showRippleEffectOnButtons("=")
-        evaluateExpression()
-        break
-      default:
-        return
+    const validKeys = [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      ".",
+      "+",
+      "-",
+      "*",
+      "/",
+      "=",
+      "Backspace",
+      "Enter"
+    ]
+    const keyPressed = e.key
+
+    if (validKeys.includes(keyPressed)) {
+      const operationKeys = ["+", "-", "*", "/"]
+
+      if (operationKeys.includes(keyPressed)) {
+        if (keyPressed === "*") {
+          showRippleEffectOnButtons(buttonsContainerRef, "×")
+          setOperation("×")
+        } else if (keyPressed === "/") {
+          showRippleEffectOnButtons(buttonsContainerRef, "÷")
+          setOperation("÷")
+        } else {
+          showRippleEffectOnButtons(buttonsContainerRef, keyPressed)
+          setOperation(keyPressed)
+        }
+      } else {
+        if (keyPressed === "=" || keyPressed === "Enter") {
+          showRippleEffectOnButtons(buttonsContainerRef, "=")
+          evaluateExpression()
+        } else if (keyPressed === "Backspace") {
+          backspace()
+        } else {
+          appendNumber(keyPressed)
+        }
+
+        showRippleEffectOnButtons(buttonsContainerRef, keyPressed)
+      }
     }
   })
-}
-
-const showRippleEffectOnButtons = (keyboardInput) => {
-  const buttons = []
-
-  for (let i = 0; i < buttonsContainerRef.value.children.length; i++) {
-    buttons.push(buttonsContainerRef.value.children[i])
-  }
-
-  buttons.forEach((btn) => {
-    // show ripple effects on buttons when input is from the keyboard
-    if (keyboardInput === btn.innerText) {
-      setRippleForKeyboardInputs(btn)
-      return
-    } else if (keyboardInput === "Backspace" && btn.innerText === "«") {
-      setRippleForKeyboardInputs(btn)
-      return
-    }
-
-    btn.addEventListener("click", (e) => setRippleForClickedButton(e))
-  })
-}
-
-const setRippleForClickedButton = (e) => {
-  const target = e.target
-  const rect = target.getBoundingClientRect()
-
-  // get the position of the mouse within the browser
-  const x = e.clientX
-  const y = e.clientY
-
-  // get the position of the button's top and left edges
-  const buttonTop = rect.top
-  const buttonLeft = rect.left
-
-  // calculate the position of the mouse within the button
-  const xInside = x - buttonLeft
-  const yInside = y - buttonTop
-
-  // create a circle element to fill the button
-  const circle = document.createElement("span")
-  circle.classList.add("circle")
-  circle.style.top = `${yInside}px`
-  circle.style.left = `${xInside}px`
-
-  e.target.appendChild(circle)
-
-  setTimeout(() => circle.remove(), 500)
-}
-
-const setRippleForKeyboardInputs = (btn) => {
-  const rect = btn.getBoundingClientRect()
-
-  // create a circle element to fill the button
-  const circle = document.createElement("span")
-  circle.classList.add("circle")
-  circle.style.top = `50%`
-  circle.style.left = `50%`
-
-  btn.appendChild(circle)
-
-  setTimeout(() => circle.remove(), 500)
 }
 </script>
