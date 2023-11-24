@@ -120,12 +120,17 @@ const clearAll = (converter, integerPortion) => {
 
 const clearChars = (activeDropdown, converter, integerPortion) => {
   // remove the last character from the expression shown on the calc display
+  //
+  // the hasConvertedTo... flag prevents the watcher methods above
+  // for topUnitValue and bottomUnitValue from running twice
   if (activeDropdown.value === "top") {
     converter.topUnitValue = converter.topUnitValue.slice(0, -1)
     integerPortion.topUnit = converter.topUnitValue
+    converter.hasConvertedToTopEquiv = true
   } else {
     converter.bottomUnitValue = converter.bottomUnitValue.slice(0, -1)
     integerPortion.bottomUnit = converter.bottomUnitValue
+    converter.hasConvertedToBottomEquiv = true
   }
 
   // remove any comma seperators and handle deleting chars from numbers with decimals

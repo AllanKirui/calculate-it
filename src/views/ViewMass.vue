@@ -410,14 +410,6 @@ const clear = () => {
 const backspace = () => {
   if (!massData.topUnitValue && !massData.bottomUnitValue) return
 
-  // the hasConvertedTo... flag prevents the watcher methods above
-  // for topUnitValue and bottomUnitValue from running twice
-  if (activeDropdown.value === "top") {
-    massData.hasConvertedToTopEquiv = true
-  } else if (activeDropdown.value === "bottom") {
-    massData.hasConvertedToBottomEquiv = true
-  }
-
   clearChars(activeDropdown, massData, integerPortion)
 }
 </script>
