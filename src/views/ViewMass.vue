@@ -46,38 +46,20 @@
 
   <!-- The Buttons -->
   <div
-    ref="buttonsContainerRef"
     class="buttons-container md:min-h-full grid grid-cols-4 grid-rows-4 gap-2 text-2xl mt-3"
+    ref="buttonsContainerRef"
   >
-    <!-- Row 1 Buttons -->
-    <button @click="appendNumber(7)" class="btn btn-numbers">7</button>
-    <button @click="appendNumber(8)" class="btn btn-numbers">8</button>
-    <button @click="appendNumber(9)" class="btn btn-numbers">9</button>
-    <button @click="clear" class="btn btn-clear row-span-2">AC</button>
-
-    <!-- Row 2 Buttons -->
-    <button @click="appendNumber(4)" class="btn btn-numbers">4</button>
-    <button @click="appendNumber(5)" class="btn btn-numbers">5</button>
-    <button @click="appendNumber(6)" class="btn btn-numbers">6</button>
-
-    <!-- Row 3 Buttons -->
-    <button @click="appendNumber(1)" class="btn btn-numbers">1</button>
-    <button @click="appendNumber(2)" class="btn btn-numbers">2</button>
-    <button @click="appendNumber(3)" class="btn btn-numbers">3</button>
-    <button @click="backspace" class="btn btn-operators row-span-2">
-      &laquo;
-    </button>
-
-    <!-- Row 4 Buttons -->
-    <button @click="appendNumber(0)" class="col-start-2 btn btn-numbers">
-      0
-    </button>
-    <button @click="appendNumber('.')" class="btn btn-numbers">.</button>
+    <ConverterButtons
+      @appendNumber="appendNumber"
+      @clear="clear"
+      @backspace="backspace"
+    />
   </div>
 </template>
 
 <script setup>
 import TheDropdown from "@/components/ui/TheDropdown.vue"
+import ConverterButtons from "@/components/ui/ConverterButtons.vue"
 import { ref, reactive, watch, inject, onMounted } from "vue"
 
 const appendNumberToConverter = inject("appendNumber")
