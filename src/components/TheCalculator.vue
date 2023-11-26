@@ -20,10 +20,8 @@ const appendNumber = (number, activeDropdown, converter, integerPortion) => {
   // and bottomUnitValue from running twice inside child components
   if (activeDropdown.value === "top") {
     converter.hasConvertedToTopEquiv = true
-    converter.hasBottomUnitChanged = false
   } else if (activeDropdown.value === "bottom") {
     converter.hasConvertedToBottomEquiv = true
-    converter.hasTopUnitChanged = false
   }
 
   // reset the flag that checks if the active dropdown has changed
