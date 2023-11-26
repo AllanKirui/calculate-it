@@ -87,8 +87,6 @@ const integerPortion = reactive({
 // reactive data object for related math data
 const massData = reactive({
   hasSwitchedActiveDropdown: false,
-  hasTopUnitChanged: false,
-  hasBottomUnitChanged: false,
   hasConvertedToTopEquiv: false,
   hasConvertedToBottomEquiv: false,
   topUnitValue: "",
@@ -143,8 +141,6 @@ watch(
         break
     }
 
-    massData.hasTopUnitChanged = true
-
     if (!massData.topUnitValue && !massData.bottomUnitValue) return
 
     // if there was a previous unit value and the unit type changes
@@ -181,8 +177,6 @@ watch(
         break
     }
 
-    massData.hasBottomUnitChanged = true
-
     if (!massData.topUnitValue && !massData.bottomUnitValue) return
 
     if (activeDropdown.value === "bottom") {
@@ -201,8 +195,7 @@ watch(
 watch(
   () => massData.topUnitValue,
   (newValue) => {
-    if (massData.hasBottomUnitChanged || massData.hasConvertedToBottomEquiv)
-      return
+    if (massData.hasConvertedToBottomEquiv) return
 
     // calculate the value for the bottom unit
     massData.bottomUnitValue = convertTopUnitToBottomEquiv(newValue)
@@ -212,7 +205,7 @@ watch(
 watch(
   () => massData.bottomUnitValue,
   (newValue) => {
-    if (massData.hasTopUnitChanged || massData.hasConvertedToTopEquiv) return
+    if (massData.hasConvertedToTopEquiv) return
 
     // calculate the value for the top unit
     massData.topUnitValue = convertBottomUnitToTopEquiv(newValue)
@@ -226,8 +219,6 @@ watch(
     massData.hasSwitchedActiveDropdown = true
     massData.hasConvertedToTopEquiv = false
     massData.hasConvertedToBottomEquiv = false
-    massData.hasTopUnitChanged = false
-    massData.hasBottomUnitChanged = false
 
     // reset the value that was previously entered for a unit
     integerPortion.topUnit = ""
