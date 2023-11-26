@@ -10,7 +10,7 @@
 <script setup>
 import { provide } from "vue"
 
-/* 
+/*
   Methods
 */
 // method for appending numbers to the converters,
@@ -200,20 +200,27 @@ const listenForKeyboardInputs = (
       "7",
       "8",
       "9",
-      "Backspace"
+      "Backspace",
+      "Delete"
     ]
     const keyPressed = e.key
 
     if (validKeys.includes(keyPressed)) {
       showRippleEffectOnButtons(buttonsRef, keyPressed)
 
-      // check if the key pressed is not a number. In this case, 'Backspace'
-      if (isNaN(+keyPressed)) {
-        clearChars(activeDropdown, converter, integerPortion)
-        return
+      // clear characters when backspace is pressed, clear all when delete is pressed
+      switch (keyPressed) {
+        case "Backspace":
+          clearChars(activeDropdown, converter, integerPortion)
+          break
+        case "Delete":
+          showRippleEffectOnButtons(buttonsRef, "AC")
+          clearAll(converter, integerPortion)
+          break
+        default:
+          appendNumber(keyPressed, activeDropdown, converter, integerPortion)
+          break
       }
-
-      appendNumber(keyPressed, activeDropdown, converter, integerPortion)
     }
   })
 }
