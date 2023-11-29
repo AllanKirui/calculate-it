@@ -325,9 +325,28 @@ const storeConverterStates = (
       bottomUnit: integerPortion.bottomUnit ?? "",
       topUnitValue: converter.topUnitValue ?? "",
       bottomUnitValue: converter.bottomUnitValue ?? "",
-      activeDropdown: activeDropdown.value ?? "top"
+      activeDropdown: activeDropdown.value ?? "top",
+      hasSwitchedActiveDropdown: false,
+      hasConvertedToTopEquiv: converter.hasConvertedToTopEquiv,
+      hasConvertedToBottomEquiv: converter.hasConvertedToBottomEquiv
     })
   )
+}
+
+const getStoredConverterData = (converter, integerPortion, activeDropdown) => {
+  const storedData = JSON.parse(localStorage.getItem(converter.name))
+
+  if (storedData) {
+    activeDropdown.value = storedData.activeDropdown
+    integerPortion.topUnit = storedData.topUnit
+    integerPortion.bottomUnit = storedData.bottomUnit
+    converter.topActiveUnit = storedData.topActiveUnit
+    converter.bottomActiveUnit = storedData.bottomActiveUnit
+    converter.topUnitValue = storedData.topUnitValue
+    converter.bottomUnitValue = storedData.bottomUnitValue
+    converter.hasConvertedToTopEquiv = storedData.hasConvertedToTopEquiv
+    converter.hasConvertedToBottomEquiv = storedData.hasConvertedToBottomEquiv
+  }
 }
 
 provide("appendNumber", appendNumber)
@@ -337,4 +356,5 @@ provide("clearChars", clearChars)
 provide("listenForKeyboardInputs", listenForKeyboardInputs)
 provide("showRippleEffectOnButtons", showRippleEffectOnButtons)
 provide("storeConverterDataLocally", storeConverterDataLocally)
+provide("getStoredConverterData", getStoredConverterData)
 </script>

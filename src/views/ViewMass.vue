@@ -60,7 +60,7 @@
 <script setup>
 import TheDropdown from "@/components/ui/TheDropdown.vue"
 import ConverterButtons from "@/components/ui/ConverterButtons.vue"
-import { ref, reactive, watch, inject, onMounted } from "vue"
+import { ref, reactive, watch, inject, onMounted, onBeforeMount } from "vue"
 
 const appendNumberToConverter = inject("appendNumber")
 const removeCommas = inject("removeCommas")
@@ -69,6 +69,7 @@ const clearChars = inject("clearChars")
 const listenForKeyboardInputs = inject("listenForKeyboardInputs")
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
 const storeConverterDataLocally = inject("storeConverterDataLocally")
+const getStoredConverterData = inject("getStoredConverterData")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
@@ -224,7 +225,7 @@ watch(
 watch(
   () => activeDropdown.value,
   (newValue) => {
-    massData.hasSwitchedActiveDropdown = true
+    massData.hasSwitchedActiveDropdown = true // FIXME unused, remove also from TheCalc cmp
     /* 
     // FIXME
       The 2 lines below result in a bug when:
@@ -242,6 +243,13 @@ watch(
     storeConverterDataLocally(massData, integerPortion, activeDropdown)
   }
 )
+
+// retrieve any locally stored converter data
+onBeforeMount(() => {
+  console.log("ViewMass retrieving data onBeforeMount")
+  if (!localStorage) return
+  getStoredConverterData(massData, integerPortion, activeDropdown)
+})
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
