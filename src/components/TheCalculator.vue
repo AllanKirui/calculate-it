@@ -107,13 +107,13 @@ const removeCommas = (stringNumber) => {
   return parseFloat(num)
 }
 
-const clearAll = (converter, integerPortion) => {
+const clearAll = (converter, integerPortion, activeDropdown) => {
   integerPortion.topUnit = ""
   integerPortion.bottomUnit = ""
   converter.topUnitValue = ""
   converter.bottomUnitValue = ""
 
-  // TODO storeMathDataLocally()
+  storeConverterDataLocally(converter, integerPortion, activeDropdown)
 }
 
 const clearChars = (activeDropdown, converter, integerPortion) => {
@@ -121,6 +121,7 @@ const clearChars = (activeDropdown, converter, integerPortion) => {
   //
   // the hasConvertedTo... flag prevents the watcher methods above
   // for topUnitValue and bottomUnitValue from running twice
+
   if (activeDropdown.value === "top") {
     converter.topUnitValue = converter.topUnitValue.slice(0, -1)
     integerPortion.topUnit = converter.topUnitValue
@@ -138,6 +139,8 @@ const clearChars = (activeDropdown, converter, integerPortion) => {
   ) {
     removeCommasFromUnitValues(activeDropdown, converter, integerPortion)
   }
+
+  storeConverterDataLocally(converter, integerPortion, activeDropdown)
 }
 
 const removeCommasFromUnitValues = (
@@ -286,10 +289,52 @@ const setRippleForClickedButton = (e) => {
   setTimeout(() => circle.remove(), 350)
 }
 
+const storeConverterDataLocally = (
+  converter,
+  integerPortion,
+  activeDropdown
+) => {
+  if (!localStorage) return
+
+  // TODO store the states of the different converters
+  switch (converter.name) {
+    case "massData":
+      const defaultActiveUnits = { top: "kg", bottom: "lb" }
+      storeConverterStates(
+        converter,
+        integerPortion,
+        activeDropdown,
+        defaultActiveUnits
+      )
+      break
+  }
+}
+
+const storeConverterStates = (
+  converter,
+  integerPortion,
+  activeDropdown,
+  activeUnit
+) => {
+  localStorage.setItem(
+    converter.name,
+    JSON.stringify({
+      topActiveUnit: converter.topActiveUnit ?? activeUnit.top,
+      bottomActiveUnit: converter.bottomActiveUnit ?? activeUnit.bottom,
+      topUnit: integerPortion.topUnit ?? "",
+      bottomUnit: integerPortion.bottomUnit ?? "",
+      topUnitValue: converter.topUnitValue ?? "",
+      bottomUnitValue: converter.bottomUnitValue ?? "",
+      activeDropdown: activeDropdown.value ?? "top"
+    })
+  )
+}
+
 provide("appendNumber", appendNumber)
 provide("removeCommas", removeCommas)
 provide("clearAll", clearAll)
 provide("clearChars", clearChars)
 provide("listenForKeyboardInputs", listenForKeyboardInputs)
 provide("showRippleEffectOnButtons", showRippleEffectOnButtons)
+provide("storeConverterDataLocally", storeConverterDataLocally)
 </script>

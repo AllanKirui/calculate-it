@@ -4,7 +4,7 @@
   <div class="dropdown-container top-dropdown">
     <TheDropdown
       :is-active="activeDropdown === 'top' ? true : false"
-      :active-unit="topActiveUnit"
+      :active-unit="massData.topActiveUnit"
       @setActiveUnit="setActiveUnitTop"
     />
     <div @click="activeDropdown = 'top'" class="relative w-full text-right">
@@ -19,7 +19,7 @@
   <div class="dropdown-container bottom-dropdown">
     <TheDropdown
       :is-active="activeDropdown === 'bottom' ? true : false"
-      :active-unit="bottomActiveUnit"
+      :active-unit="massData.bottomActiveUnit"
       @setActiveUnit="setActiveUnitBottom"
     />
     <div @click="activeDropdown = 'bottom'" class="relative w-full text-right">
@@ -68,13 +68,12 @@ const clearAll = inject("clearAll")
 const clearChars = inject("clearChars")
 const listenForKeyboardInputs = inject("listenForKeyboardInputs")
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
+const storeConverterDataLocally = inject("storeConverterDataLocally")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
 
 const activeDropdown = ref("top")
-const topActiveUnit = ref("kg")
-const bottomActiveUnit = ref("lb")
 const topUnitName = ref("Kilogram")
 const bottomUnitName = ref("Pound")
 
@@ -86,6 +85,9 @@ const integerPortion = reactive({
 
 // reactive data object for related math data
 const massData = reactive({
+  name: "massData",
+  topActiveUnit: "kg",
+  bottomActiveUnit: "lb",
   hasSwitchedActiveDropdown: false,
   hasConvertedToTopEquiv: false,
   hasConvertedToBottomEquiv: false,
@@ -124,7 +126,7 @@ const conversionRates = {
 
 // when a user changes units, update the unit name below the result
 watch(
-  () => topActiveUnit.value,
+  () => massData.topActiveUnit,
   (newUnit) => {
     switch (newUnit) {
       case "g":
@@ -156,11 +158,13 @@ watch(
         massData.bottomUnitValue
       )
     }
+
+    storeConverterDataLocally(massData, integerPortion, activeDropdown)
   }
 )
 
 watch(
-  () => bottomActiveUnit.value,
+  () => massData.bottomActiveUnit,
   (newUnit) => {
     switch (newUnit) {
       case "kg":
@@ -188,6 +192,8 @@ watch(
         massData.topUnitValue
       )
     }
+
+    storeConverterDataLocally(massData, integerPortion, activeDropdown)
   }
 )
 
@@ -199,6 +205,7 @@ watch(
 
     // calculate the value for the bottom unit
     massData.bottomUnitValue = convertTopUnitToBottomEquiv(newValue)
+    storeConverterDataLocally(massData, integerPortion, activeDropdown)
   }
 )
 
@@ -209,6 +216,7 @@ watch(
 
     // calculate the value for the top unit
     massData.topUnitValue = convertBottomUnitToTopEquiv(newValue)
+    storeConverterDataLocally(massData, integerPortion, activeDropdown)
   }
 )
 
@@ -217,12 +225,21 @@ watch(
   () => activeDropdown.value,
   (newValue) => {
     massData.hasSwitchedActiveDropdown = true
+    /* 
+    // FIXME
+      The 2 lines below result in a bug when:
+      topUnit is 'kg' and value is 5, bottomUnit is 'lb' and value has been calculated based on the topUnitValue
+      switching topUnit to 'g' then switching active dropdown to 'bottom' and then trying to change the
+      calculated 5000 gram value to any other unit
+     */
     massData.hasConvertedToTopEquiv = false
     massData.hasConvertedToBottomEquiv = false
 
     // reset the value that was previously entered for a unit
     integerPortion.topUnit = ""
     integerPortion.bottomUnit = ""
+
+    storeConverterDataLocally(massData, integerPortion, activeDropdown)
   }
 )
 
@@ -279,11 +296,11 @@ const convertValues = (dropdown, unitValue) => {
 
   // check the active unit on the top and bottom dropdowns
   if (dropdown === "top") {
-    activeUnit1 = bottomActiveUnit.value
-    activeUnit2 = topActiveUnit.value
+    activeUnit1 = massData.bottomActiveUnit
+    activeUnit2 = massData.topActiveUnit
   } else {
-    activeUnit1 = topActiveUnit.value
-    activeUnit2 = bottomActiveUnit.value
+    activeUnit1 = massData.topActiveUnit
+    activeUnit2 = massData.bottomActiveUnit
   }
 
   // convert the top/bottom unit values based on the active
@@ -367,17 +384,19 @@ const convertValues = (dropdown, unitValue) => {
 }
 
 const setActiveUnitTop = (unit) => {
-  topActiveUnit.value = unit
+  massData.topActiveUnit = unit
+  storeConverterDataLocally(massData, integerPortion, activeDropdown)
 }
 
 const setActiveUnitBottom = (unit) => {
-  bottomActiveUnit.value = unit
+  massData.bottomActiveUnit = unit
+  storeConverterDataLocally(massData, integerPortion, activeDropdown)
 }
 
 const clear = () => {
   if (!massData.topUnitValue && !massData.bottomUnitValue) return
 
-  clearAll(massData, integerPortion)
+  clearAll(massData, integerPortion, activeDropdown)
 }
 
 const backspace = () => {
