@@ -24,9 +24,6 @@ const appendNumber = (number, activeDropdown, converter, integerPortion) => {
     converter.hasConvertedToBottomEquiv = true
   }
 
-  // reset the flag that checks if the active dropdown has changed
-  converter.hasSwitchedActiveDropdown = false
-
   // return if zero is clicked when either the top or bottom unit values are zero
   // and if the number already contains a decimal point return
   if (activeDropdown.value === "top") {
@@ -326,7 +323,6 @@ const storeConverterStates = (
       topUnitValue: converter.topUnitValue ?? "",
       bottomUnitValue: converter.bottomUnitValue ?? "",
       activeDropdown: activeDropdown.value ?? "top",
-      hasSwitchedActiveDropdown: false,
       hasConvertedToTopEquiv: converter.hasConvertedToTopEquiv,
       hasConvertedToBottomEquiv: converter.hasConvertedToBottomEquiv
     })

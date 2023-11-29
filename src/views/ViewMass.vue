@@ -89,7 +89,6 @@ const massData = reactive({
   name: "massData",
   topActiveUnit: "kg",
   bottomActiveUnit: "lb",
-  hasSwitchedActiveDropdown: false,
   hasConvertedToTopEquiv: false,
   hasConvertedToBottomEquiv: false,
   topUnitValue: "",
@@ -225,7 +224,6 @@ watch(
 watch(
   () => activeDropdown.value,
   (newValue) => {
-    massData.hasSwitchedActiveDropdown = true // FIXME unused, remove also from TheCalc cmp
     /* 
     // FIXME
       The 2 lines below result in a bug when:
@@ -246,7 +244,6 @@ watch(
 
 // retrieve any locally stored converter data
 onBeforeMount(() => {
-  console.log("ViewMass retrieving data onBeforeMount")
   if (!localStorage) return
   getStoredConverterData(massData, integerPortion, activeDropdown)
 })
