@@ -153,10 +153,12 @@ watch(
       massData.bottomUnitValue = convertTopUnitToBottomEquiv(
         massData.topUnitValue
       )
+      massData.hasConvertedToTopEquiv = true
     } else {
       massData.topUnitValue = convertBottomUnitToTopEquiv(
         massData.bottomUnitValue
       )
+      massData.hasConvertedToBottomEquiv = true
     }
 
     storeConverterDataLocally(massData, integerPortion, activeDropdown)
@@ -187,10 +189,12 @@ watch(
       massData.topUnitValue = convertBottomUnitToTopEquiv(
         massData.bottomUnitValue
       )
+      massData.hasConvertedToBottomEquiv = true
     } else {
       massData.bottomUnitValue = convertTopUnitToBottomEquiv(
         massData.topUnitValue
       )
+      massData.hasConvertedToTopEquiv = true
     }
 
     storeConverterDataLocally(massData, integerPortion, activeDropdown)
@@ -224,13 +228,6 @@ watch(
 watch(
   () => activeDropdown.value,
   (newValue) => {
-    /* 
-    // FIXME
-      The 2 lines below result in a bug when:
-      topUnit is 'kg' and value is 5, bottomUnit is 'lb' and value has been calculated based on the topUnitValue
-      switching topUnit to 'g' then switching active dropdown to 'bottom' and then trying to change the
-      calculated 5000 gram value to any other unit
-     */
     massData.hasConvertedToTopEquiv = false
     massData.hasConvertedToBottomEquiv = false
 
