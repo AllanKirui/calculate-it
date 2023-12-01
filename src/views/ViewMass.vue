@@ -8,7 +8,15 @@
       @setActiveUnit="setActiveUnitTop"
     />
     <div @click="activeDropdown = 'top'" class="relative w-full text-right">
-      <h2 class="result" :class="[activeDropdown === 'top' ? 'active' : '']">
+      <h2
+        class="result"
+        :class="[
+          activeDropdown === 'top' ? 'active' : '',
+          massData.topUnitValue && massData.topUnitValue.length > 20
+            ? 'text-2xl'
+            : ''
+        ]"
+      >
         {{ massData.topUnitValue || massData.defaultResult }}
       </h2>
       <span class="absolute right-0 text-xs md:text-sm">{{ topUnitName }}</span>
@@ -23,7 +31,15 @@
       @setActiveUnit="setActiveUnitBottom"
     />
     <div @click="activeDropdown = 'bottom'" class="relative w-full text-right">
-      <h2 class="result" :class="[activeDropdown === 'bottom' ? 'active' : '']">
+      <h2
+        class="result"
+        :class="[
+          activeDropdown === 'bottom' ? 'active' : '',
+          massData.bottomUnitValue && massData.bottomUnitValue.length > 20
+            ? 'text-2xl'
+            : ''
+        ]"
+      >
         {{ massData.bottomUnitValue || massData.defaultResult }}
       </h2>
       <span class="absolute right-0 text-xs md:text-sm">{{
