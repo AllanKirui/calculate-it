@@ -44,7 +44,7 @@
           </li>
 
           <li>
-            <a href="#">
+            <router-link to="length">
               <img
                 src="../assets/img/length.svg"
                 width="24"
@@ -52,7 +52,7 @@
                 alt=""
               />
               <span class="">Length</span>
-            </a>
+            </router-link>
           </li>
 
           <!-- Mass Converter -->

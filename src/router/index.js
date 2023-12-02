@@ -23,6 +23,11 @@ const router = createRouter({
       path: "/mass",
       name: "mass",
       component: () => import("../views/ViewMass.vue")
+    },
+    {
+      path: "/length",
+      name: "length",
+      component: () => import("../views/ViewLength.vue")
     }
   ]
 })
