@@ -3,6 +3,7 @@
   <!-- Top Units -->
   <div class="dropdown-container top-dropdown">
     <TheDropdown
+      :calc-units="calcUnits"
       :is-active="activeDropdown === 'top' ? true : false"
       :active-unit="massData.topActiveUnit"
       @setActiveUnit="setActiveUnitTop"
@@ -26,6 +27,7 @@
   <!-- Bottom Units -->
   <div class="dropdown-container bottom-dropdown">
     <TheDropdown
+      :calc-units="calcUnits"
       :is-active="activeDropdown === 'bottom' ? true : false"
       :active-unit="massData.bottomActiveUnit"
       @setActiveUnit="setActiveUnitBottom"
@@ -98,6 +100,25 @@ const bottomUnitName = ref("Pound")
 const integerPortion = reactive({
   topUnit: "",
   bottomUnit: ""
+})
+
+const calcUnits = ref({
+  kilogram: {
+    shortName: "kg",
+    longName: "Kilogram kg"
+  },
+  pound: {
+    shortName: "lb",
+    longName: "Pound lb"
+  },
+  gram: {
+    shortName: "g",
+    longName: "Gram g"
+  },
+  ounce: {
+    shortName: "oz",
+    longName: "Ounce oz"
+  }
 })
 
 // reactive data object for related math data
