@@ -293,31 +293,11 @@ const storeConverterDataLocally = (
 ) => {
   if (!localStorage) return
 
-  // TODO store the states of the different converters
-  switch (converter.name) {
-    case "massData":
-      const defaultActiveUnits = { top: "kg", bottom: "lb" }
-      storeConverterStates(
-        converter,
-        integerPortion,
-        activeDropdown,
-        defaultActiveUnits
-      )
-      break
-  }
-}
-
-const storeConverterStates = (
-  converter,
-  integerPortion,
-  activeDropdown,
-  activeUnit
-) => {
   localStorage.setItem(
     converter.name,
     JSON.stringify({
-      topActiveUnit: converter.topActiveUnit ?? activeUnit.top,
-      bottomActiveUnit: converter.bottomActiveUnit ?? activeUnit.bottom,
+      topActiveUnit: converter.topActiveUnit,
+      bottomActiveUnit: converter.bottomActiveUnit,
       topUnit: integerPortion.topUnit ?? "",
       bottomUnit: integerPortion.bottomUnit ?? "",
       topUnitValue: converter.topUnitValue ?? "",
