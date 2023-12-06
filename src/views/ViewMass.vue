@@ -88,6 +88,8 @@ const listenForKeyboardInputs = inject("listenForKeyboardInputs")
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
 const storeConverterDataLocally = inject("storeConverterDataLocally")
 const getStoredConverterData = inject("getStoredConverterData")
+const convertTopUnitToBottomEquiv = inject("convertTopUnitToBottomEquiv")
+const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
@@ -188,12 +190,16 @@ watch(
     // re-calculate the value of 5 grams to pounds
     if (activeDropdown.value === "top") {
       massData.bottomUnitValue = convertTopUnitToBottomEquiv(
-        massData.topUnitValue
+        massData,
+        massData.topUnitValue,
+        convertValues
       )
       massData.hasConvertedToTopEquiv = true
     } else {
       massData.topUnitValue = convertBottomUnitToTopEquiv(
-        massData.bottomUnitValue
+        massData,
+        massData.bottomUnitValue,
+        convertValues
       )
       massData.hasConvertedToBottomEquiv = true
     }
@@ -224,12 +230,16 @@ watch(
 
     if (activeDropdown.value === "bottom") {
       massData.topUnitValue = convertBottomUnitToTopEquiv(
-        massData.bottomUnitValue
+        massData,
+        massData.bottomUnitValue,
+        convertValues
       )
       massData.hasConvertedToBottomEquiv = true
     } else {
       massData.bottomUnitValue = convertTopUnitToBottomEquiv(
-        massData.topUnitValue
+        massData,
+        massData.topUnitValue,
+        convertValues
       )
       massData.hasConvertedToTopEquiv = true
     }
@@ -245,7 +255,11 @@ watch(
     if (massData.hasConvertedToBottomEquiv) return
 
     // calculate the value for the bottom unit
-    massData.bottomUnitValue = convertTopUnitToBottomEquiv(newValue)
+    massData.bottomUnitValue = convertTopUnitToBottomEquiv(
+      massData,
+      newValue,
+      convertValues
+    )
     storeConverterDataLocally(massData, integerPortion, activeDropdown)
   }
 )
@@ -256,7 +270,11 @@ watch(
     if (massData.hasConvertedToTopEquiv) return
 
     // calculate the value for the top unit
-    massData.topUnitValue = convertBottomUnitToTopEquiv(newValue)
+    massData.topUnitValue = convertBottomUnitToTopEquiv(
+      massData,
+      newValue,
+      convertValues
+    )
     storeConverterDataLocally(massData, integerPortion, activeDropdown)
   }
 )
@@ -298,34 +316,6 @@ onMounted(() => {
 */
 const appendNumber = (number) => {
   appendNumberToConverter(number, activeDropdown, massData, integerPortion)
-}
-
-const convertTopUnitToBottomEquiv = (unitValue) => {
-  if (!unitValue) return
-
-  // convert the string number to a number
-  let topUnitValue = removeCommas(unitValue)
-
-  let dropdown = "top"
-  let convertedValue = convertValues(dropdown, topUnitValue)
-
-  return !isNaN(parseFloat(convertedValue))
-    ? convertedValue
-    : massData.defaultResult
-}
-
-const convertBottomUnitToTopEquiv = (unitValue) => {
-  if (!unitValue) return
-
-  // convert the string number to a number
-  let bottomUnitValue = removeCommas(unitValue)
-
-  let dropdown = "bottom"
-  let convertedValue = convertValues(dropdown, bottomUnitValue)
-
-  return !isNaN(parseFloat(convertedValue))
-    ? convertedValue
-    : massData.defaultResult
 }
 
 const convertValues = (dropdown, unitValue) => {

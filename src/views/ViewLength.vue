@@ -88,6 +88,8 @@ const listenForKeyboardInputs = inject("listenForKeyboardInputs")
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
 const storeConverterDataLocally = inject("storeConverterDataLocally")
 const getStoredConverterData = inject("getStoredConverterData")
+const convertTopUnitToBottomEquiv = inject("convertTopUnitToBottomEquiv")
+const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
@@ -102,8 +104,6 @@ const integerPortion = reactive({
   bottomUnit: ""
 })
 
-// TODO storeLengthDataLocally
-// TODO test the conversions for all units for any bugs
 const calcUnits = ref({
   foot: {
     shortName: "ft",
@@ -277,12 +277,16 @@ watch(
     // re-calculate the value of 5 grams to pounds
     if (activeDropdown.value === "top") {
       lengthData.bottomUnitValue = convertTopUnitToBottomEquiv(
-        lengthData.topUnitValue
+        lengthData,
+        lengthData.topUnitValue,
+        convertValues
       )
       lengthData.hasConvertedToTopEquiv = true
     } else {
       lengthData.topUnitValue = convertBottomUnitToTopEquiv(
-        lengthData.bottomUnitValue
+        lengthData,
+        lengthData.bottomUnitValue,
+        convertValues
       )
       lengthData.hasConvertedToBottomEquiv = true
     }
@@ -325,12 +329,16 @@ watch(
 
     if (activeDropdown.value === "bottom") {
       lengthData.topUnitValue = convertBottomUnitToTopEquiv(
-        lengthData.bottomUnitValue
+        lengthData,
+        lengthData.bottomUnitValue,
+        convertValues
       )
       lengthData.hasConvertedToBottomEquiv = true
     } else {
       lengthData.bottomUnitValue = convertTopUnitToBottomEquiv(
-        lengthData.topUnitValue
+        lengthData,
+        lengthData.topUnitValue,
+        convertValues
       )
       lengthData.hasConvertedToTopEquiv = true
     }
@@ -346,7 +354,11 @@ watch(
     if (lengthData.hasConvertedToBottomEquiv) return
 
     // calculate the value for the bottom unit
-    lengthData.bottomUnitValue = convertTopUnitToBottomEquiv(newValue)
+    lengthData.bottomUnitValue = convertTopUnitToBottomEquiv(
+      lengthData,
+      newValue,
+      convertValues
+    )
     storeConverterDataLocally(lengthData, integerPortion, activeDropdown)
   }
 )
@@ -357,7 +369,11 @@ watch(
     if (lengthData.hasConvertedToTopEquiv) return
 
     // calculate the value for the top unit
-    lengthData.topUnitValue = convertBottomUnitToTopEquiv(newValue)
+    lengthData.topUnitValue = convertBottomUnitToTopEquiv(
+      lengthData,
+      newValue,
+      convertValues
+    )
     storeConverterDataLocally(lengthData, integerPortion, activeDropdown)
   }
 )
@@ -402,35 +418,6 @@ onMounted(() => {
 */
 const appendNumber = (number) => {
   appendNumberToConverter(number, activeDropdown, lengthData, integerPortion)
-}
-
-// TODO the following 2 functions might be global
-const convertTopUnitToBottomEquiv = (unitValue) => {
-  if (!unitValue) return
-
-  // convert the string number to a number
-  let topUnitValue = removeCommas(unitValue)
-
-  let dropdown = "top"
-  let convertedValue = convertValues(dropdown, topUnitValue)
-
-  return !isNaN(parseFloat(convertedValue))
-    ? convertedValue
-    : lengthData.defaultResult
-}
-
-const convertBottomUnitToTopEquiv = (unitValue) => {
-  if (!unitValue) return
-
-  // convert the string number to a number
-  let bottomUnitValue = removeCommas(unitValue)
-
-  let dropdown = "bottom"
-  let convertedValue = convertValues(dropdown, bottomUnitValue)
-
-  return !isNaN(parseFloat(convertedValue))
-    ? convertedValue
-    : lengthData.defaultResult
 }
 
 const convertValues = (dropdown, unitValue) => {
