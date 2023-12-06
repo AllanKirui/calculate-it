@@ -329,6 +329,34 @@ const getStoredConverterData = (converter, integerPortion, activeDropdown) => {
   }
 }
 
+const convertTopUnitToBottomEquiv = (converter, unitValue, convertValues) => {
+  if (!unitValue) return
+
+  // convert the string number to a number
+  let topUnitValue = removeCommas(unitValue)
+
+  let dropdown = "top"
+  let convertedValue = convertValues(dropdown, topUnitValue)
+
+  return !isNaN(parseFloat(convertedValue))
+    ? convertedValue
+    : converter.defaultResult
+}
+
+const convertBottomUnitToTopEquiv = (converter, unitValue, convertValues) => {
+  if (!unitValue) return
+
+  // convert the string number to a number
+  let bottomUnitValue = removeCommas(unitValue)
+
+  let dropdown = "bottom"
+  let convertedValue = convertValues(dropdown, bottomUnitValue)
+
+  return !isNaN(parseFloat(convertedValue))
+    ? convertedValue
+    : converter.defaultResult
+}
+
 provide("appendNumber", appendNumber)
 provide("removeCommas", removeCommas)
 provide("clearAll", clearAll)
@@ -337,4 +365,6 @@ provide("listenForKeyboardInputs", listenForKeyboardInputs)
 provide("showRippleEffectOnButtons", showRippleEffectOnButtons)
 provide("storeConverterDataLocally", storeConverterDataLocally)
 provide("getStoredConverterData", getStoredConverterData)
+provide("convertTopUnitToBottomEquiv", convertTopUnitToBottomEquiv)
+provide("convertBottomUnitToTopEquiv", convertBottomUnitToTopEquiv)
 </script>
