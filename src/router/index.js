@@ -15,11 +15,6 @@ const router = createRouter({
       component: ViewMath
     },
     {
-      path: "/age",
-      name: "age",
-      component: () => import("../views/ViewAge.vue")
-    },
-    {
       path: "/mass",
       name: "mass",
       component: () => import("../views/ViewMass.vue")
@@ -28,6 +23,11 @@ const router = createRouter({
       path: "/length",
       name: "length",
       component: () => import("../views/ViewLength.vue")
+    },
+    {
+      path: "/time",
+      name: "time",
+      component: () => import("../views/ViewTime.vue")
     }
   ]
 })

@@ -29,13 +29,7 @@
             </RouterLink>
           </li>
 
-          <li>
-            <RouterLink to="age">
-              <img src="../assets/img/age.svg" width="24" height="24" alt="" />
-              <span class="">Age</span>
-            </RouterLink>
-          </li>
-
+          <!-- BMI Calculator -->
           <li>
             <a href="#">
               <img src="../assets/img/bmi.svg" width="24" height="24" alt="" />
@@ -43,6 +37,7 @@
             </a>
           </li>
 
+          <!-- Length Converter -->
           <li>
             <router-link to="length">
               <img
@@ -63,6 +58,16 @@
             </RouterLink>
           </li>
 
+          <!-- Time Converter -->
+          <li>
+            <RouterLink to="time">
+              <!-- TODO add time icon -->
+              <img src="" width="24" height="24" alt="" />
+              <span class="">Time</span>
+            </RouterLink>
+          </li>
+
+          <!-- Temperature Converter -->
           <li>
             <a href="#">
               <img
@@ -75,6 +80,7 @@
             </a>
           </li>
 
+          <!-- Currency Converter -->
           <li>
             <a href="#">
               <img
