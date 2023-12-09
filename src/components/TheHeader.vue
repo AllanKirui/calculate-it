@@ -78,7 +78,7 @@
 
           <!-- Temperature Converter -->
           <li>
-            <a href="#">
+            <RouterLink to="temperature">
               <img
                 src="../assets/img/temperature.svg"
                 width="24"
@@ -86,7 +86,7 @@
                 alt=""
               />
               <span class="">Temperature</span>
-            </a>
+            </RouterLink>
           </li>
 
           <!-- Currency Converter -->

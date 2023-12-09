@@ -33,6 +33,11 @@ const router = createRouter({
       path: "/speed",
       name: "speed",
       component: () => import("../views/ViewSpeed.vue")
+    },
+    {
+      path: "/temperature",
+      name: "temperature",
+      component: () => import("../views/ViewTemp.vue")
     }
   ]
 })
