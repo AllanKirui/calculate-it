@@ -67,6 +67,15 @@
             </RouterLink>
           </li>
 
+          <!-- Time Converter -->
+          <li>
+            <RouterLink to="speed">
+              <!-- TODO add speed icon, remove empty class attributes from spans -->
+              <img src="" width="24" height="24" alt="" />
+              <span class="">Speed</span>
+            </RouterLink>
+          </li>
+
           <!-- Temperature Converter -->
           <li>
             <a href="#">

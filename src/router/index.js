@@ -28,6 +28,11 @@ const router = createRouter({
       path: "/time",
       name: "time",
       component: () => import("../views/ViewTime.vue")
+    },
+    {
+      path: "/speed",
+      name: "speed",
+      component: () => import("../views/ViewSpeed.vue")
     }
   ]
 })
