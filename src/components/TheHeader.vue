@@ -37,6 +37,14 @@
             </a>
           </li>
 
+          <!-- Mass Converter -->
+          <li>
+            <RouterLink to="mass">
+              <img src="../assets/img/mass.svg" width="24" height="24" alt="" />
+              <span class="">Mass</span>
+            </RouterLink>
+          </li>
+
           <!-- Length Converter -->
           <li>
             <router-link to="length">
@@ -48,14 +56,6 @@
               />
               <span class="">Length</span>
             </router-link>
-          </li>
-
-          <!-- Mass Converter -->
-          <li>
-            <RouterLink to="mass">
-              <img src="../assets/img/mass.svg" width="24" height="24" alt="" />
-              <span class="">Mass</span>
-            </RouterLink>
           </li>
 
           <!-- Time Converter -->
