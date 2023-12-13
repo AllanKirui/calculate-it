@@ -145,37 +145,21 @@ const temperatureData = reactive({
 const conversionRates = {
   oneCelsius: {
     celsiusEquiv: 1,
-    fahrenheitEquiv: 33.8,
-    kelvinEquiv: 274.15,
-    rankineEquiv: 493.47,
     reaumurEquiv: 0.8
   },
   oneFahrenheit: {
-    fahrenheitEquiv: 1,
-    celsiusEquiv: -17.2222222,
-    kelvinEquiv: 255.927778,
-    rankineEquiv: 460.67,
-    reaumurEquiv: -13.7777778
+    fahrenheitEquiv: 1
   },
   oneKelvin: {
     kelvinEquiv: 1,
-    fahrenheitEquiv: -457.87,
-    celsiusEquiv: -272.15,
-    rankineEquiv: 1.8,
-    reaumurEquiv: -217.72
+    rankineEquiv: 1.8
   },
   oneRankine: {
     rankineEquiv: 1,
-    kelvinEquiv: 0.555555556,
-    fahrenheitEquiv: -458.67,
-    celsiusEquiv: -272.594444,
-    reaumurEquiv: -218.075556
+    kelvinEquiv: 0.555555556
   },
   oneReaumur: {
     reaumurEquiv: 1,
-    rankineEquiv: 493.92,
-    kelvinEquiv: 274.4,
-    fahrenheitEquiv: 34.25,
     celsiusEquiv: 1.25
   }
 }
@@ -364,22 +348,47 @@ const convertValues = (dropdown, unitValue) => {
     activeUnit2 = temperatureData.bottomActiveUnit
   }
 
-  // convert the top/bottom unit values based on the active
-  // units on the adjacent dropdown
+  /*
+    Convert the top/bottom unit values based on the active units
+    on the adjacent dropdown 
+
+    Conversion Formulas
+    ---------------------------------------------
+
+    Celsius to Fahrenheit formula -> F = C * 1.8 + 32
+
+    Celsius to Kelvin -> K = C + 273.15
+    Kelvin to Celsius -> C = K - 273.15
+
+    Celsius to Rankine -> R = (C * 1.8) + 491.67
+    Rankine to Celsius -> C = (R - 491.67) / 1.79999999
+
+    Fahrenheit to Kelvin -> K = ((F - 32) / 1.799999999) + 273.15
+    Kelvin to Fahrenheit -> F = ((K - 273.15) * 1.8) + 32
+
+    Rankine to Fahrenheit -> F = R - 459.67
+    Fahrenheit to Rankine -> R = F + 459.67
+
+    Reaumur to Fahrenheit -> F = (Re * 2.25) + 32
+    Fahrenheit to Reaumur -> Re = (F - 32) / 2.25000002
+
+    Kelvin to Reaumur -> Re = (K - 273.15) / 1.25
+    Reaumur to Kelvin -> K = (Re * 1.25) + 273.15
+
+    Rankine to Reaumur -> Re = (R - 491.67) / 2.25000002
+    Reaumur to Rankine -> R = (Re * 2.25) + 491.67
+  */
   switch (activeUnit1) {
     case "°C":
       switch (activeUnit2) {
         case "°F":
-          convertedValue =
-            conversionRates.oneFahrenheit.celsiusEquiv * activeUnitValue
+          convertedValue = (activeUnitValue - 32) / 1.8 // Fahrenheit to Celsius
           break
         case "K":
-          convertedValue =
-            conversionRates.oneKelvin.celsiusEquiv * activeUnitValue
+          convertedValue = activeUnitValue - 273.15 // Kelvin to Celsius
           break
         case "°R":
-          convertedValue =
-            conversionRates.oneRankine.celsiusEquiv * activeUnitValue
+          convertedValue = (activeUnitValue - 491.67) / 1.79999999 // Rankine to Celsius
           break
         case "°Re":
           convertedValue =
@@ -398,28 +407,23 @@ const convertValues = (dropdown, unitValue) => {
             conversionRates.oneFahrenheit.fahrenheitEquiv * activeUnitValue
           break
         case "K":
-          convertedValue =
-            conversionRates.oneKelvin.fahrenheitEquiv * activeUnitValue
+          convertedValue = (activeUnitValue - 273.15) * 1.8 + 32 // Kelvin to Fahrenheit
           break
         case "°R":
-          convertedValue =
-            conversionRates.oneRankine.fahrenheitEquiv * activeUnitValue
+          convertedValue = activeUnitValue - 459.67 // Rankine to Fahrenheit
           break
         case "°Re":
-          convertedValue =
-            conversionRates.oneReaumur.fahrenheitEquiv * activeUnitValue
+          convertedValue = activeUnitValue * 2.25 + 32 // Reaumur to Fahrenheit
           break
         default:
-          convertedValue =
-            conversionRates.oneCelsius.fahrenheitEquiv * activeUnitValue
+          convertedValue = activeUnitValue * 1.8 + 32 // Celsius to Fahrenheit
           break
       }
       break
     case "K":
       switch (activeUnit2) {
         case "°F":
-          convertedValue =
-            conversionRates.oneFahrenheit.kelvinEquiv * activeUnitValue
+          convertedValue = (activeUnitValue - 32) / 1.79999999 + 273.15 // Fahrenheit to Kelvin
           break
         case "K":
           convertedValue =
@@ -430,20 +434,17 @@ const convertValues = (dropdown, unitValue) => {
             conversionRates.oneRankine.kelvinEquiv * activeUnitValue
           break
         case "°Re":
-          convertedValue =
-            conversionRates.oneReaumur.kelvinEquiv * activeUnitValue
+          convertedValue = activeUnitValue * 1.25 + 273.15 // Reaumur to Kelvin
           break
         default:
-          convertedValue =
-            conversionRates.oneCelsius.kelvinEquiv * activeUnitValue
+          convertedValue = activeUnitValue + 273.15 // Celsius to Kelvin
           break
       }
       break
     case "°R":
       switch (activeUnit2) {
         case "°F":
-          convertedValue =
-            conversionRates.oneFahrenheit.rankineEquiv * activeUnitValue
+          convertedValue = activeUnitValue + 459.67 // Fahrenheit to Rankine
           break
         case "K":
           convertedValue =
@@ -454,28 +455,23 @@ const convertValues = (dropdown, unitValue) => {
             conversionRates.oneRankine.rankineEquiv * activeUnitValue
           break
         case "°Re":
-          convertedValue =
-            conversionRates.oneReaumur.rankineEquiv * activeUnitValue
+          convertedValue = activeUnitValue * 2.25 + 491.67 // Reaumur to Rankine
           break
         default:
-          convertedValue =
-            conversionRates.oneCelsius.rankineEquiv * activeUnitValue
+          convertedValue = activeUnitValue * 1.8 + 491.67 // Celsius to Rankine
           break
       }
       break
     case "°Re":
       switch (activeUnit2) {
         case "°F":
-          convertedValue =
-            conversionRates.oneFahrenheit.reaumurEquiv * activeUnitValue
+          convertedValue = (activeUnitValue - 32) / 2.25000002 // Fahrenheit to Reaumur
           break
         case "K":
-          convertedValue =
-            conversionRates.oneKelvin.reaumurEquiv * activeUnitValue
+          convertedValue = (activeUnitValue - 273.15) / 1.25 // Kelvin to Reaumur
           break
         case "°R":
-          convertedValue =
-            conversionRates.oneRankine.reaumurEquiv * activeUnitValue
+          convertedValue = (activeUnitValue - 491.67) / 2.25000002 // Rankine to Reaumur
           break
         case "°Re":
           convertedValue =
