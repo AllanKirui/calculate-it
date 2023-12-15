@@ -121,10 +121,21 @@ const clearChars = (activeDropdown, converter, integerPortion) => {
 
   if (activeDropdown.value === "top") {
     converter.topUnitValue = converter.topUnitValue.slice(0, -1)
+
+    if (converter.topUnitValue.length == 1 && isNaN(converter.topUnitValue))
+      converter.topUnitValue = ""
+
     integerPortion.topUnit = converter.topUnitValue
     converter.hasConvertedToTopEquiv = true
   } else {
     converter.bottomUnitValue = converter.bottomUnitValue.slice(0, -1)
+
+    if (
+      converter.bottomUnitValue.length == 1 &&
+      isNaN(converter.bottomUnitValue)
+    )
+      converter.bottomUnitValue = ""
+
     integerPortion.bottomUnit = converter.bottomUnitValue
     converter.hasConvertedToBottomEquiv = true
   }
