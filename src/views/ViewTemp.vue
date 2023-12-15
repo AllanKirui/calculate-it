@@ -70,9 +70,11 @@
     ref="buttonsContainerRef"
   >
     <ConverterButtons
+      mode="temp"
       @appendNumber="appendNumber"
       @clear="clear"
       @backspace="backspace"
+      @toggleNegativeValue="toggleNegativeValue"
     />
   </div>
 </template>
@@ -512,5 +514,15 @@ const backspace = () => {
   if (!temperatureData.topUnitValue && !temperatureData.bottomUnitValue) return
 
   clearChars(activeDropdown, temperatureData, integerPortion)
+}
+
+const toggleNegativeValue = () => {
+  if (activeDropdown.value === "top") {
+    temperatureData.topUnitValue = `${-temperatureData.topUnitValue}`
+    integerPortion.topUnit = temperatureData.topUnitValue
+  } else {
+    temperatureData.bottomUnitValue = `${-temperatureData.bottomUnitValue}`
+    integerPortion.bottomUnit = temperatureData.bottomUnitValue
+  }
 }
 </script>
