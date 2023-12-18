@@ -24,13 +24,24 @@ const appendNumber = (number, activeDropdown, converter, integerPortion) => {
     converter.hasConvertedToBottomEquiv = true
   }
 
-  // return if zero is clicked when either the top or bottom unit values are zero
+  // return if zero is clicked when either the top or bottom unit values are
+  // zero (except in the Temperature Converter)
   // and if the number already contains a decimal point return
   if (activeDropdown.value === "top") {
-    if (number === 0 && !converter.topUnitValue) return
+    if (
+      number === 0 &&
+      converter.name !== "temperatureData" &&
+      !converter.topUnitValue
+    )
+      return
     if (number === "." && integerPortion.topUnit.includes(".")) return
   } else {
-    if (number === 0 && !converter.bottomUnitValue) return
+    if (
+      number === 0 &&
+      converter.name !== "temperatureData" &&
+      !converter.bottomUnitValue
+    )
+      return
     if (number === "." && integerPortion.bottomUnit.includes(".")) return
   }
 

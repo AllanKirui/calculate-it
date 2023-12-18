@@ -262,6 +262,7 @@ watch(
 watch(
   () => temperatureData.topUnitValue,
   (newValue) => {
+    if (!newValue) appendNumber(0)
     if (temperatureData.hasConvertedToBottomEquiv) return
 
     // calculate the value for the bottom unit
@@ -277,6 +278,7 @@ watch(
 watch(
   () => temperatureData.bottomUnitValue,
   (newValue) => {
+    if (!newValue) appendNumber(0)
     if (temperatureData.hasConvertedToTopEquiv) return
 
     // calculate the value for the top unit
@@ -322,6 +324,14 @@ onMounted(() => {
     buttonsContainerRef
   )
   showRippleEffectOnButtons(buttonsContainerRef)
+
+  // when the component is first mounted, set zero as the value of the active dropdown
+  if (
+    temperatureData.topUnitValue === "" &&
+    temperatureData.bottomUnitValue === ""
+  ) {
+    appendNumber(0)
+  }
 })
 
 /*
