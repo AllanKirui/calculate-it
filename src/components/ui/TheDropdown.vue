@@ -23,7 +23,7 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <MenuItems
-        class="absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-macaroni-and-cheese shadow-lg ring-2 ring-mellow-apricot ring-opacity-1 focus:outline-none text-base md:text-lg text-seal-brown"
+        class="absolute z-10 mt-2 max-h-60 scrollable dropdown-items overflow-scroll w-4/5 sm:w-2/3 md:w-1/2 origin-top-left rounded-md bg-macaroni-and-cheese shadow-lg ring-2 ring-mellow-apricot ring-opacity-1 focus:outline-none text-base md:text-lg text-seal-brown"
       >
         <div v-for="unit in calcUnits" :key="unit" class="py-1">
           <MenuItem v-slot="{ active }">
