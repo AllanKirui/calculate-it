@@ -1,6 +1,6 @@
 <template>
   <!-- Global Container -->
-  <div class="container h-screen max-w-4xl mx-auto md:py-10">
+  <div class="container max-w-4xl mx-auto md:py-10 relative h-screen">
     <TheHeader />
     <TheCalculator />
   </div>
