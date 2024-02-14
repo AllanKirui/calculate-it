@@ -530,9 +530,14 @@ const toggleNegativeValue = () => {
   if (activeDropdown.value === "top") {
     temperatureData.topUnitValue = `${-temperatureData.topUnitValue}`
     integerPortion.topUnit = temperatureData.topUnitValue
+
+    // the hasConvertedTo... flag prevents the watcher methods for topUnitValue
+    // and bottomUnitValue from running twice inside child components
+    temperatureData.hasConvertedToTopEquiv = true
   } else {
     temperatureData.bottomUnitValue = `${-temperatureData.bottomUnitValue}`
     integerPortion.bottomUnit = temperatureData.bottomUnitValue
+    temperatureData.hasConvertedToBottomEquiv = true
   }
 }
 </script>
