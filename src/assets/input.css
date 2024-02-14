@@ -163,11 +163,11 @@
 }
 
 .top-dropdown {
-  @apply top-20 sm:top-24 md:top-8 z-50;
+  @apply top-14 sm:top-16 md:top-6 z-50;
 }
 
 .bottom-dropdown {
-  @apply top-48 md:top-[100px] z-40;
+  @apply top-32 sm:top-40 md:top-24 z-40;
 }
 
 .dropdown-container .result.active {
