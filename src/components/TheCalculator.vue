@@ -360,6 +360,11 @@ const convertTopUnitToBottomEquiv = (converter, unitValue, convertValues) => {
   let dropdown = "top"
   let convertedValue = convertValues(dropdown, topUnitValue)
 
+  // if negating the top unit value in the Temperature Converter results
+  // in a value of '-0' for the bottom unit, remove the hyphen
+  convertedValue =
+    convertedValue === "-0" ? convertedValue.slice(1) : convertedValue
+
   return !isNaN(parseFloat(convertedValue))
     ? convertedValue
     : converter.defaultResult
@@ -373,6 +378,11 @@ const convertBottomUnitToTopEquiv = (converter, unitValue, convertValues) => {
 
   let dropdown = "bottom"
   let convertedValue = convertValues(dropdown, bottomUnitValue)
+
+  // if negating the bottom unit value in the Temperature Converter results
+  // in a value of '-0' for the top unit, remove the hyphen
+  convertedValue =
+    convertedValue === "-0" ? convertedValue.slice(1) : convertedValue
 
   return !isNaN(parseFloat(convertedValue))
     ? convertedValue
