@@ -124,12 +124,16 @@
 }
 
 /* calculator screen & button container heights */
+.calculator-height {
+  height: calc(100vh - 80px);
+}
+
 .display-container {
-  min-height: calc(45vh - 16px);
+  height: calc(50% - 16px);
 }
 
 .buttons-container {
-  min-height: calc(55vh - 28px);
+  height: 50%;
 }
 
 /* animation styles for expressions added to the history container */
