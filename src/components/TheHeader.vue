@@ -17,109 +17,12 @@
           class="links-wrapper scrollable pb-1 px-4 flex gap-4 md:justify-center md:text-lg overflow-x-auto"
           ref="navLinksContainer"
         >
-          <!-- Basic Math Calculator -->
-          <li>
-            <RouterLink to="math">
-              <img
-                src="../assets/img/calculator.svg"
-                width="24"
-                height="24"
-                alt="calculator icon"
-              />
-              <span>Math</span>
-            </RouterLink>
-          </li>
-
-          <!-- BMI Calculator -->
-          <li>
-            <a href="#">
-              <img
-                src="../assets/img/bmi.svg"
-                width="24"
-                height="24"
-                alt="bathroom scale icon"
-              />
-              <span>BMI</span>
-            </a>
-          </li>
-
-          <!-- Mass Converter -->
-          <li>
-            <RouterLink to="mass">
-              <img
-                src="../assets/img/mass.svg"
-                width="24"
-                height="24"
-                alt="weight icon"
-              />
-              <span>Mass</span>
-            </RouterLink>
-          </li>
-
-          <!-- Length Converter -->
-          <li>
-            <RouterLink to="length">
-              <img
-                src="../assets/img/length.svg"
-                width="24"
-                height="24"
-                alt="ruler icon"
-              />
-              <span>Length</span>
-            </RouterLink>
-          </li>
-
-          <!-- Time Converter -->
-          <li>
-            <RouterLink to="time">
-              <img
-                src="../assets/img/time.svg"
-                width="24"
-                height="24"
-                alt="clock icon"
-              />
-              <span>Time</span>
-            </RouterLink>
-          </li>
-
-          <!-- Speed Converter -->
-          <li>
-            <RouterLink to="speed">
-              <img
-                src="../assets/img/speed.svg"
-                width="24"
-                height="24"
-                alt="speed meter icon"
-              />
-              <span>Speed</span>
-            </RouterLink>
-          </li>
-
-          <!-- Temperature Converter -->
-          <li>
-            <RouterLink to="temperature">
-              <img
-                src="../assets/img/temperature.svg"
-                width="24"
-                height="24"
-                alt="thermometer icon"
-              />
-              <span>Temperature</span>
-            </RouterLink>
-          </li>
-
-          <!-- Currency Converter -->
-          <li>
-            <a href="#">
-              <img
-                src="../assets/img/currency.svg"
-                width="24"
-                height="24"
-                alt="dollar sign icon"
-              />
-              <span>Currency</span>
-            </a>
-          </li>
+          <NavLink
+            v-for="link in linksData"
+            :key="link.routeName"
+            :route-name="link.routeName"
+            :imgSrc="link.imgSrc"
+          />
         </ul>
       </div>
     </nav>
@@ -130,28 +33,18 @@
 import { ref, watch } from "vue"
 import { useRoute } from "vue-router"
 
+import NavLink from "./NavLink.vue"
+
+const linksData = [
+  { routeName: "math", imgSrc: "/img/calculator.svg" },
+  { routeName: "bmi", imgSrc: "/img/bmi.svg" },
+  { routeName: "mass", imgSrc: "/img/mass.svg" },
+  { routeName: "length", imgSrc: "/img/length.svg" },
+  { routeName: "time", imgSrc: "/img/time.svg" },
+  { routeName: "speed", imgSrc: "/img/speed.svg" },
+  { routeName: "temperature", imgSrc: "/img/temperature.svg" },
+  { routeName: "currency", imgSrc: "/img/currency.svg" }
+]
+
 const route = useRoute()
-
-const navLinksContainer = ref(null)
-
-watch(
-  () => route.name,
-  (newRouteName) => {
-    // scrolling the active route into view
-    const navLinks = Array.from(navLinksContainer.value.children)
-
-    // find the <li> with an <a> child containing a <span> whose the innerText
-    // matches the active route name
-    const activeLink = navLinks.find(
-      (linkEl) =>
-        linkEl.children[0].lastElementChild.innerText.toLowerCase() ===
-        newRouteName
-    )
-
-    activeLink.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    })
-  }
-)
 </script>
