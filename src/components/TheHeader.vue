@@ -23,56 +23,74 @@
                 src="../assets/img/calculator.svg"
                 width="24"
                 height="24"
-                alt=""
+                alt="calculator icon"
               />
-              <span class="">Math</span>
+              <span>Math</span>
             </RouterLink>
           </li>
 
           <!-- BMI Calculator -->
           <li>
             <a href="#">
-              <img src="../assets/img/bmi.svg" width="24" height="24" alt="" />
-              <span class="">BMI</span>
+              <img
+                src="../assets/img/bmi.svg"
+                width="24"
+                height="24"
+                alt="bathroom scale icon"
+              />
+              <span>BMI</span>
             </a>
           </li>
 
           <!-- Mass Converter -->
           <li>
             <RouterLink to="mass">
-              <img src="../assets/img/mass.svg" width="24" height="24" alt="" />
-              <span class="">Mass</span>
+              <img
+                src="../assets/img/mass.svg"
+                width="24"
+                height="24"
+                alt="weight icon"
+              />
+              <span>Mass</span>
             </RouterLink>
           </li>
 
           <!-- Length Converter -->
           <li>
-            <router-link to="length">
+            <RouterLink to="length">
               <img
                 src="../assets/img/length.svg"
                 width="24"
                 height="24"
-                alt=""
+                alt="ruler icon"
               />
-              <span class="">Length</span>
-            </router-link>
-          </li>
-
-          <!-- Time Converter -->
-          <li>
-            <RouterLink to="time">
-              <!-- TODO add time icon -->
-              <img src="" width="24" height="24" alt="" />
-              <span class="">Time</span>
+              <span>Length</span>
             </RouterLink>
           </li>
 
           <!-- Time Converter -->
           <li>
+            <RouterLink to="time">
+              <img
+                src="../assets/img/time.svg"
+                width="24"
+                height="24"
+                alt="clock icon"
+              />
+              <span>Time</span>
+            </RouterLink>
+          </li>
+
+          <!-- Speed Converter -->
+          <li>
             <RouterLink to="speed">
-              <!-- TODO add speed icon, remove empty class attributes from spans -->
-              <img src="" width="24" height="24" alt="" />
-              <span class="">Speed</span>
+              <img
+                src="../assets/img/speed.svg"
+                width="24"
+                height="24"
+                alt="speed meter icon"
+              />
+              <span>Speed</span>
             </RouterLink>
           </li>
 
@@ -83,9 +101,9 @@
                 src="../assets/img/temperature.svg"
                 width="24"
                 height="24"
-                alt=""
+                alt="thermometer icon"
               />
-              <span class="">Temperature</span>
+              <span>Temperature</span>
             </RouterLink>
           </li>
 
@@ -96,9 +114,9 @@
                 src="../assets/img/currency.svg"
                 width="24"
                 height="24"
-                alt=""
+                alt="dollar sign icon"
               />
-              <span class="">Currency</span>
+              <span>Currency</span>
             </a>
           </li>
         </ul>
