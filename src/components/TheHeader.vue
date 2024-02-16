@@ -47,4 +47,26 @@ const linksData = [
 ]
 
 const route = useRoute()
+const navLinksContainer = ref(null)
+
+watch(
+  () => route.name,
+  (newRouteName) => {
+    // scrolling the active route into view
+    const navLinks = Array.from(navLinksContainer.value.children)
+
+    // find the <li> with an <a> child containing a <span> whose the innerText
+    // matches the active route name
+    const activeLink = navLinks.find(
+      (linkEl) =>
+        linkEl.children[0].lastElementChild.innerText.toLowerCase() ===
+        newRouteName
+    )
+
+    activeLink.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    })
+  }
+)
 </script>
