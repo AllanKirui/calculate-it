@@ -15,6 +15,7 @@
 
         <ul
           class="links-wrapper scrollable pb-1 px-4 flex gap-4 md:justify-center md:text-lg overflow-x-auto"
+          ref="navLinksContainer"
         >
           <!-- Basic Math Calculator -->
           <li>
@@ -124,3 +125,33 @@
     </nav>
   </header>
 </template>
+
+<script setup>
+import { ref, watch } from "vue"
+import { useRoute } from "vue-router"
+
+const route = useRoute()
+
+const navLinksContainer = ref(null)
+
+watch(
+  () => route.name,
+  (newRouteName) => {
+    // scrolling the active route into view
+    const navLinks = Array.from(navLinksContainer.value.children)
+
+    // find the <li> with an <a> child containing a <span> whose the innerText
+    // matches the active route name
+    const activeLink = navLinks.find(
+      (linkEl) =>
+        linkEl.children[0].lastElementChild.innerText.toLowerCase() ===
+        newRouteName
+    )
+
+    activeLink.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    })
+  }
+)
+</script>
