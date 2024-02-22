@@ -51,22 +51,15 @@
   </div>
 
   <!-- The Output -->
-  <div
-    class="display-container md:min-h-[160px] h-[100px] overflow-x-hidden relative p-5 bg-liver text-sandy-brown rounded-xl"
-  >
+  <div class="display-container">
     <!-- Background Text -->
-    <div class="absolute top-5 md:top-1/2 md:-translate-y-1/2">
-      <span class="text-pearl-copper text-4xl sm:text-5xl md:text-7xl">{{
-        $route.name
-      }}</span>
+    <div class="bg-text">
+      <span>{{ $route.name }}</span>
     </div>
   </div>
 
   <!-- The Buttons -->
-  <div
-    class="buttons-container md:min-h-full grid grid-cols-4 grid-rows-4 gap-2 text-2xl mt-3"
-    ref="buttonsContainerRef"
-  >
+  <div class="buttons-container" ref="buttonsContainerRef">
     <ConverterButtons
       @appendNumber="appendNumber"
       @clear="clear"

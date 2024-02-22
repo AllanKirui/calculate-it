@@ -1,17 +1,13 @@
 <template>
   <!-- The Output -->
-  <div
-    class="display-container md:min-h-[160px] overflow-x-hidden relative flex flex-col justify-end gap-2 p-5 bg-liver text-sandy-brown rounded-xl"
-  >
+  <div class="display-container math-calculator">
     <!-- Blurred Left & Right Edges For Previous Operations -->
     <div class="absolute top-4 left-4 w-5 h-8 bg-liver blur-md z-10"></div>
     <div class="absolute top-4 right-0 w-5 h-8 bg-liver blur-lg z-10"></div>
 
     <!-- Background Text -->
-    <div class="absolute top-5 md:top-1/2 md:-translate-y-1/2">
-      <span class="text-pearl-copper text-4xl sm:text-5xl md:text-7xl">{{
-        $route.name
-      }}</span>
+    <div class="bg-text">
+      <span>{{ $route.name }}</span>
     </div>
 
     <!-- Previous Operations -->
@@ -65,10 +61,7 @@
   </div>
 
   <!-- The Buttons -->
-  <div
-    ref="buttonsContainerRef"
-    class="buttons-container md:min-h-full grid grid-cols-4 grid-rows-5 gap-2 text-2xl mt-3"
-  >
+  <div ref="buttonsContainerRef" class="buttons-container math-calculator">
     <!-- Row 1 Buttons -->
     <button @click="clear('all')" class="btn btn-clear">AC</button>
     <button @click="clear" class="btn btn-operators">C</button>
