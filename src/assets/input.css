@@ -130,10 +130,24 @@
 
 .display-container {
   height: calc(50% - 16px);
+  @apply md:min-h-[160px] relative p-5 bg-liver text-sandy-brown rounded-xl overflow-x-hidden;
+}
+
+.display-container.math-calculator {
+  @apply flex flex-col justify-end gap-2;
+}
+
+.display-container .bg-text {
+  @apply absolute top-5 md:top-1/2 md:-translate-y-1/2 text-4xl sm:text-5xl md:text-7xl text-pearl-copper;
 }
 
 .buttons-container {
   height: 50%;
+  @apply md:min-h-full grid grid-cols-4 grid-rows-4 gap-2 text-2xl mt-3;
+}
+
+.buttons-container.math-calculator {
+  @apply grid-rows-5;
 }
 
 /* animation styles for expressions added to the history container */
