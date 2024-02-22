@@ -105,7 +105,7 @@ watch(
     if (newExpression) {
       // watch the length of the history array
       watch(
-        () => mathData.history.length,
+        () => mathData.history?.length,
         (newLength) => {
           if (newLength) {
             let lastPosition = newLength - 1
