@@ -15,6 +15,11 @@ const router = createRouter({
       component: ViewMath
     },
     {
+      path: "/bmi",
+      name: "bmi",
+      component: () => import("../views/ViewBMI.vue")
+    },
+    {
       path: "/mass",
       name: "mass",
       component: () => import("../views/ViewMass.vue")
