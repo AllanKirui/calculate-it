@@ -62,40 +62,19 @@
 
   <!-- The Buttons -->
   <div ref="buttonsContainerRef" class="buttons-container math-calculator">
-    <!-- Row 1 Buttons -->
-    <button @click="clear('all')" class="btn btn-clear">AC</button>
-    <button @click="clear" class="btn btn-operators">C</button>
-    <button @click="backspace" class="btn btn-operators">&laquo;</button>
-    <button @click="setOperation('÷')" class="btn btn-operators">÷</button>
-
-    <!-- Row 2 Buttons -->
-    <button @click="appendNumber(7)" class="btn btn-numbers">7</button>
-    <button @click="appendNumber(8)" class="btn btn-numbers">8</button>
-    <button @click="appendNumber(9)" class="btn btn-numbers">9</button>
-    <button @click="setOperation('×')" class="btn btn-operators">×</button>
-
-    <!-- Row 3 Buttons -->
-    <button @click="appendNumber(4)" class="btn btn-numbers">4</button>
-    <button @click="appendNumber(5)" class="btn btn-numbers">5</button>
-    <button @click="appendNumber(6)" class="btn btn-numbers">6</button>
-    <button @click="setOperation('-')" class="btn btn-operators">-</button>
-
-    <!-- Row 4 Buttons -->
-    <button @click="appendNumber(1)" class="btn btn-numbers">1</button>
-    <button @click="appendNumber(2)" class="btn btn-numbers">2</button>
-    <button @click="appendNumber(3)" class="btn btn-numbers">3</button>
-    <button @click="setOperation('+')" class="btn btn-operators">+</button>
-
-    <!-- Row 5 Buttons -->
-    <button @click="appendNumber(0)" class="col-start-2 btn btn-numbers">
-      0
-    </button>
-    <button @click="appendNumber('.')" class="btn btn-numbers">.</button>
-    <button @click="evaluateExpression" class="btn btn-equals">=</button>
+    <ConverterButtons
+      mode="math"
+      @appendNumber="appendNumber"
+      @clear="clear"
+      @backspace="backspace"
+      @setOperation="setOperation"
+      @evaluateExpression="evaluateExpression"
+    />
   </div>
 </template>
 
 <script setup>
+import ConverterButtons from "@/components/ui/ConverterButtons.vue"
 import { onBeforeMount, onMounted, reactive, ref, watch, inject } from "vue"
 
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
