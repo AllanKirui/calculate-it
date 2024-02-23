@@ -345,11 +345,23 @@ const getStoredConverterData = (converter, integerPortion, activeDropdown) => {
     if (activeDropdown.value === "top") {
       integerPortion.topUnit = storedData.topUnit
       converter.topUnitValue = storedData.topUnitValue
-      converter.hasConvertedToTopEquiv = true
+
+      if (converter.name === "bmiData") {
+        integerPortion.bottomUnit = storedData.bottomUnit
+        converter.bottomUnitValue = storedData.bottomUnitValue
+      } else {
+        converter.hasConvertedToTopEquiv = true
+      }
     } else {
       integerPortion.bottomUnit = storedData.bottomUnit
       converter.bottomUnitValue = storedData.bottomUnitValue
-      converter.hasConvertedToBottomEquiv = true
+
+      if (converter.name === "bmiData") {
+        integerPortion.topUnit = storedData.topUnit
+        converter.topUnitValue = storedData.topUnitValue
+      } else {
+        converter.hasConvertedToBottomEquiv = true
+      }
     }
   }
 }
