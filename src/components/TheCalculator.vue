@@ -315,20 +315,23 @@ const storeConverterDataLocally = (
 ) => {
   if (!localStorage) return
 
-  localStorage.setItem(
-    converter.name,
-    JSON.stringify({
-      topActiveUnit: converter.topActiveUnit,
-      bottomActiveUnit: converter.bottomActiveUnit,
-      topUnit: integerPortion.topUnit ?? "",
-      bottomUnit: integerPortion.bottomUnit ?? "",
-      topUnitValue: converter.topUnitValue ?? "",
-      bottomUnitValue: converter.bottomUnitValue ?? "",
-      activeDropdown: activeDropdown.value ?? "top",
-      hasConvertedToTopEquiv: converter.hasConvertedToTopEquiv,
-      hasConvertedToBottomEquiv: converter.hasConvertedToBottomEquiv
-    })
-  )
+  const converterData = {
+    topActiveUnit: converter.topActiveUnit,
+    bottomActiveUnit: converter.bottomActiveUnit,
+    topUnit: integerPortion.topUnit ?? "",
+    bottomUnit: integerPortion.bottomUnit ?? "",
+    topUnitValue: converter.topUnitValue ?? "",
+    bottomUnitValue: converter.bottomUnitValue ?? "",
+    activeDropdown: activeDropdown.value ?? "top"
+  }
+
+  if (converter.name !== "bmiData") {
+    converterData.hasConvertedToTopEquiv = converter.hasConvertedToTopEquiv
+    converterData.hasConvertedToBottomEquiv =
+      converter.hasConvertedToBottomEquiv
+  }
+
+  localStorage.setItem(converter.name, JSON.stringify(converterData))
 }
 
 const getStoredConverterData = (converter, integerPortion, activeDropdown) => {
