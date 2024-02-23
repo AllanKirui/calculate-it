@@ -23,7 +23,7 @@
     ×
   </button>
   <button
-    v-else-if="mode == 'temp'"
+    v-else-if="mode == 'temp' || mode == 'bmi'"
     @click="$emit('clear')"
     class="btn btn-clear row-span-1"
   >
@@ -45,7 +45,7 @@
     -
   </button>
   <button
-    v-else-if="mode == 'temp'"
+    v-else-if="mode === 'temp' || mode === 'bmi'"
     @click="$emit('backspace')"
     class="btn btn-operators row-span-1"
   >
@@ -69,6 +69,13 @@
     class="btn btn-operators row-span-1"
   >
     +/-
+  </button>
+  <button
+    v-else-if="mode == 'bmi'"
+    @click="$emit('calculateBMI')"
+    class="btn btn-equals row-span-2"
+  >
+    GO
   </button>
   <button
     v-else
@@ -100,6 +107,7 @@ defineEmits([
   "backspace",
   "toggleNegativeValue",
   "setOperation",
-  "evaluateExpression"
+  "evaluateExpression",
+  "calculateBMI"
 ])
 </script>
