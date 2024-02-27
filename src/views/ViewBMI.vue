@@ -1,7 +1,7 @@
 <template>
   <!-- Dropdowns containing unit options -->
   <!-- Top Units -->
-  <div class="dropdown-container top-dropdown">
+  <div @click="closeBmiResults" class="dropdown-container top-dropdown">
     <TheDropdown
       :calc-units="weightUnits"
       unit-type="Weight"
@@ -26,7 +26,7 @@
   </div>
 
   <!-- Bottom Units -->
-  <div class="dropdown-container bottom-dropdown">
+  <div @click="closeBmiResults" class="dropdown-container bottom-dropdown">
     <TheDropdown
       :calc-units="heightUnits"
       unit-type="Height"
@@ -113,7 +113,10 @@
           <span class="">40.0</span>
         </div>
       </div>
-      <button class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md">
+      <button
+        @click="closeBmiResults"
+        class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md"
+      >
         Close
       </button>
       <p class="mt-2 text-center text-xs">Powered by Calculate It!</p>
@@ -127,7 +130,10 @@
       <p>Oops! Something went wrong.</p>
       <p>Please check your units and retry.</p>
     </div>
-    <button class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md">
+    <button
+      @click="closeBmiResults"
+      class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md"
+    >
       Close
     </button>
     <p class="mt-2 text-center text-xs">Powered by Calculate It!</p>
@@ -241,7 +247,7 @@ watch(
   }
 )
 
-// when the value of a unit changes, calculate the equivalent value for the corresponding unit
+// when the value of a unit changes, store the value locally
 watch(
   () => bmiData.topUnitValue,
   (newValue) => {
@@ -385,5 +391,10 @@ const calculateBMI = () => {
       : +userBMI.value > maxNormalRange
       ? "Overweight"
       : "Normal"
+}
+
+const closeBmiResults = () => {
+  hasBMI.value = false
+  hasOutOfRangeBMI.value = false
 }
 </script>
