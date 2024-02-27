@@ -329,6 +329,12 @@ const backspace = () => {
 }
 
 const calculateBMI = () => {
+  if (bmiData.topUnitValue === "" || bmiData.bottomUnitValue === "") {
+    hasBMI.value = false
+    hasOutOfRangeBMI.value = true
+    return
+  }
+
   const minNormalRange = 18.5
   const maxNormalRange = 25.0
   const maxBMI = 50
