@@ -61,13 +61,76 @@
   </div>
 
   <!-- The Buttons -->
-  <div class="buttons-container" ref="buttonsContainerRef">
+  <div
+    v-if="!hasBMI && !hasOutOfRangeBMI"
+    class="buttons-container"
+    ref="buttonsContainerRef"
+  >
     <ConverterButtons
       mode="bmi"
       @appendNumber="appendNumber"
       @clear="clear"
       @backspace="backspace"
+      @calculateBMI="calculateBMI"
     />
+  </div>
+  <div
+    v-else-if="hasBMI && !hasOutOfRangeBMI"
+    class="bg-navajo-white h-1/2 md:min-h-full relative -top-5 md:-top-0 rounded-xl rounded-s-none rounded-e-none"
+  >
+    <div class="px-8 py-4">
+      <!-- BMI Results Wrapper -->
+      <div
+        class="flex justify-center items-center gap-3 pb-2 border-b-4 border-sandy-brown"
+      >
+        <h2 class="text-6xl">{{ userBMI }}</h2>
+        <div class="flex flex-col items-center">
+          <span class="text-3xl">BMI</span>
+          <span class="text-sm">{{ bmiRange }}</span>
+        </div>
+      </div>
+
+      <!-- Information Wrapper -->
+      <div>
+        <h3 class="mt-3 text-xl text-center">Information</h3>
+        <div class="mt-5 flex text-center text-sm">
+          <span class="w-5/6">Underweight</span>
+          <span class="w-full">Normal</span>
+          <span class="w-5/6">Overweight</span>
+        </div>
+        <div class="mt-3 flex">
+          <!-- <span class="h-2 w-5/6 bg-blue-500"></span>
+          <span class="h-2 w-full bg-green-500"></span>
+          <span class="h-2 w-5/6 bg-red-500"></span> -->
+          <span class="h-2 w-5/6 bg-mellow-apricot"></span>
+          <span class="h-2 w-full bg-mango-tango"></span>
+          <span class="h-2 w-5/6 bg-liver"></span>
+        </div>
+        <div class="mt-2 flex">
+          <span class="w-5/6">16.0</span>
+          <span class="w-full">18.5</span>
+          <span class="w-5/6">25.0</span>
+          <span class="">40.0</span>
+        </div>
+      </div>
+      <button class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md">
+        Close
+      </button>
+      <p class="mt-2 text-center text-xs">Powered by Calculate It!</p>
+    </div>
+  </div>
+  <div
+    v-else-if="!hasBMI && hasOutOfRangeBMI"
+    class="bg-navajo-white h-1/2 md:min-h-full relative mt-auto rounded-xl rounded-s-none rounded-e-none"
+  >
+    <div class="px-8 py-4 text-center">
+      <p>Oops! Something went wrong.</p>
+      <p>Please check your units and retry.</p>
+    </div>
+    <button class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md">
+      Close
+    </button>
+    <p class="mt-2 text-center text-xs">Powered by Calculate It!</p>
   </div>
 </template>
 
@@ -91,6 +154,10 @@ const buttonsContainerRef = ref(null)
 const activeDropdown = ref("top")
 const topUnitName = ref("Kilograms")
 const bottomUnitName = ref("Centimeters")
+const hasBMI = ref(false)
+const hasOutOfRangeBMI = ref(false)
+const userBMI = ref(null)
+const bmiRange = ref(null)
 
 // integer part of a float i.e 3.142 => 3
 const integerPortion = reactive({
@@ -101,6 +168,26 @@ const integerPortion = reactive({
 // non-reactive data
 const weightUnits = ["Kilograms", "Pounds"]
 const heightUnits = ["Centimeters", "Meters", "Feet", "Inches"]
+
+// non reactive data object for units and their conversion rates
+const conversionRates = {
+  weight: {
+    oneKilo: {
+      poundEquiv: 2.20462262
+    }
+  },
+  height: {
+    oneCentimeter: {
+      inchEquiv: 0.393700787
+    },
+    oneMeter: {
+      inchEquiv: 39.3700787
+    },
+    oneFoot: {
+      inchEquiv: 12
+    }
+  }
+}
 
 // reactive data object for related bmi data
 const bmiData = reactive({
@@ -233,5 +320,70 @@ const backspace = () => {
   if (!bmiData.topUnitValue && !bmiData.bottomUnitValue) return
 
   clearChars(activeDropdown, bmiData, integerPortion)
+}
+
+const calculateBMI = () => {
+  const minNormalRange = 18.5
+  const maxNormalRange = 25.0
+  const maxBMI = 50
+  const minBMI = 0
+  let weight // in pounds
+  let height // in inches
+  let bmi
+
+  const activeWeightUnit = bmiData.topActiveUnit
+  const activeHeightUnit = bmiData.bottomActiveUnit
+
+  // convert the weight to pounds
+  switch (activeWeightUnit) {
+    case "Kilograms":
+      weight = bmiData.topUnitValue * conversionRates.weight.oneKilo.poundEquiv
+      break
+    default:
+      weight = bmiData.topUnitValue
+      break
+  }
+
+  // convert the height to inches
+  switch (activeHeightUnit) {
+    case "Centimeters":
+      height =
+        bmiData.bottomUnitValue * conversionRates.height.oneCentimeter.inchEquiv
+      break
+    case "Meters":
+      height =
+        bmiData.bottomUnitValue * conversionRates.height.oneMeter.inchEquiv
+      break
+    case "Feet":
+      height =
+        bmiData.bottomUnitValue * conversionRates.height.oneFoot.inchEquiv
+      break
+    default:
+      height = bmiData.bottomUnitValue
+      break
+  }
+
+  weight = weight.toLocaleString("en", { maximumFractionDigits: 7 })
+  height = height.toLocaleString("en", { maximumFractionDigits: 7 })
+
+  // BMI formula: weight in pounds, height in inches
+  bmi = weight * (703 / (height * height))
+  if (isNaN(bmi)) bmi = 0
+
+  if (bmi < minBMI || bmi > maxBMI) {
+    hasBMI.value = false
+    hasOutOfRangeBMI.value = true
+    return
+  }
+
+  userBMI.value = bmi.toLocaleString("en", { maximumFractionDigits: 1 })
+  hasBMI.value = true
+  hasOutOfRangeBMI.value = false
+  bmiRange.value =
+    +userBMI.value < minNormalRange
+      ? "Underweight"
+      : +userBMI.value > maxNormalRange
+      ? "Overweight"
+      : "Normal"
 }
 </script>
