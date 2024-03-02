@@ -99,9 +99,6 @@
           <span class="w-5/6">Overweight</span>
         </div>
         <div class="mt-3 flex">
-          <!-- <span class="h-2 w-5/6 bg-blue-500"></span>
-          <span class="h-2 w-full bg-green-500"></span>
-          <span class="h-2 w-5/6 bg-red-500"></span> -->
           <span class="h-2 w-5/6 bg-mellow-apricot"></span>
           <span class="h-2 w-full bg-mango-tango"></span>
           <span class="h-2 w-5/6 bg-liver"></span>
@@ -110,7 +107,7 @@
           <span class="w-5/6">16.0</span>
           <span class="w-full">18.5</span>
           <span class="w-5/6">25.0</span>
-          <span class="">40.0</span>
+          <span>40.0</span>
         </div>
       </div>
       <button
