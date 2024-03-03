@@ -173,7 +173,7 @@
 
 /* dropdown styles */
 .dropdown-container {
-  @apply w-[90%] px-4 md:px-2 py-2 md:py-1 absolute left-1/2 -translate-x-1/2 flex justify-between items-center gap-4 text-4xl md:text-[40px] text-navajo-white cursor-pointer;
+  @apply w-[90%] px-4 md:px-2 py-2 md:py-1 absolute left-1/2 -translate-x-1/2 flex justify-between items-center gap-2 md:gap-4 text-2xl sm:text-4xl text-navajo-white;
 }
 
 .top-dropdown {
@@ -184,6 +184,14 @@
   @apply top-32 sm:top-40 md:top-24 z-40;
 }
 
-.dropdown-container .result.active {
+.dropdown-container .results-wrapper {
+  @apply relative w-full text-right scrollable overflow-y-hidden overflow-x-auto cursor-pointer;
+}
+
+.dropdown-container .results-wrapper .result.active {
   @apply text-neon-carrot;
+}
+
+.dropdown-container .unit-name-wrapper {
+  @apply absolute right-4 md:right-2 -bottom-0 md:-bottom-2 text-xs md:text-sm cursor-pointer;
 }
