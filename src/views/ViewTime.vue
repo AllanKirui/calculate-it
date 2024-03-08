@@ -453,6 +453,32 @@ const convertValues = (dropdown, unitValue) => {
           break
       }
       break
+    case "d":
+      switch (activeUnit2) {
+        case "y":
+          convertedValue = conversionRates.oneYear.dayEquiv * activeUnitValue
+          break
+        case "d":
+          convertedValue = conversionRates.oneDay.dayEquiv * activeUnitValue
+          break
+        case "h":
+          convertedValue = conversionRates.oneHour.dayEquiv * activeUnitValue
+          break
+        case "min":
+          convertedValue = conversionRates.oneMinute.dayEquiv * activeUnitValue
+          break
+        case "s":
+          convertedValue = conversionRates.oneSecond.dayEquiv * activeUnitValue
+          break
+        case "ms":
+          convertedValue =
+            conversionRates.oneMillisecond.dayEquiv * activeUnitValue
+          break
+        default:
+          convertedValue = conversionRates.oneWeek.dayEquiv * activeUnitValue
+          break
+      }
+      break
     case "h":
       switch (activeUnit2) {
         case "y":
