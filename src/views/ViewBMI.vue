@@ -8,20 +8,14 @@
       :active-unit="bmiData.topActiveUnit"
       @setActiveUnit="setActiveUnitTop"
     />
-    <div @click="activeDropdown = 'top'" class="relative w-full text-right">
-      <h2
-        class="result"
-        :class="[
-          activeDropdown === 'top' ? 'active' : '',
-          bmiData.topUnitValue && bmiData.topUnitValue.length > 20
-            ? 'text-2xl'
-            : ''
-        ]"
-      >
-        {{ bmiData.topUnitValue || bmiData.defaultResult }}
-      </h2>
-      <span class="absolute right-0 text-xs md:text-sm">{{ topUnitName }}</span>
-    </div>
+    <UnitValue
+      dropdown-owner="top"
+      :active-dropdown="activeDropdown"
+      :unit-value="bmiData.topUnitValue"
+      :unit-name="topUnitName"
+      :default-result="bmiData.defaultResult"
+      @setActiveDropdown="setActiveDropdown"
+    />
   </div>
 
   <!-- Bottom Units -->
@@ -32,22 +26,14 @@
       :active-unit="bmiData.bottomActiveUnit"
       @setActiveUnit="setActiveUnitBottom"
     />
-    <div @click="activeDropdown = 'bottom'" class="relative w-full text-right">
-      <h2
-        class="result"
-        :class="[
-          activeDropdown === 'bottom' ? 'active' : '',
-          bmiData.bottomUnitValue && bmiData.bottomUnitValue.length > 20
-            ? 'text-2xl'
-            : ''
-        ]"
-      >
-        {{ bmiData.bottomUnitValue || bmiData.defaultResult }}
-      </h2>
-      <span class="absolute right-0 text-xs md:text-sm">{{
-        bottomUnitName
-      }}</span>
-    </div>
+    <UnitValue
+      dropdown-owner="bottom"
+      :active-dropdown="activeDropdown"
+      :unit-value="bmiData.bottomUnitValue"
+      :unit-name="bottomUnitName"
+      :default-result="bmiData.defaultResult"
+      @setActiveDropdown="setActiveDropdown"
+    />
   </div>
 
   <!-- The Output -->
@@ -137,6 +123,7 @@
 
 <script setup>
 import TheDropdown from "@/components/ui/TheDropdown.vue"
+import UnitValue from "@/components/ui/UnitValue.vue"
 import ConverterButtons from "@/components/ui/ConverterButtons.vue"
 import { ref, reactive, watch, inject, onMounted, onBeforeMount } from "vue"
 
@@ -301,6 +288,10 @@ onMounted(() => {
 */
 const appendNumber = (number) => {
   appendNumberToConverter(number, activeDropdown, bmiData, integerPortion)
+}
+
+const setActiveDropdown = (dropdown) => {
+  activeDropdown.value = dropdown
 }
 
 const setActiveUnitTop = (unit) => {

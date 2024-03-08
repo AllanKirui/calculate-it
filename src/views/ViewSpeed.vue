@@ -7,20 +7,14 @@
       :active-unit="speedData.topActiveUnit"
       @setActiveUnit="setActiveUnitTop"
     />
-    <div @click="activeDropdown = 'top'" class="relative w-full text-right">
-      <h2
-        class="result"
-        :class="[
-          activeDropdown === 'top' ? 'active' : '',
-          speedData.topUnitValue && speedData.topUnitValue.length > 20
-            ? 'text-2xl'
-            : ''
-        ]"
-      >
-        {{ speedData.topUnitValue || speedData.defaultResult }}
-      </h2>
-      <span class="absolute right-0 text-xs md:text-sm">{{ topUnitName }}</span>
-    </div>
+    <UnitValue
+      dropdown-owner="top"
+      :active-dropdown="activeDropdown"
+      :unit-value="speedData.topUnitValue"
+      :unit-name="topUnitName"
+      :default-result="speedData.defaultResult"
+      @setActiveDropdown="setActiveDropdown"
+    />
   </div>
 
   <!-- Bottom Units -->
@@ -30,22 +24,14 @@
       :active-unit="speedData.bottomActiveUnit"
       @setActiveUnit="setActiveUnitBottom"
     />
-    <div @click="activeDropdown = 'bottom'" class="relative w-full text-right">
-      <h2
-        class="result"
-        :class="[
-          activeDropdown === 'bottom' ? 'active' : '',
-          speedData.bottomUnitValue && speedData.bottomUnitValue.length > 20
-            ? 'text-2xl'
-            : ''
-        ]"
-      >
-        {{ speedData.bottomUnitValue || speedData.defaultResult }}
-      </h2>
-      <span class="absolute right-0 text-xs md:text-sm">{{
-        bottomUnitName
-      }}</span>
-    </div>
+    <UnitValue
+      dropdown-owner="bottom"
+      :active-dropdown="activeDropdown"
+      :unit-value="speedData.bottomUnitValue"
+      :unit-name="bottomUnitName"
+      :default-result="speedData.defaultResult"
+      @setActiveDropdown="setActiveDropdown"
+    />
   </div>
 
   <!-- The Output -->
@@ -68,6 +54,7 @@
 
 <script setup>
 import TheDropdown from "@/components/ui/TheDropdown.vue"
+import UnitValue from "@/components/ui/UnitValue.vue"
 import ConverterButtons from "@/components/ui/ConverterButtons.vue"
 import { ref, reactive, watch, inject, onMounted, onBeforeMount } from "vue"
 
@@ -809,6 +796,10 @@ const convertValues = (dropdown, unitValue) => {
   })
 
   return convertedValue
+}
+
+const setActiveDropdown = (dropdown) => {
+  activeDropdown.value = dropdown
 }
 
 const setActiveUnitTop = (unit) => {

@@ -7,21 +7,14 @@
       :active-unit="temperatureData.topActiveUnit"
       @setActiveUnit="setActiveUnitTop"
     />
-    <div @click="activeDropdown = 'top'" class="relative w-full text-right">
-      <h2
-        class="result"
-        :class="[
-          activeDropdown === 'top' ? 'active' : '',
-          temperatureData.topUnitValue &&
-          temperatureData.topUnitValue.length > 20
-            ? 'text-2xl'
-            : ''
-        ]"
-      >
-        {{ temperatureData.topUnitValue || temperatureData.defaultResult }}
-      </h2>
-      <span class="absolute right-0 text-xs md:text-sm">{{ topUnitName }}</span>
-    </div>
+    <UnitValue
+      dropdown-owner="top"
+      :active-dropdown="activeDropdown"
+      :unit-value="temperatureData.topUnitValue"
+      :unit-name="topUnitName"
+      :default-result="temperatureData.defaultResult"
+      @setActiveDropdown="setActiveDropdown"
+    />
   </div>
 
   <!-- Bottom Units -->
@@ -31,23 +24,14 @@
       :active-unit="temperatureData.bottomActiveUnit"
       @setActiveUnit="setActiveUnitBottom"
     />
-    <div @click="activeDropdown = 'bottom'" class="relative w-full text-right">
-      <h2
-        class="result"
-        :class="[
-          activeDropdown === 'bottom' ? 'active' : '',
-          temperatureData.bottomUnitValue &&
-          temperatureData.bottomUnitValue.length > 20
-            ? 'text-2xl'
-            : ''
-        ]"
-      >
-        {{ temperatureData.bottomUnitValue || temperatureData.defaultResult }}
-      </h2>
-      <span class="absolute right-0 text-xs md:text-sm">{{
-        bottomUnitName
-      }}</span>
-    </div>
+    <UnitValue
+      dropdown-owner="bottom"
+      :active-dropdown="activeDropdown"
+      :unit-value="temperatureData.bottomUnitValue"
+      :unit-name="bottomUnitName"
+      :default-result="temperatureData.defaultResult"
+      @setActiveDropdown="setActiveDropdown"
+    />
   </div>
 
   <!-- The Output -->
@@ -72,6 +56,7 @@
 
 <script setup>
 import TheDropdown from "@/components/ui/TheDropdown.vue"
+import UnitValue from "@/components/ui/UnitValue.vue"
 import ConverterButtons from "@/components/ui/ConverterButtons.vue"
 import { ref, reactive, watch, inject, onMounted, onBeforeMount } from "vue"
 
@@ -493,6 +478,10 @@ const convertValues = (dropdown, unitValue) => {
   })
 
   return convertedValue
+}
+
+const setActiveDropdown = (dropdown) => {
+  activeDropdown.value = dropdown
 }
 
 const setActiveUnitTop = (unit) => {
