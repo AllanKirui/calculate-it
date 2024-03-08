@@ -4,7 +4,6 @@
   <div class="dropdown-container top-dropdown">
     <TheDropdown
       :calc-units="calcUnits"
-      :is-active="activeDropdown === 'top' ? true : false"
       :active-unit="timeData.topActiveUnit"
       @setActiveUnit="setActiveUnitTop"
     />
@@ -28,7 +27,6 @@
   <div class="dropdown-container bottom-dropdown">
     <TheDropdown
       :calc-units="calcUnits"
-      :is-active="activeDropdown === 'bottom' ? true : false"
       :active-unit="timeData.bottomActiveUnit"
       @setActiveUnit="setActiveUnitBottom"
     />

@@ -5,7 +5,6 @@
     <TheDropdown
       :calc-units="weightUnits"
       unit-type="Weight"
-      :is-active="activeDropdown === 'top' ? true : false"
       :active-unit="bmiData.topActiveUnit"
       @setActiveUnit="setActiveUnitTop"
     />
@@ -30,7 +29,6 @@
     <TheDropdown
       :calc-units="heightUnits"
       unit-type="Height"
-      :is-active="activeDropdown === 'bottom' ? true : false"
       :active-unit="bmiData.bottomActiveUnit"
       @setActiveUnit="setActiveUnitBottom"
     />
