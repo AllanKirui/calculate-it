@@ -7,7 +7,7 @@
       :active-unit="timeData.topActiveUnit"
       @setActiveUnit="setActiveUnitTop"
     />
-    <div @click="activeDropdown = 'top'" class="relative w-full text-right">
+    <!-- <div @click="activeDropdown = 'top'" class="relative w-full text-right">
       <h2
         class="result"
         :class="[
@@ -20,7 +20,15 @@
         {{ timeData.topUnitValue || timeData.defaultResult }}
       </h2>
       <span class="absolute right-0 text-xs md:text-sm">{{ topUnitName }}</span>
-    </div>
+    </div> -->
+    <UnitValue
+      dropdown-owner="top"
+      :active-dropdown="activeDropdown"
+      :unit-value="timeData.topUnitValue"
+      :unit-name="topUnitName"
+      :default-result="timeData.defaultResult"
+      @setActiveDropdown="setActiveDropdown"
+    />
   </div>
 
   <!-- Bottom Units -->
@@ -30,7 +38,7 @@
       :active-unit="timeData.bottomActiveUnit"
       @setActiveUnit="setActiveUnitBottom"
     />
-    <div @click="activeDropdown = 'bottom'" class="relative w-full text-right">
+    <!-- <div @click="activeDropdown = 'bottom'" class="relative w-full text-right">
       <h2
         class="result"
         :class="[
@@ -45,7 +53,15 @@
       <span class="absolute right-0 text-xs md:text-sm">{{
         bottomUnitName
       }}</span>
-    </div>
+    </div> -->
+    <UnitValue
+      dropdown-owner="bottom"
+      :active-dropdown="activeDropdown"
+      :unit-value="timeData.bottomUnitValue"
+      :unit-name="bottomUnitName"
+      :default-result="timeData.defaultResult"
+      @setActiveDropdown="setActiveDropdown"
+    />
   </div>
 
   <!-- The Output -->
@@ -68,6 +84,7 @@
 
 <script setup>
 import TheDropdown from "@/components/ui/TheDropdown.vue"
+import UnitValue from "@/components/ui/UnitValue.vue"
 import ConverterButtons from "@/components/ui/ConverterButtons.vue"
 import { ref, reactive, watch, inject, onMounted, onBeforeMount } from "vue"
 
@@ -600,6 +617,10 @@ const convertValues = (dropdown, unitValue) => {
   })
 
   return convertedValue
+}
+
+const setActiveDropdown = (dropdown) => {
+  activeDropdown.value = dropdown
 }
 
 const setActiveUnitTop = (unit) => {
