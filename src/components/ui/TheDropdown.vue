@@ -49,7 +49,6 @@ import { ChevronDownIcon } from "@heroicons/vue/20/solid"
 defineProps({
   unitType: { type: String },
   calcUnits: { type: Object },
-  isActive: { type: Boolean, default: false },
   activeUnit: { type: String }
 })
 
