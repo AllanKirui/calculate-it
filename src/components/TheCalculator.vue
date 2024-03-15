@@ -125,9 +125,17 @@ const clearAll = (converter, integerPortion, activeDropdown) => {
 }
 
 const clearChars = (activeDropdown, converter, integerPortion) => {
+  // remove any comma seperators and handle deleting chars from numbers with decimals
+  if (
+    converter.topUnitValue.includes(",") ||
+    converter.bottomUnitValue.includes(",")
+  ) {
+    removeCommasFromUnitValues(activeDropdown, converter, integerPortion)
+  }
+
   // remove the last character from the expression shown on the calc display
   //
-  // the hasConvertedTo... flag prevents the watcher methods above
+  // the hasConvertedTo... flag prevents the watcher methods
   // for topUnitValue and bottomUnitValue from running twice
 
   if (activeDropdown.value === "top") {
@@ -149,14 +157,6 @@ const clearChars = (activeDropdown, converter, integerPortion) => {
 
     integerPortion.bottomUnit = converter.bottomUnitValue
     converter.hasConvertedToBottomEquiv = true
-  }
-
-  // remove any comma seperators and handle deleting chars from numbers with decimals
-  if (
-    converter.topUnitValue.includes(",") ||
-    converter.bottomUnitValue.includes(",")
-  ) {
-    removeCommasFromUnitValues(activeDropdown, converter, integerPortion)
   }
 
   storeConverterDataLocally(converter, integerPortion, activeDropdown)
