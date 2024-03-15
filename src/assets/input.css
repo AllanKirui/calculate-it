@@ -4,6 +4,14 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  *:focus {
+    outline: none;
+  }
+
   body {
     @apply font-viga bg-navajo-white text-liver body-scrollable;
   }
