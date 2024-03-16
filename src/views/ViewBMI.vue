@@ -125,7 +125,15 @@
 import TheDropdown from "@/components/ui/TheDropdown.vue"
 import UnitValue from "@/components/ui/UnitValue.vue"
 import ConverterButtons from "@/components/ui/ConverterButtons.vue"
-import { ref, reactive, watch, inject, onMounted, onBeforeMount } from "vue"
+import {
+  ref,
+  reactive,
+  watch,
+  inject,
+  nextTick,
+  onMounted,
+  onBeforeMount
+} from "vue"
 
 const appendNumberToConverter = inject("appendNumber")
 const removeCommas = inject("removeCommas")
@@ -388,5 +396,7 @@ const calculateBMI = () => {
 const closeBmiResults = () => {
   hasBMI.value = false
   hasOutOfRangeBMI.value = false
+
+  nextTick(() => showRippleEffectOnButtons(buttonsContainerRef))
 }
 </script>
