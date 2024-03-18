@@ -125,14 +125,6 @@ const clearAll = (converter, integerPortion, activeDropdown) => {
 }
 
 const clearChars = (activeDropdown, converter, integerPortion) => {
-  // remove any comma seperators and handle deleting chars from numbers with decimals
-  if (
-    converter.topUnitValue.includes(",") ||
-    converter.bottomUnitValue.includes(",")
-  ) {
-    removeCommasFromUnitValues(activeDropdown, converter, integerPortion)
-  }
-
   // remove the last character from the expression shown on the calc display
   //
   // the hasConvertedTo... flag prevents the watcher methods
@@ -141,22 +133,46 @@ const clearChars = (activeDropdown, converter, integerPortion) => {
   if (activeDropdown.value === "top") {
     converter.topUnitValue = converter.topUnitValue.slice(0, -1)
 
-    if (converter.topUnitValue.length == 1 && isNaN(converter.topUnitValue))
+    // reset the topUnitValue if it has a single digit value that is a zero
+    if (converter.topUnitValue.length === 1 && converter.topUnitValue === "0")
       converter.topUnitValue = ""
+
+    if (converter.topUnitValue === "") {
+      integerPortion.topUnit = converter.topUnitValue
+      converter.hasConvertedToTopEquiv = true
+      return
+    }
 
     integerPortion.topUnit = converter.topUnitValue
     converter.hasConvertedToTopEquiv = true
-  } else {
+  }
+
+  if (activeDropdown.value === "bottom") {
     converter.bottomUnitValue = converter.bottomUnitValue.slice(0, -1)
 
+    // reset the bottomUnitValue if it has a single digit value that is a zero
     if (
-      converter.bottomUnitValue.length == 1 &&
-      isNaN(converter.bottomUnitValue)
+      converter.bottomUnitValue.length === 1 &&
+      converter.bottomUnitValue === "0"
     )
       converter.bottomUnitValue = ""
 
+    if (converter.bottomUnitValue === "") {
+      integerPortion.bottomUnit = converter.bottomUnitValue
+      converter.hasConvertedToBottomEquiv = true
+      return
+    }
+
     integerPortion.bottomUnit = converter.bottomUnitValue
     converter.hasConvertedToBottomEquiv = true
+  }
+
+  // remove any comma seperators and handle deleting chars from numbers with decimals
+  if (
+    converter.topUnitValue.includes(",") ||
+    converter.bottomUnitValue.includes(",")
+  ) {
+    removeCommasFromUnitValues(activeDropdown, converter, integerPortion)
   }
 
   storeConverterDataLocally(converter, integerPortion, activeDropdown)
