@@ -7,20 +7,6 @@
       :active-unit="timeData.topActiveUnit"
       @setActiveUnit="setActiveUnitTop"
     />
-    <!-- <div @click="activeDropdown = 'top'" class="relative w-full text-right">
-      <h2
-        class="result"
-        :class="[
-          activeDropdown === 'top' ? 'active' : '',
-          timeData.topUnitValue && timeData.topUnitValue.length > 20
-            ? 'text-2xl'
-            : ''
-        ]"
-      >
-        {{ timeData.topUnitValue || timeData.defaultResult }}
-      </h2>
-      <span class="absolute right-0 text-xs md:text-sm">{{ topUnitName }}</span>
-    </div> -->
     <UnitValue
       dropdown-owner="top"
       :active-dropdown="activeDropdown"
@@ -38,22 +24,6 @@
       :active-unit="timeData.bottomActiveUnit"
       @setActiveUnit="setActiveUnitBottom"
     />
-    <!-- <div @click="activeDropdown = 'bottom'" class="relative w-full text-right">
-      <h2
-        class="result"
-        :class="[
-          activeDropdown === 'bottom' ? 'active' : '',
-          timeData.bottomUnitValue && timeData.bottomUnitValue.length > 20
-            ? 'text-2xl'
-            : ''
-        ]"
-      >
-        {{ timeData.bottomUnitValue || timeData.defaultResult }}
-      </h2>
-      <span class="absolute right-0 text-xs md:text-sm">{{
-        bottomUnitName
-      }}</span>
-    </div> -->
     <UnitValue
       dropdown-owner="bottom"
       :active-dropdown="activeDropdown"
