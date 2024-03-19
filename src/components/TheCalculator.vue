@@ -321,10 +321,10 @@ const storeConverterDataLocally = (converter, integerPortion) => {
   const converterData = {
     topActiveUnit: converter.topActiveUnit,
     bottomActiveUnit: converter.bottomActiveUnit,
-    topUnit: integerPortion.topUnit ?? "",
-    bottomUnit: integerPortion.bottomUnit ?? "",
-    topUnitValue: converter.topUnitValue ?? "",
-    bottomUnitValue: converter.bottomUnitValue ?? "",
+    topUnit: integerPortion.topUnit || "",
+    bottomUnit: integerPortion.bottomUnit || "",
+    topUnitValue: converter.topUnitValue || "",
+    bottomUnitValue: converter.bottomUnitValue || "",
     activeDropdown: converter.activeDropdown
   }
 
