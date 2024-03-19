@@ -15,19 +15,19 @@ import { provide } from "vue"
 */
 // method for appending numbers to the converters,
 // different from the appendNumber() in ViewMath.vue
-const appendNumber = (number, activeDropdown, converter, integerPortion) => {
+const appendNumber = (number, converter, integerPortion) => {
   // the hasConvertedTo... flag prevents the watcher methods for topUnitValue
   // and bottomUnitValue from running twice inside child components
-  if (activeDropdown.value === "top") {
+  if (converter.activeDropdown === "top") {
     converter.hasConvertedToTopEquiv = true
-  } else if (activeDropdown.value === "bottom") {
+  } else if (converter.activeDropdown === "bottom") {
     converter.hasConvertedToBottomEquiv = true
   }
 
   // return if zero is clicked when either the top or bottom unit values are
   // zero (except in the Temperature Converter)
   // and if the number already contains a decimal point return
-  if (activeDropdown.value === "top") {
+  if (converter.activeDropdown === "top") {
     if (
       number === 0 &&
       converter.name !== "temperatureData" &&
@@ -47,7 +47,7 @@ const appendNumber = (number, activeDropdown, converter, integerPortion) => {
 
   // convert the number to a string
   let stringNumber = number.toString()
-  if (activeDropdown.value === "top") {
+  if (converter.activeDropdown === "top") {
     integerPortion.topUnit += stringNumber
   } else {
     integerPortion.bottomUnit += stringNumber
@@ -58,7 +58,7 @@ const appendNumber = (number, activeDropdown, converter, integerPortion) => {
   let decimalNumbers
   let integerDisplay
 
-  if (activeDropdown.value === "top") {
+  if (converter.activeDropdown === "top") {
     integerNumbers = removeCommas(integerPortion.topUnit.split(".")[0]) // integer = 3
     decimalNumbers = integerPortion.topUnit.split(".")[1] // decimal = 142
   } else {
@@ -77,7 +77,7 @@ const appendNumber = (number, activeDropdown, converter, integerPortion) => {
 
   // if the decimal point is the first button to be clicked add a zero before it
   if (number === "." && isNaN(integerNumbers)) {
-    if (activeDropdown.value === "top") {
+    if (converter.activeDropdown === "top") {
       integerPortion.topUnit = "0."
       integerDisplay = "0"
     } else {
@@ -88,13 +88,13 @@ const appendNumber = (number, activeDropdown, converter, integerPortion) => {
 
   // handle displaying any decimal digits
   if (decimalNumbers != null) {
-    if (activeDropdown.value === "top") {
+    if (converter.activeDropdown === "top") {
       converter.topUnitValue = `${integerDisplay}.${decimalNumbers}`
     } else {
       converter.bottomUnitValue = `${integerDisplay}.${decimalNumbers}`
     }
   } else {
-    if (activeDropdown.value === "top") {
+    if (converter.activeDropdown === "top") {
       converter.topUnitValue = integerDisplay
     } else {
       converter.bottomUnitValue = integerDisplay
@@ -115,22 +115,22 @@ const removeCommas = (stringNumber) => {
   return parseFloat(num)
 }
 
-const clearAll = (converter, integerPortion, activeDropdown) => {
+const clearAll = (converter, integerPortion) => {
   integerPortion.topUnit = ""
   integerPortion.bottomUnit = ""
   converter.topUnitValue = ""
   converter.bottomUnitValue = ""
 
-  storeConverterDataLocally(converter, integerPortion, activeDropdown)
+  storeConverterDataLocally(converter, integerPortion)
 }
 
-const clearChars = (activeDropdown, converter, integerPortion) => {
+const clearChars = (converter, integerPortion) => {
   // remove the last character from the expression shown on the calc display
   //
   // the hasConvertedTo... flag prevents the watcher methods
   // for topUnitValue and bottomUnitValue from running twice
 
-  if (activeDropdown.value === "top") {
+  if (converter.activeDropdown === "top") {
     converter.topUnitValue = converter.topUnitValue.slice(0, -1)
 
     // reset the topUnitValue if it has a single digit value that is a zero
@@ -147,7 +147,7 @@ const clearChars = (activeDropdown, converter, integerPortion) => {
     converter.hasConvertedToTopEquiv = true
   }
 
-  if (activeDropdown.value === "bottom") {
+  if (converter.activeDropdown === "bottom") {
     converter.bottomUnitValue = converter.bottomUnitValue.slice(0, -1)
 
     // reset the bottomUnitValue if it has a single digit value that is a zero
@@ -172,21 +172,17 @@ const clearChars = (activeDropdown, converter, integerPortion) => {
     converter.topUnitValue.includes(",") ||
     converter.bottomUnitValue.includes(",")
   ) {
-    removeCommasFromUnitValues(activeDropdown, converter, integerPortion)
+    removeCommasFromUnitValues(converter, integerPortion)
   }
 
-  storeConverterDataLocally(converter, integerPortion, activeDropdown)
+  storeConverterDataLocally(converter, integerPortion)
 }
 
-const removeCommasFromUnitValues = (
-  activeDropdown,
-  converter,
-  integerPortion
-) => {
+const removeCommasFromUnitValues = (converter, integerPortion) => {
   let numWithoutCommas,
     numWithCommas = ""
 
-  if (activeDropdown.value === "top") {
+  if (converter.activeDropdown === "top") {
     numWithoutCommas = removeCommas(converter.topUnitValue).toString()
   } else {
     numWithoutCommas = removeCommas(converter.bottomUnitValue).toString()
@@ -202,7 +198,7 @@ const removeCommasFromUnitValues = (
     })
   }
 
-  if (activeDropdown.value === "top") {
+  if (converter.activeDropdown === "top") {
     if (converter.topUnitValue.endsWith(".") && !numWithCommas.includes("."))
       numWithCommas += "."
 
@@ -217,12 +213,7 @@ const removeCommasFromUnitValues = (
   }
 }
 
-const listenForKeyboardInputs = (
-  activeDropdown,
-  converter,
-  integerPortion,
-  buttonsRef
-) => {
+const listenForKeyboardInputs = (converter, integerPortion, buttonsRef) => {
   window.addEventListener("keyup", (e) => {
     // check which key was pressed and append the number or set operation
     const validKeys = [
@@ -247,14 +238,14 @@ const listenForKeyboardInputs = (
       // clear characters when backspace is pressed, clear all when delete is pressed
       switch (keyPressed) {
         case "Backspace":
-          clearChars(activeDropdown, converter, integerPortion)
+          clearChars(converter, integerPortion)
           break
         case "Delete":
           showRippleEffectOnButtons(buttonsRef, "AC")
           clearAll(converter, integerPortion)
           break
         default:
-          appendNumber(keyPressed, activeDropdown, converter, integerPortion)
+          appendNumber(keyPressed, converter, integerPortion)
           break
       }
     }
@@ -324,11 +315,7 @@ const setRippleForClickedButton = (e) => {
   setTimeout(() => circle.remove(), 350)
 }
 
-const storeConverterDataLocally = (
-  converter,
-  integerPortion,
-  activeDropdown
-) => {
+const storeConverterDataLocally = (converter, integerPortion) => {
   if (!localStorage) return
 
   const converterData = {
@@ -338,7 +325,7 @@ const storeConverterDataLocally = (
     bottomUnit: integerPortion.bottomUnit ?? "",
     topUnitValue: converter.topUnitValue ?? "",
     bottomUnitValue: converter.bottomUnitValue ?? "",
-    activeDropdown: activeDropdown.value ?? "top"
+    activeDropdown: converter.activeDropdown
   }
 
   if (converter.name !== "bmiData") {
@@ -350,15 +337,15 @@ const storeConverterDataLocally = (
   localStorage.setItem(converter.name, JSON.stringify(converterData))
 }
 
-const getStoredConverterData = (converter, integerPortion, activeDropdown) => {
+const getStoredConverterData = (converter, integerPortion) => {
   const storedData = JSON.parse(localStorage.getItem(converter.name))
 
   if (storedData) {
-    activeDropdown.value = storedData.activeDropdown
+    converter.activeDropdown = storedData.activeDropdown
     converter.topActiveUnit = storedData.topActiveUnit
     converter.bottomActiveUnit = storedData.bottomActiveUnit
 
-    if (activeDropdown.value === "top") {
+    if (converter.activeDropdown === "top") {
       integerPortion.topUnit = storedData.topUnit
       converter.topUnitValue = storedData.topUnitValue
 

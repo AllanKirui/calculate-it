@@ -9,7 +9,7 @@
     />
     <UnitValue
       dropdown-owner="top"
-      :active-dropdown="activeDropdown"
+      :active-dropdown="massData.activeDropdown"
       :unit-value="massData.topUnitValue"
       :unit-name="topUnitName"
       :default-result="massData.defaultResult"
@@ -26,7 +26,7 @@
     />
     <UnitValue
       dropdown-owner="bottom"
-      :active-dropdown="activeDropdown"
+      :active-dropdown="massData.activeDropdown"
       :unit-value="massData.bottomUnitValue"
       :unit-name="bottomUnitName"
       :default-result="massData.defaultResult"
@@ -72,7 +72,6 @@ const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
 
-const activeDropdown = ref("top")
 const topUnitName = ref("Kilogram")
 const bottomUnitName = ref("Pound")
 
@@ -110,6 +109,7 @@ const massData = reactive({
   hasConvertedToBottomEquiv: false,
   topUnitValue: "",
   bottomUnitValue: "",
+  activeDropdown: "top",
   defaultResult: 0
 })
 
@@ -166,7 +166,7 @@ watch(
     // re-calculate the equivalent e.g. if top unit is 'kg' with a value of 5
     // and bottom unit is 'lb', and then top unit gets changed to 'g',
     // re-calculate the value of 5 grams to pounds
-    if (activeDropdown.value === "top") {
+    if (massData.activeDropdown === "top") {
       massData.bottomUnitValue = convertTopUnitToBottomEquiv(
         massData,
         massData.topUnitValue,
@@ -182,7 +182,7 @@ watch(
       massData.hasConvertedToBottomEquiv = true
     }
 
-    storeConverterDataLocally(massData, integerPortion, activeDropdown)
+    storeConverterDataLocally(massData, integerPortion)
   }
 )
 
@@ -206,7 +206,7 @@ watch(
 
     if (!massData.topUnitValue && !massData.bottomUnitValue) return
 
-    if (activeDropdown.value === "bottom") {
+    if (massData.activeDropdown === "bottom") {
       massData.topUnitValue = convertBottomUnitToTopEquiv(
         massData,
         massData.bottomUnitValue,
@@ -222,7 +222,7 @@ watch(
       massData.hasConvertedToTopEquiv = true
     }
 
-    storeConverterDataLocally(massData, integerPortion, activeDropdown)
+    storeConverterDataLocally(massData, integerPortion)
   }
 )
 
@@ -238,7 +238,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(massData, integerPortion, activeDropdown)
+    storeConverterDataLocally(massData, integerPortion)
   }
 )
 
@@ -253,13 +253,13 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(massData, integerPortion, activeDropdown)
+    storeConverterDataLocally(massData, integerPortion)
   }
 )
 
 // when the activeDropdown changes, update the following flags
 watch(
-  () => activeDropdown.value,
+  () => massData.activeDropdown,
   (newValue) => {
     massData.hasConvertedToTopEquiv = false
     massData.hasConvertedToBottomEquiv = false
@@ -268,24 +268,19 @@ watch(
     integerPortion.topUnit = ""
     integerPortion.bottomUnit = ""
 
-    storeConverterDataLocally(massData, integerPortion, activeDropdown)
+    storeConverterDataLocally(massData, integerPortion)
   }
 )
 
 // retrieve any locally stored converter data
 onBeforeMount(() => {
   if (!localStorage) return
-  getStoredConverterData(massData, integerPortion, activeDropdown)
+  getStoredConverterData(massData, integerPortion)
 })
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(
-    activeDropdown,
-    massData,
-    integerPortion,
-    buttonsContainerRef
-  )
+  listenForKeyboardInputs(massData, integerPortion, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
 })
 
@@ -293,7 +288,7 @@ onMounted(() => {
   Methods
 */
 const appendNumber = (number) => {
-  appendNumberToConverter(number, activeDropdown, massData, integerPortion)
+  appendNumberToConverter(number, massData, integerPortion)
 }
 
 const convertValues = (dropdown, unitValue) => {
@@ -391,28 +386,28 @@ const convertValues = (dropdown, unitValue) => {
 }
 
 const setActiveDropdown = (dropdown) => {
-  activeDropdown.value = dropdown
+  massData.activeDropdown = dropdown
 }
 
 const setActiveUnitTop = (unit) => {
   massData.topActiveUnit = unit
-  storeConverterDataLocally(massData, integerPortion, activeDropdown)
+  storeConverterDataLocally(massData, integerPortion)
 }
 
 const setActiveUnitBottom = (unit) => {
   massData.bottomActiveUnit = unit
-  storeConverterDataLocally(massData, integerPortion, activeDropdown)
+  storeConverterDataLocally(massData, integerPortion)
 }
 
 const clear = () => {
   if (!massData.topUnitValue && !massData.bottomUnitValue) return
 
-  clearAll(massData, integerPortion, activeDropdown)
+  clearAll(massData, integerPortion)
 }
 
 const backspace = () => {
   if (!massData.topUnitValue && !massData.bottomUnitValue) return
 
-  clearChars(activeDropdown, massData, integerPortion)
+  clearChars(massData, integerPortion)
 }
 </script>
