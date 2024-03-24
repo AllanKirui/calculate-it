@@ -10,10 +10,7 @@
     />
     <UnitValue
       dropdown-owner="top"
-      :active-dropdown="activeDropdown"
-      :unit-value="bmiData.topUnitValue"
-      :unit-name="topUnitName"
-      :default-result="bmiData.defaultResult"
+      :converter-data="bmiData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -28,10 +25,7 @@
     />
     <UnitValue
       dropdown-owner="bottom"
-      :active-dropdown="activeDropdown"
-      :unit-value="bmiData.bottomUnitValue"
-      :unit-name="bottomUnitName"
-      :default-result="bmiData.defaultResult"
+      :converter-data="bmiData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -147,9 +141,6 @@ const getStoredConverterData = inject("getStoredConverterData")
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
 
-const activeDropdown = ref("top")
-const topUnitName = ref("Kilograms")
-const bottomUnitName = ref("Centimeters")
 const hasBMI = ref(false)
 const hasOutOfRangeBMI = ref(false)
 const userBMI = ref(null)
@@ -190,8 +181,11 @@ const bmiData = reactive({
   name: "bmiData",
   topActiveUnit: "Kilograms",
   bottomActiveUnit: "Centimeters",
+  topUnitName: "Kilograms",
+  bottomUnitName: "Centimeters",
   topUnitValue: "",
   bottomUnitValue: "",
+  activeDropdown: "top",
   defaultResult: 0
 })
 
@@ -204,14 +198,14 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "Pounds":
-        topUnitName.value = "Pounds"
+        bmiData.topUnitName = "Pounds"
         break
       default:
-        topUnitName.value = "Kilograms"
+        bmiData.topUnitName = "Kilograms"
         break
     }
 
-    storeConverterDataLocally(bmiData, integerPortion, activeDropdown)
+    storeConverterDataLocally(bmiData, integerPortion)
   }
 )
 
@@ -220,20 +214,20 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "Meters":
-        bottomUnitName.value = "Meters"
+        bmiData.bottomUnitName = "Meters"
         break
       case "Feet":
-        bottomUnitName.value = "Feet"
+        bmiData.bottomUnitName = "Feet"
         break
       case "Inches":
-        bottomUnitName.value = "Inches"
+        bmiData.bottomUnitName = "Inches"
         break
       default:
-        bottomUnitName.value = "Centimeters"
+        bmiData.bottomUnitName = "Centimeters"
         break
     }
 
-    storeConverterDataLocally(bmiData, integerPortion, activeDropdown)
+    storeConverterDataLocally(bmiData, integerPortion)
   }
 )
 
@@ -242,7 +236,7 @@ watch(
   () => bmiData.topUnitValue,
   (newValue) => {
     if (!newValue) appendNumber(0)
-    storeConverterDataLocally(bmiData, integerPortion, activeDropdown)
+    storeConverterDataLocally(bmiData, integerPortion)
   }
 )
 
@@ -250,19 +244,15 @@ watch(
   () => bmiData.bottomUnitValue,
   (newValue) => {
     if (!newValue) appendNumber(0)
-    storeConverterDataLocally(bmiData, integerPortion, activeDropdown)
+    storeConverterDataLocally(bmiData, integerPortion)
   }
 )
 
 // when the activeDropdown changes, update the following flags
 watch(
-  () => activeDropdown.value,
+  () => bmiData.activeDropdown,
   (newValue) => {
-    // reset the value that was previously entered for a unit
-    integerPortion.topUnit = ""
-    integerPortion.bottomUnit = ""
-
-    storeConverterDataLocally(bmiData, integerPortion, activeDropdown)
+    storeConverterDataLocally(bmiData, integerPortion)
   }
 )
 
@@ -272,17 +262,12 @@ watch(
 // retrieve any locally stored converter data
 onBeforeMount(() => {
   if (!localStorage) return
-  getStoredConverterData(bmiData, integerPortion, activeDropdown)
+  getStoredConverterData(bmiData, integerPortion)
 })
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(
-    activeDropdown,
-    bmiData,
-    integerPortion,
-    buttonsContainerRef
-  )
+  listenForKeyboardInputs(bmiData, integerPortion, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
 
   // when the component is first mounted, set zero as the value of the active dropdown
@@ -295,11 +280,11 @@ onMounted(() => {
   Methods
 */
 const appendNumber = (number) => {
-  appendNumberToConverter(number, activeDropdown, bmiData, integerPortion)
+  appendNumberToConverter(number, bmiData, integerPortion)
 }
 
 const setActiveDropdown = (dropdown) => {
-  activeDropdown.value = dropdown
+  bmiData.activeDropdown = dropdown
 }
 
 const setActiveUnitTop = (unit) => {
@@ -313,13 +298,13 @@ const setActiveUnitBottom = (unit) => {
 const clear = () => {
   if (!bmiData.topUnitValue && !bmiData.bottomUnitValue) return
 
-  clearAll(bmiData, integerPortion, activeDropdown)
+  clearAll(bmiData, integerPortion)
 }
 
 const backspace = () => {
   if (!bmiData.topUnitValue && !bmiData.bottomUnitValue) return
 
-  clearChars(activeDropdown, bmiData, integerPortion)
+  clearChars(bmiData, integerPortion)
 }
 
 const calculateBMI = () => {
