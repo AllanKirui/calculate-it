@@ -9,10 +9,7 @@
     />
     <UnitValue
       dropdown-owner="top"
-      :active-dropdown="activeDropdown"
-      :unit-value="speedData.topUnitValue"
-      :unit-name="topUnitName"
-      :default-result="speedData.defaultResult"
+      :converter-data="speedData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -26,10 +23,7 @@
     />
     <UnitValue
       dropdown-owner="bottom"
-      :active-dropdown="activeDropdown"
-      :unit-value="speedData.bottomUnitValue"
-      :unit-name="bottomUnitName"
-      :default-result="speedData.defaultResult"
+      :converter-data="speedData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -71,10 +65,6 @@ const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
-
-const activeDropdown = ref("top")
-const topUnitName = ref("Kilometer per hour")
-const bottomUnitName = ref("Mile per hour")
 
 // integer part of a float i.e 3.142 => 3
 const integerPortion = reactive({
@@ -121,15 +111,18 @@ const calcUnits = ref({
   }
 })
 
-// reactive data object for related math data
+// reactive data object for related speed data
 const speedData = reactive({
   name: "speedData",
   topActiveUnit: "km/h",
   bottomActiveUnit: "mph",
+  topUnitName: "Kilometer per hour",
+  bottomUnitName: "Mile per hour",
   hasConvertedToTopEquiv: false,
   hasConvertedToBottomEquiv: false,
   topUnitValue: "",
   bottomUnitValue: "",
+  activeDropdown: "top",
   defaultResult: 0
 })
 
@@ -245,31 +238,31 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "c":
-        topUnitName.value = "Lightspeed"
+        speedData.topUnitName = "Lightspeed"
         break
       case "Ma":
-        topUnitName.value = "Mach"
+        speedData.topUnitName = "Mach"
         break
       case "m/s":
-        topUnitName.value = "Meter per second"
+        speedData.topUnitName = "Meter per second"
         break
       case "km/s":
-        topUnitName.value = "Kilometer per second"
+        speedData.topUnitName = "Kilometer per second"
         break
       case "kn":
-        topUnitName.value = "Knot"
+        speedData.topUnitName = "Knot"
         break
       case "mph":
-        topUnitName.value = "Mile per hour"
+        speedData.topUnitName = "Mile per hour"
         break
       case "fps":
-        topUnitName.value = "Foot per second"
+        speedData.topUnitName = "Foot per second"
         break
       case "ips":
-        topUnitName.value = "Inch per second"
+        speedData.topUnitName = "Inch per second"
         break
       default:
-        topUnitName.value = "Kilometer per hour"
+        speedData.topUnitName = "Kilometer per hour"
         break
     }
 
@@ -279,7 +272,7 @@ watch(
     // re-calculate the equivalent e.g. if top unit is 'kg' with a value of 5
     // and bottom unit is 'lb', and then top unit gets changed to 'g',
     // re-calculate the value of 5 grams to pounds
-    if (activeDropdown.value === "top") {
+    if (speedData.activeDropdown === "top") {
       speedData.bottomUnitValue = convertTopUnitToBottomEquiv(
         speedData,
         speedData.topUnitValue,
@@ -295,7 +288,7 @@ watch(
       speedData.hasConvertedToBottomEquiv = true
     }
 
-    storeConverterDataLocally(speedData, integerPortion, activeDropdown)
+    storeConverterDataLocally(speedData, integerPortion)
   }
 )
 
@@ -304,37 +297,37 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "c":
-        bottomUnitName.value = "Lightspeed"
+        speedData.bottomUnitName = "Lightspeed"
         break
       case "Ma":
-        bottomUnitName.value = "Mach"
+        speedData.bottomUnitName = "Mach"
         break
       case "m/s":
-        bottomUnitName.value = "Meter per second"
+        speedData.bottomUnitName = "Meter per second"
         break
       case "km/h":
-        bottomUnitName.value = "Kilometer per hour"
+        speedData.bottomUnitName = "Kilometer per hour"
         break
       case "km/s":
-        bottomUnitName.value = "Kilometer per second"
+        speedData.bottomUnitName = "Kilometer per second"
         break
       case "kn":
-        bottomUnitName.value = "Knot"
+        speedData.bottomUnitName = "Knot"
         break
       case "fps":
-        bottomUnitName.value = "Foot per second"
+        speedData.bottomUnitName = "Foot per second"
         break
       case "ips":
-        bottomUnitName.value = "Inch per second"
+        speedData.bottomUnitName = "Inch per second"
         break
       default:
-        bottomUnitName.value = "Mile per hour"
+        speedData.bottomUnitName = "Mile per hour"
         break
     }
 
     if (!speedData.topUnitValue && !speedData.bottomUnitValue) return
 
-    if (activeDropdown.value === "bottom") {
+    if (speedData.activeDropdown === "bottom") {
       speedData.topUnitValue = convertBottomUnitToTopEquiv(
         speedData,
         speedData.bottomUnitValue,
@@ -350,7 +343,7 @@ watch(
       speedData.hasConvertedToTopEquiv = true
     }
 
-    storeConverterDataLocally(speedData, integerPortion, activeDropdown)
+    storeConverterDataLocally(speedData, integerPortion)
   }
 )
 
@@ -366,7 +359,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(speedData, integerPortion, activeDropdown)
+    storeConverterDataLocally(speedData, integerPortion)
   }
 )
 
@@ -381,13 +374,13 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(speedData, integerPortion, activeDropdown)
+    storeConverterDataLocally(speedData, integerPortion)
   }
 )
 
 // when the activeDropdown changes, update the following flags
 watch(
-  () => activeDropdown.value,
+  () => speedData.activeDropdown,
   (newValue) => {
     speedData.hasConvertedToTopEquiv = false
     speedData.hasConvertedToBottomEquiv = false
@@ -396,7 +389,7 @@ watch(
     integerPortion.topUnit = ""
     integerPortion.bottomUnit = ""
 
-    storeConverterDataLocally(speedData, integerPortion, activeDropdown)
+    storeConverterDataLocally(speedData, integerPortion)
   }
 )
 
@@ -406,17 +399,12 @@ watch(
 // retrieve any locally stored converter data
 onBeforeMount(() => {
   if (!localStorage) return
-  getStoredConverterData(speedData, integerPortion, activeDropdown)
+  getStoredConverterData(speedData, integerPortion)
 })
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(
-    activeDropdown,
-    speedData,
-    integerPortion,
-    buttonsContainerRef
-  )
+  listenForKeyboardInputs(speedData, integerPortion, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
 })
 
@@ -424,7 +412,7 @@ onMounted(() => {
   Methods
 */
 const appendNumber = (number) => {
-  appendNumberToConverter(number, activeDropdown, speedData, integerPortion)
+  appendNumberToConverter(number, speedData, integerPortion)
 }
 
 const convertValues = (dropdown, unitValue) => {
@@ -799,28 +787,28 @@ const convertValues = (dropdown, unitValue) => {
 }
 
 const setActiveDropdown = (dropdown) => {
-  activeDropdown.value = dropdown
+  speedData.activeDropdown = dropdown
 }
 
 const setActiveUnitTop = (unit) => {
   speedData.topActiveUnit = unit
-  storeConverterDataLocally(speedData, integerPortion, activeDropdown)
+  storeConverterDataLocally(speedData, integerPortion)
 }
 
 const setActiveUnitBottom = (unit) => {
   speedData.bottomActiveUnit = unit
-  storeConverterDataLocally(speedData, integerPortion, activeDropdown)
+  storeConverterDataLocally(speedData, integerPortion)
 }
 
 const clear = () => {
   if (!speedData.topUnitValue && !speedData.bottomUnitValue) return
 
-  clearAll(speedData, integerPortion, activeDropdown)
+  clearAll(speedData, integerPortion)
 }
 
 const backspace = () => {
   if (!speedData.topUnitValue && !speedData.bottomUnitValue) return
 
-  clearChars(activeDropdown, speedData, integerPortion)
+  clearChars(speedData, integerPortion)
 }
 </script>

@@ -9,10 +9,7 @@
     />
     <UnitValue
       dropdown-owner="top"
-      :active-dropdown="activeDropdown"
-      :unit-value="lengthData.topUnitValue"
-      :unit-name="topUnitName"
-      :default-result="lengthData.defaultResult"
+      :converter-data="lengthData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -26,10 +23,7 @@
     />
     <UnitValue
       dropdown-owner="bottom"
-      :active-dropdown="activeDropdown"
-      :unit-value="lengthData.bottomUnitValue"
-      :unit-name="bottomUnitName"
-      :default-result="lengthData.defaultResult"
+      :converter-data="lengthData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -72,10 +66,6 @@ const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
 
-const activeDropdown = ref("top")
-const topUnitName = ref("Foot")
-const bottomUnitName = ref("Meter")
-
 // integer part of a float i.e 3.142 => 3
 const integerPortion = reactive({
   topUnit: "",
@@ -117,15 +107,18 @@ const calcUnits = ref({
   }
 })
 
-// reactive data object for related math data
+// reactive data object for related length data
 const lengthData = reactive({
   name: "lengthData",
   topActiveUnit: "ft",
   bottomActiveUnit: "m",
+  topUnitName: "Foot",
+  bottomUnitName: "Meter",
   hasConvertedToTopEquiv: false,
   hasConvertedToBottomEquiv: false,
   topUnitValue: "",
   bottomUnitValue: "",
+  activeDropdown: "top",
   defaultResult: 0
 })
 
@@ -222,28 +215,28 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "m":
-        topUnitName.value = "Meter"
+        lengthData.topUnitName = "Meter"
         break
       case "km":
-        topUnitName.value = "Kilometer"
+        lengthData.topUnitName = "Kilometer"
         break
       case "mi":
-        topUnitName.value = "Mile"
+        lengthData.topUnitName = "Mile"
         break
       case "cm":
-        topUnitName.value = "Centimeter"
+        lengthData.topUnitName = "Centimeter"
         break
       case "mm":
-        topUnitName.value = "Millimeter"
+        lengthData.topUnitName = "Millimeter"
         break
       case "yd":
-        topUnitName.value = "Yard"
+        lengthData.topUnitName = "Yard"
         break
       case "in":
-        topUnitName.value = "Inch"
+        lengthData.topUnitName = "Inch"
         break
       default:
-        topUnitName.value = "Foot"
+        lengthData.topUnitName = "Foot"
         break
     }
 
@@ -253,7 +246,7 @@ watch(
     // re-calculate the equivalent e.g. if top unit is 'kg' with a value of 5
     // and bottom unit is 'lb', and then top unit gets changed to 'g',
     // re-calculate the value of 5 grams to pounds
-    if (activeDropdown.value === "top") {
+    if (lengthData.activeDropdown === "top") {
       lengthData.bottomUnitValue = convertTopUnitToBottomEquiv(
         lengthData,
         lengthData.topUnitValue,
@@ -269,7 +262,7 @@ watch(
       lengthData.hasConvertedToBottomEquiv = true
     }
 
-    storeConverterDataLocally(lengthData, integerPortion, activeDropdown)
+    storeConverterDataLocally(lengthData, integerPortion)
   }
 )
 
@@ -278,34 +271,34 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "ft":
-        bottomUnitName.value = "Foot"
+        lengthData.bottomUnitName = "Foot"
         break
       case "km":
-        bottomUnitName.value = "Kilometer"
+        lengthData.bottomUnitName = "Kilometer"
         break
       case "mi":
-        bottomUnitName.value = "Mile"
+        lengthData.bottomUnitName = "Mile"
         break
       case "cm":
-        bottomUnitName.value = "Centimeter"
+        lengthData.bottomUnitName = "Centimeter"
         break
       case "mm":
-        bottomUnitName.value = "Millimeter"
+        lengthData.bottomUnitName = "Millimeter"
         break
       case "yd":
-        bottomUnitName.value = "Yard"
+        lengthData.bottomUnitName = "Yard"
         break
       case "in":
-        bottomUnitName.value = "Inch"
+        lengthData.bottomUnitName = "Inch"
         break
       default:
-        bottomUnitName.value = "Meter"
+        lengthData.bottomUnitName = "Meter"
         break
     }
 
     if (!lengthData.topUnitValue && !lengthData.bottomUnitValue) return
 
-    if (activeDropdown.value === "bottom") {
+    if (lengthData.activeDropdown === "bottom") {
       lengthData.topUnitValue = convertBottomUnitToTopEquiv(
         lengthData,
         lengthData.bottomUnitValue,
@@ -321,7 +314,7 @@ watch(
       lengthData.hasConvertedToTopEquiv = true
     }
 
-    storeConverterDataLocally(lengthData, integerPortion, activeDropdown)
+    storeConverterDataLocally(lengthData, integerPortion)
   }
 )
 
@@ -337,7 +330,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(lengthData, integerPortion, activeDropdown)
+    storeConverterDataLocally(lengthData, integerPortion)
   }
 )
 
@@ -352,13 +345,13 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(lengthData, integerPortion, activeDropdown)
+    storeConverterDataLocally(lengthData, integerPortion)
   }
 )
 
 // when the activeDropdown changes, update the following flags
 watch(
-  () => activeDropdown.value,
+  () => lengthData.activeDropdown,
   (newValue) => {
     lengthData.hasConvertedToTopEquiv = false
     lengthData.hasConvertedToBottomEquiv = false
@@ -367,7 +360,7 @@ watch(
     integerPortion.topUnit = ""
     integerPortion.bottomUnit = ""
 
-    storeConverterDataLocally(lengthData, integerPortion, activeDropdown)
+    storeConverterDataLocally(lengthData, integerPortion)
   }
 )
 
@@ -377,17 +370,12 @@ watch(
 // retrieve any locally stored converter data
 onBeforeMount(() => {
   if (!localStorage) return
-  getStoredConverterData(lengthData, integerPortion, activeDropdown)
+  getStoredConverterData(lengthData, integerPortion)
 })
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(
-    activeDropdown,
-    lengthData,
-    integerPortion,
-    buttonsContainerRef
-  )
+  listenForKeyboardInputs(lengthData, integerPortion, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
 })
 
@@ -395,7 +383,7 @@ onMounted(() => {
   Methods
 */
 const appendNumber = (number) => {
-  appendNumberToConverter(number, activeDropdown, lengthData, integerPortion)
+  appendNumberToConverter(number, lengthData, integerPortion)
 }
 
 const convertValues = (dropdown, unitValue) => {
@@ -688,28 +676,28 @@ const convertValues = (dropdown, unitValue) => {
 }
 
 const setActiveDropdown = (dropdown) => {
-  activeDropdown.value = dropdown
+  lengthData.activeDropdown = dropdown
 }
 
 const setActiveUnitTop = (unit) => {
   lengthData.topActiveUnit = unit
-  storeConverterDataLocally(lengthData, integerPortion, activeDropdown)
+  storeConverterDataLocally(lengthData, integerPortion)
 }
 
 const setActiveUnitBottom = (unit) => {
   lengthData.bottomActiveUnit = unit
-  storeConverterDataLocally(lengthData, integerPortion, activeDropdown)
+  storeConverterDataLocally(lengthData, integerPortion)
 }
 
 const clear = () => {
   if (!lengthData.topUnitValue && !lengthData.bottomUnitValue) return
 
-  clearAll(lengthData, integerPortion, activeDropdown)
+  clearAll(lengthData, integerPortion)
 }
 
 const backspace = () => {
   if (!lengthData.topUnitValue && !lengthData.bottomUnitValue) return
 
-  clearChars(activeDropdown, lengthData, integerPortion)
+  clearChars(lengthData, integerPortion)
 }
 </script>

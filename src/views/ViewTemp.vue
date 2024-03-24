@@ -9,10 +9,7 @@
     />
     <UnitValue
       dropdown-owner="top"
-      :active-dropdown="activeDropdown"
-      :unit-value="temperatureData.topUnitValue"
-      :unit-name="topUnitName"
-      :default-result="temperatureData.defaultResult"
+      :converter-data="temperatureData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -26,10 +23,7 @@
     />
     <UnitValue
       dropdown-owner="bottom"
-      :active-dropdown="activeDropdown"
-      :unit-value="temperatureData.bottomUnitValue"
-      :unit-name="bottomUnitName"
-      :default-result="temperatureData.defaultResult"
+      :converter-data="temperatureData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -74,10 +68,6 @@ const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
 
-const activeDropdown = ref("top")
-const topUnitName = ref("Celsius")
-const bottomUnitName = ref("Fahrenheit")
-
 // integer part of a float i.e 3.142 => 3
 const integerPortion = reactive({
   topUnit: "",
@@ -107,15 +97,18 @@ const calcUnits = ref({
   }
 })
 
-// reactive data object for related math data
+// reactive data object for related temperature data
 const temperatureData = reactive({
   name: "temperatureData",
   topActiveUnit: "°C",
   bottomActiveUnit: "°F",
+  topUnitName: "Celsius",
+  bottomUnitName: "Fahrenheit",
   hasConvertedToTopEquiv: false,
   hasConvertedToBottomEquiv: false,
   topUnitValue: "",
   bottomUnitValue: "",
+  activeDropdown: "top",
   defaultResult: 0
 })
 
@@ -151,26 +144,26 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "°F":
-        topUnitName.value = "Fahrenheit"
+        temperatureData.topUnitName = "Fahrenheit"
         break
       case "K":
-        topUnitName.value = "Kelvin"
+        temperatureData.topUnitName = "Kelvin"
         break
       case "°R":
-        topUnitName.value = "Rankine"
+        temperatureData.topUnitName = "Rankine"
         break
       case "°Re":
-        topUnitName.value = "Reaumur"
+        temperatureData.topUnitName = "Reaumur"
         break
       default:
-        topUnitName.value = "Celsius"
+        temperatureData.topUnitName = "Celsius"
         break
     }
 
     if (!temperatureData.topUnitValue && !temperatureData.bottomUnitValue)
       return
 
-    if (activeDropdown.value === "top") {
+    if (temperatureData.activeDropdown === "top") {
       temperatureData.bottomUnitValue = convertTopUnitToBottomEquiv(
         temperatureData,
         temperatureData.topUnitValue,
@@ -186,7 +179,7 @@ watch(
       temperatureData.hasConvertedToBottomEquiv = true
     }
 
-    storeConverterDataLocally(temperatureData, integerPortion, activeDropdown)
+    storeConverterDataLocally(temperatureData, integerPortion)
   }
 )
 
@@ -195,26 +188,26 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "°C":
-        bottomUnitName.value = "Celsius"
+        temperatureData.bottomUnitName = "Celsius"
         break
       case "K":
-        bottomUnitName.value = "Kelvin"
+        temperatureData.bottomUnitName = "Kelvin"
         break
       case "°R":
-        bottomUnitName.value = "Rankine"
+        temperatureData.bottomUnitName = "Rankine"
         break
       case "°Re":
-        bottomUnitName.value = "Reaumur"
+        temperatureData.bottomUnitName = "Reaumur"
         break
       default:
-        bottomUnitName.value = "Fahrenheit"
+        temperatureData.bottomUnitName = "Fahrenheit"
         break
     }
 
     if (!temperatureData.topUnitValue && !temperatureData.bottomUnitValue)
       return
 
-    if (activeDropdown.value === "bottom") {
+    if (temperatureData.activeDropdown === "bottom") {
       temperatureData.topUnitValue = convertBottomUnitToTopEquiv(
         temperatureData,
         temperatureData.bottomUnitValue,
@@ -230,7 +223,7 @@ watch(
       temperatureData.hasConvertedToTopEquiv = true
     }
 
-    storeConverterDataLocally(temperatureData, integerPortion, activeDropdown)
+    storeConverterDataLocally(temperatureData, integerPortion)
   }
 )
 
@@ -247,7 +240,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(temperatureData, integerPortion, activeDropdown)
+    storeConverterDataLocally(temperatureData, integerPortion)
   }
 )
 
@@ -263,13 +256,13 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(temperatureData, integerPortion, activeDropdown)
+    storeConverterDataLocally(temperatureData, integerPortion)
   }
 )
 
 // when the activeDropdown changes, update the following flags
 watch(
-  () => activeDropdown.value,
+  () => temperatureData.activeDropdown,
   (newValue) => {
     temperatureData.hasConvertedToTopEquiv = false
     temperatureData.hasConvertedToBottomEquiv = false
@@ -278,7 +271,7 @@ watch(
     integerPortion.topUnit = ""
     integerPortion.bottomUnit = ""
 
-    storeConverterDataLocally(temperatureData, integerPortion, activeDropdown)
+    storeConverterDataLocally(temperatureData, integerPortion)
   }
 )
 
@@ -288,17 +281,12 @@ watch(
 // retrieve any locally stored converter data
 onBeforeMount(() => {
   if (!localStorage) return
-  getStoredConverterData(temperatureData, integerPortion, activeDropdown)
+  getStoredConverterData(temperatureData, integerPortion)
 })
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(
-    activeDropdown,
-    temperatureData,
-    integerPortion,
-    buttonsContainerRef
-  )
+  listenForKeyboardInputs(temperatureData, integerPortion, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
 
   // when the component is first mounted, set zero as the value of the active dropdown
@@ -314,12 +302,7 @@ onMounted(() => {
   Methods
 */
 const appendNumber = (number) => {
-  appendNumberToConverter(
-    number,
-    activeDropdown,
-    temperatureData,
-    integerPortion
-  )
+  appendNumberToConverter(number, temperatureData, integerPortion)
 }
 
 const convertValues = (dropdown, unitValue) => {
@@ -481,33 +464,33 @@ const convertValues = (dropdown, unitValue) => {
 }
 
 const setActiveDropdown = (dropdown) => {
-  activeDropdown.value = dropdown
+  temperatureData.activeDropdown = dropdown
 }
 
 const setActiveUnitTop = (unit) => {
   temperatureData.topActiveUnit = unit
-  storeConverterDataLocally(temperatureData, integerPortion, activeDropdown)
+  storeConverterDataLocally(temperatureData, integerPortion)
 }
 
 const setActiveUnitBottom = (unit) => {
   temperatureData.bottomActiveUnit = unit
-  storeConverterDataLocally(temperatureData, integerPortion, activeDropdown)
+  storeConverterDataLocally(temperatureData, integerPortion)
 }
 
 const clear = () => {
   if (!temperatureData.topUnitValue && !temperatureData.bottomUnitValue) return
 
-  clearAll(temperatureData, integerPortion, activeDropdown)
+  clearAll(temperatureData, integerPortion)
 }
 
 const backspace = () => {
   if (!temperatureData.topUnitValue && !temperatureData.bottomUnitValue) return
 
-  clearChars(activeDropdown, temperatureData, integerPortion)
+  clearChars(temperatureData, integerPortion)
 }
 
 const toggleNegativeValue = () => {
-  if (activeDropdown.value === "top") {
+  if (temperatureData.activeDropdown === "top") {
     temperatureData.topUnitValue = `${-temperatureData.topUnitValue}`
     integerPortion.topUnit = temperatureData.topUnitValue
 

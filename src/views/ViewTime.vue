@@ -9,10 +9,7 @@
     />
     <UnitValue
       dropdown-owner="top"
-      :active-dropdown="activeDropdown"
-      :unit-value="timeData.topUnitValue"
-      :unit-name="topUnitName"
-      :default-result="timeData.defaultResult"
+      :converter-data="timeData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -26,10 +23,7 @@
     />
     <UnitValue
       dropdown-owner="bottom"
-      :active-dropdown="activeDropdown"
-      :unit-value="timeData.bottomUnitValue"
-      :unit-name="bottomUnitName"
-      :default-result="timeData.defaultResult"
+      :converter-data="timeData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -72,10 +66,6 @@ const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
 
-const activeDropdown = ref("top")
-const topUnitName = ref("Year")
-const bottomUnitName = ref("Week")
-
 // integer part of a float i.e 3.142 => 3
 const integerPortion = reactive({
   topUnit: "",
@@ -113,15 +103,18 @@ const calcUnits = ref({
   }
 })
 
-// reactive data object for related math data
+// reactive data object for related time data
 const timeData = reactive({
   name: "timeData",
   topActiveUnit: "y",
   bottomActiveUnit: "wk",
+  topUnitName: "Year",
+  bottomUnitName: "Week",
   hasConvertedToTopEquiv: false,
   hasConvertedToBottomEquiv: false,
   topUnitValue: "",
   bottomUnitValue: "",
+  activeDropdown: "top",
   defaultResult: 0
 })
 
@@ -201,25 +194,25 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "wk":
-        topUnitName.value = "Week"
+        timeData.topUnitName = "Week"
         break
       case "d":
-        topUnitName.value = "Day"
+        timeData.topUnitName = "Day"
         break
       case "h":
-        topUnitName.value = "Hour"
+        timeData.topUnitName = "Hour"
         break
       case "min":
-        topUnitName.value = "Minute"
+        timeData.topUnitName = "Minute"
         break
       case "s":
-        topUnitName.value = "Second"
+        timeData.topUnitName = "Second"
         break
       case "ms":
-        topUnitName.value = "Millisecond"
+        timeData.topUnitName = "Millisecond"
         break
       default:
-        topUnitName.value = "Year"
+        timeData.topUnitName = "Year"
         break
     }
 
@@ -229,7 +222,7 @@ watch(
     // re-calculate the equivalent e.g. if top unit is 'kg' with a value of 5
     // and bottom unit is 'lb', and then top unit gets changed to 'g',
     // re-calculate the value of 5 grams to pounds
-    if (activeDropdown.value === "top") {
+    if (timeData.activeDropdown === "top") {
       timeData.bottomUnitValue = convertTopUnitToBottomEquiv(
         timeData,
         timeData.topUnitValue,
@@ -245,7 +238,7 @@ watch(
       timeData.hasConvertedToBottomEquiv = true
     }
 
-    storeConverterDataLocally(timeData, integerPortion, activeDropdown)
+    storeConverterDataLocally(timeData, integerPortion)
   }
 )
 
@@ -254,31 +247,31 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "y":
-        bottomUnitName.value = "Year"
+        timeData.bottomUnitName = "Year"
         break
       case "d":
-        bottomUnitName.value = "Day"
+        timeData.bottomUnitName = "Day"
         break
       case "h":
-        bottomUnitName.value = "Hour"
+        timeData.bottomUnitName = "Hour"
         break
       case "min":
-        bottomUnitName.value = "Minute"
+        timeData.bottomUnitName = "Minute"
         break
       case "s":
-        bottomUnitName.value = "Second"
+        timeData.bottomUnitName = "Second"
         break
       case "ms":
-        bottomUnitName.value = "Millisecond"
+        timeData.bottomUnitName = "Millisecond"
         break
       default:
-        bottomUnitName.value = "Week"
+        timeData.bottomUnitName = "Week"
         break
     }
 
     if (!timeData.topUnitValue && !timeData.bottomUnitValue) return
 
-    if (activeDropdown.value === "bottom") {
+    if (timeData.activeDropdown === "bottom") {
       timeData.topUnitValue = convertBottomUnitToTopEquiv(
         timeData,
         timeData.bottomUnitValue,
@@ -294,7 +287,7 @@ watch(
       timeData.hasConvertedToTopEquiv = true
     }
 
-    storeConverterDataLocally(timeData, integerPortion, activeDropdown)
+    storeConverterDataLocally(timeData, integerPortion)
   }
 )
 
@@ -310,7 +303,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(timeData, integerPortion, activeDropdown)
+    storeConverterDataLocally(timeData, integerPortion)
   }
 )
 
@@ -325,13 +318,13 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(timeData, integerPortion, activeDropdown)
+    storeConverterDataLocally(timeData, integerPortion)
   }
 )
 
 // when the activeDropdown changes, update the following flags
 watch(
-  () => activeDropdown.value,
+  () => timeData.activeDropdown,
   (newValue) => {
     timeData.hasConvertedToTopEquiv = false
     timeData.hasConvertedToBottomEquiv = false
@@ -340,7 +333,7 @@ watch(
     integerPortion.topUnit = ""
     integerPortion.bottomUnit = ""
 
-    storeConverterDataLocally(timeData, integerPortion, activeDropdown)
+    storeConverterDataLocally(timeData, integerPortion)
   }
 )
 
@@ -350,17 +343,12 @@ watch(
 // retrieve any locally stored converter data
 onBeforeMount(() => {
   if (!localStorage) return
-  getStoredConverterData(timeData, integerPortion, activeDropdown)
+  getStoredConverterData(timeData, integerPortion)
 })
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(
-    activeDropdown,
-    timeData,
-    integerPortion,
-    buttonsContainerRef
-  )
+  listenForKeyboardInputs(timeData, integerPortion, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
 })
 
@@ -368,7 +356,7 @@ onMounted(() => {
   Methods
 */
 const appendNumber = (number) => {
-  appendNumberToConverter(number, activeDropdown, timeData, integerPortion)
+  appendNumberToConverter(number, timeData, integerPortion)
 }
 
 const convertValues = (dropdown, unitValue) => {
@@ -590,28 +578,28 @@ const convertValues = (dropdown, unitValue) => {
 }
 
 const setActiveDropdown = (dropdown) => {
-  activeDropdown.value = dropdown
+  timeData.activeDropdown = dropdown
 }
 
 const setActiveUnitTop = (unit) => {
   timeData.topActiveUnit = unit
-  storeConverterDataLocally(timeData, integerPortion, activeDropdown)
+  storeConverterDataLocally(timeData, integerPortion)
 }
 
 const setActiveUnitBottom = (unit) => {
   timeData.bottomActiveUnit = unit
-  storeConverterDataLocally(timeData, integerPortion, activeDropdown)
+  storeConverterDataLocally(timeData, integerPortion)
 }
 
 const clear = () => {
   if (!timeData.topUnitValue && !timeData.bottomUnitValue) return
 
-  clearAll(timeData, integerPortion, activeDropdown)
+  clearAll(timeData, integerPortion)
 }
 
 const backspace = () => {
   if (!timeData.topUnitValue && !timeData.bottomUnitValue) return
 
-  clearChars(activeDropdown, timeData, integerPortion)
+  clearChars(timeData, integerPortion)
 }
 </script>
