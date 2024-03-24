@@ -355,7 +355,9 @@ const getStoredConverterData = (converter, integerPortion) => {
       } else {
         converter.hasConvertedToTopEquiv = true
       }
-    } else {
+    }
+
+    if (converter.activeDropdown === "bottom") {
       integerPortion.bottomUnit = storedData.bottomUnit
       converter.bottomUnitValue = storedData.bottomUnitValue
 
