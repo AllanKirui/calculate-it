@@ -9,10 +9,7 @@
     />
     <UnitValue
       dropdown-owner="top"
-      :active-dropdown="massData.activeDropdown"
-      :unit-value="massData.topUnitValue"
-      :unit-name="topUnitName"
-      :default-result="massData.defaultResult"
+      :converter-data="massData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -26,10 +23,7 @@
     />
     <UnitValue
       dropdown-owner="bottom"
-      :active-dropdown="massData.activeDropdown"
-      :unit-value="massData.bottomUnitValue"
-      :unit-name="bottomUnitName"
-      :default-result="massData.defaultResult"
+      :converter-data="massData"
       @setActiveDropdown="setActiveDropdown"
     />
   </div>
@@ -72,9 +66,6 @@ const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
 
-const topUnitName = ref("Kilogram")
-const bottomUnitName = ref("Pound")
-
 // integer part of a float i.e 3.142 => 3
 const integerPortion = reactive({
   topUnit: "",
@@ -100,11 +91,13 @@ const calcUnits = ref({
   }
 })
 
-// reactive data object for related math data
+// reactive data object for related mass data
 const massData = reactive({
   name: "massData",
   topActiveUnit: "kg",
   bottomActiveUnit: "lb",
+  topUnitName: "Kilogram",
+  bottomUnitName: "Pound",
   hasConvertedToTopEquiv: false,
   hasConvertedToBottomEquiv: false,
   topUnitValue: "",
@@ -147,16 +140,16 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "g":
-        topUnitName.value = "Gram"
+        massData.topUnitName = "Gram"
         break
       case "lb":
-        topUnitName.value = "Pound"
+        massData.topUnitName = "Pound"
         break
       case "oz":
-        topUnitName.value = "Ounce"
+        massData.topUnitName = "Ounce"
         break
       default:
-        topUnitName.value = "Kilogram"
+        massData.topUnitName = "Kilogram"
         break
     }
 
@@ -191,16 +184,16 @@ watch(
   (newUnit) => {
     switch (newUnit) {
       case "kg":
-        bottomUnitName.value = "Kilogram"
+        massData.bottomUnitName = "Kilogram"
         break
       case "g":
-        bottomUnitName.value = "Gram"
+        massData.bottomUnitName = "Gram"
         break
       case "oz":
-        bottomUnitName.value = "Ounce"
+        massData.bottomUnitName = "Ounce"
         break
       default:
-        bottomUnitName.value = "Pound"
+        massData.bottomUnitName = "Pound"
         break
     }
 
