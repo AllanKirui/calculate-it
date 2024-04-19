@@ -253,6 +253,8 @@ const listenForKeyboardInputs = (converter, integerPortion, buttonsRef) => {
 }
 
 const showRippleEffectOnButtons = (buttonsRef, keyboardInput) => {
+  if (!buttonsRef.value) return
+
   const buttons = []
 
   for (let i = 0; i < buttonsRef.value.children.length; i++) {
