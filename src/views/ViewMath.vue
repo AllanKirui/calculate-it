@@ -75,7 +75,19 @@
 
 <script setup>
 import ConverterButtons from "@/components/ui/ConverterButtons.vue"
-import { onBeforeMount, onMounted, reactive, ref, watch, inject } from "vue"
+import {
+  onBeforeMount,
+  onMounted,
+  onBeforeUnmount,
+  reactive,
+  ref,
+  watch,
+  inject
+} from "vue"
+import { useRoute } from "vue-router"
+
+// create a route object by calling useRoute
+const route = useRoute()
 
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
 
@@ -131,10 +143,16 @@ onMounted(() => {
   listenForKeyboardInputs()
 })
 
+onBeforeUnmount(() => {
+  removeListenerForKeyboardInputs()
+})
+
 /*
   Methods
 */
 const appendNumber = (number) => {
+  if (route.name !== "math") return
+
   // if the expression has been evaluated, store the expression and clear the screen
   if (mathData.hasEvaluated) {
     storeExpression()
@@ -454,58 +472,64 @@ const removeCommasFromCurrentOperand = () => {
   integerPortion.value = mathData.currentOperand
 }
 
-const listenForKeyboardInputs = () => {
-  window.addEventListener("keyup", (e) => {
-    // check which key was pressed and append the number or set operation
-    const validKeys = [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      ".",
-      "+",
-      "-",
-      "*",
-      "/",
-      "=",
-      "Backspace",
-      "Enter"
-    ]
-    const keyPressed = e.key
+const handleKeyboardInputs = (e) => {
+  // check which key was pressed and append the number or set operation
+  const validKeys = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    ".",
+    "+",
+    "-",
+    "*",
+    "/",
+    "=",
+    "Backspace",
+    "Enter"
+  ]
+  const keyPressed = e.key
 
-    if (validKeys.includes(keyPressed)) {
-      const operationKeys = ["+", "-", "*", "/"]
+  if (validKeys.includes(keyPressed)) {
+    const operationKeys = ["+", "-", "*", "/"]
 
-      if (operationKeys.includes(keyPressed)) {
-        if (keyPressed === "*") {
-          showRippleEffectOnButtons(buttonsContainerRef, "×")
-          setOperation("×")
-        } else if (keyPressed === "/") {
-          showRippleEffectOnButtons(buttonsContainerRef, "÷")
-          setOperation("÷")
-        } else {
-          showRippleEffectOnButtons(buttonsContainerRef, keyPressed)
-          setOperation(keyPressed)
-        }
+    if (operationKeys.includes(keyPressed)) {
+      if (keyPressed === "*") {
+        showRippleEffectOnButtons(buttonsContainerRef, "×")
+        setOperation("×")
+      } else if (keyPressed === "/") {
+        showRippleEffectOnButtons(buttonsContainerRef, "÷")
+        setOperation("÷")
       } else {
-        if (keyPressed === "=" || keyPressed === "Enter") {
-          showRippleEffectOnButtons(buttonsContainerRef, "=")
-          evaluateExpression()
-        } else if (keyPressed === "Backspace") {
-          backspace()
-        } else {
-          appendNumber(keyPressed)
-        }
-
         showRippleEffectOnButtons(buttonsContainerRef, keyPressed)
+        setOperation(keyPressed)
       }
+    } else {
+      if (keyPressed === "=" || keyPressed === "Enter") {
+        showRippleEffectOnButtons(buttonsContainerRef, "=")
+        evaluateExpression()
+      } else if (keyPressed === "Backspace") {
+        backspace()
+      } else {
+        appendNumber(keyPressed)
+      }
+
+      showRippleEffectOnButtons(buttonsContainerRef, keyPressed)
     }
-  })
+  }
+}
+
+const listenForKeyboardInputs = () => {
+  window.addEventListener("keyup", (e) => handleKeyboardInputs(e))
+}
+
+const removeListenerForKeyboardInputs = () => {
+  window.removeEventListener("keyup", (e) => handleKeyboardInputs(e))
 }
 </script>
