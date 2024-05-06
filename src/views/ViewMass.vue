@@ -268,6 +268,10 @@ watch(
     massData.hasConvertedToTopEquiv = false
     massData.hasConvertedToBottomEquiv = false
 
+    // reset the value that was previously entered for a unit
+    integerPortion.topUnit = ""
+    integerPortion.bottomUnit = ""
+
     storeConverterDataLocally(massData, integerPortion)
   }
 )

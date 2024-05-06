@@ -367,6 +367,10 @@ watch(
     lengthData.hasConvertedToTopEquiv = false
     lengthData.hasConvertedToBottomEquiv = false
 
+    // reset the value that was previously entered for a unit
+    integerPortion.topUnit = ""
+    integerPortion.bottomUnit = ""
+
     storeConverterDataLocally(lengthData, integerPortion)
   }
 )

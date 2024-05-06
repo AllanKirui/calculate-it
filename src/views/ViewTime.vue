@@ -340,6 +340,10 @@ watch(
     timeData.hasConvertedToTopEquiv = false
     timeData.hasConvertedToBottomEquiv = false
 
+    // reset the value that was previously entered for a unit
+    integerPortion.topUnit = ""
+    integerPortion.bottomUnit = ""
+
     storeConverterDataLocally(timeData, integerPortion)
   }
 )

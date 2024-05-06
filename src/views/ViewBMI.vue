@@ -256,6 +256,10 @@ watch(
 watch(
   () => bmiData.activeDropdown,
   (newValue) => {
+    // reset the value that was previously entered for a unit
+    integerPortion.topUnit = ""
+    integerPortion.bottomUnit = ""
+
     storeConverterDataLocally(bmiData, integerPortion)
   }
 )
