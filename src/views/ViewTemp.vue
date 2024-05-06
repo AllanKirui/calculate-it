@@ -52,13 +52,24 @@
 import TheDropdown from "@/components/ui/TheDropdown.vue"
 import UnitValue from "@/components/ui/UnitValue.vue"
 import ConverterButtons from "@/components/ui/ConverterButtons.vue"
-import { ref, reactive, watch, inject, onMounted, onBeforeMount } from "vue"
+import {
+  ref,
+  reactive,
+  watch,
+  inject,
+  onMounted,
+  onBeforeMount,
+  onBeforeUnmount
+} from "vue"
 
 const appendNumberToConverter = inject("appendNumber")
 const removeCommas = inject("removeCommas")
 const clearAll = inject("clearAll")
 const clearChars = inject("clearChars")
 const listenForKeyboardInputs = inject("listenForKeyboardInputs")
+const removeListenerForKeyboardInputs = inject(
+  "removeListenerForKeyboardInputs"
+)
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
 const storeConverterDataLocally = inject("storeConverterDataLocally")
 const getStoredConverterData = inject("getStoredConverterData")
@@ -292,6 +303,14 @@ onMounted(() => {
   ) {
     appendNumber(0)
   }
+})
+
+onBeforeUnmount(() => {
+  removeListenerForKeyboardInputs(
+    temperatureData,
+    integerPortion,
+    buttonsContainerRef
+  )
 })
 
 /*

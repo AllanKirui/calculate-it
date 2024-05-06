@@ -213,43 +213,57 @@ const removeCommasFromUnitValues = (converter, integerPortion) => {
   }
 }
 
-const listenForKeyboardInputs = (converter, integerPortion, buttonsRef) => {
-  window.addEventListener("keyup", (e) => {
-    // check which key was pressed and append the number or set operation
-    const validKeys = [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "Backspace",
-      "Delete"
-    ]
-    const keyPressed = e.key
+const handleKeyboardInputs = (e, converter, integerPortion, buttonsRef) => {
+  // check which key was pressed and append the number or set operation
+  const validKeys = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "Backspace",
+    "Delete"
+  ]
+  const keyPressed = e.key
 
-    if (validKeys.includes(keyPressed)) {
-      showRippleEffectOnButtons(buttonsRef, keyPressed)
+  if (validKeys.includes(keyPressed)) {
+    showRippleEffectOnButtons(buttonsRef, keyPressed)
 
-      // clear characters when backspace is pressed, clear all when delete is pressed
-      switch (keyPressed) {
-        case "Backspace":
-          clearChars(converter, integerPortion)
-          break
-        case "Delete":
-          showRippleEffectOnButtons(buttonsRef, "AC")
-          clearAll(converter, integerPortion)
-          break
-        default:
-          appendNumber(keyPressed, converter, integerPortion)
-          break
-      }
+    // clear characters when backspace is pressed, clear all when delete is pressed
+    switch (keyPressed) {
+      case "Backspace":
+        clearChars(converter, integerPortion)
+        break
+      case "Delete":
+        showRippleEffectOnButtons(buttonsRef, "AC")
+        clearAll(converter, integerPortion)
+        break
+      default:
+        appendNumber(keyPressed, converter, integerPortion)
+        break
     }
-  })
+  }
+}
+
+const listenForKeyboardInputs = (converter, integerPortion, buttonsRef) => {
+  window.addEventListener("keyup", (e) =>
+    handleKeyboardInputs(e, converter, integerPortion, buttonsRef)
+  )
+}
+
+const removeListenerForKeyboardInputs = (
+  converter,
+  integerPortion,
+  buttonsRef
+) => {
+  window.removeEventListener("keyup", (e) =>
+    handleKeyboardInputs(e, converter, integerPortion, buttonsRef)
+  )
 }
 
 const showRippleEffectOnButtons = (buttonsRef, keyboardInput) => {
@@ -416,6 +430,7 @@ provide("removeCommas", removeCommas)
 provide("clearAll", clearAll)
 provide("clearChars", clearChars)
 provide("listenForKeyboardInputs", listenForKeyboardInputs)
+provide("removeListenerForKeyboardInputs", removeListenerForKeyboardInputs)
 provide("showRippleEffectOnButtons", showRippleEffectOnButtons)
 provide("storeConverterDataLocally", storeConverterDataLocally)
 provide("getStoredConverterData", getStoredConverterData)

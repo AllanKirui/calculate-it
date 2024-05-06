@@ -126,7 +126,8 @@ import {
   inject,
   nextTick,
   onMounted,
-  onBeforeMount
+  onBeforeMount,
+  onBeforeUnmount
 } from "vue"
 
 const appendNumberToConverter = inject("appendNumber")
@@ -134,6 +135,9 @@ const removeCommas = inject("removeCommas")
 const clearAll = inject("clearAll")
 const clearChars = inject("clearChars")
 const listenForKeyboardInputs = inject("listenForKeyboardInputs")
+const removeListenerForKeyboardInputs = inject(
+  "removeListenerForKeyboardInputs"
+)
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
 const storeConverterDataLocally = inject("storeConverterDataLocally")
 const getStoredConverterData = inject("getStoredConverterData")
@@ -274,6 +278,10 @@ onMounted(() => {
   if (bmiData.topUnitValue === "" && bmiData.bottomUnitValue === "") {
     appendNumber(0)
   }
+})
+
+onBeforeUnmount(() => {
+  removeListenerForKeyboardInputs(bmiData, integerPortion, buttonsContainerRef)
 })
 
 /*
