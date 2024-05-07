@@ -417,6 +417,11 @@ onBeforeMount(() => {
 onMounted(() => {
   listenForKeyboardInputs(speedData, integerPortion, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
+
+  // when the component is mounted, set 1 as the value of the active dropdown
+  if (speedData.topUnitValue === "" && speedData.bottomUnitValue === "") {
+    appendNumber(1)
+  }
 })
 
 onBeforeUnmount(() => {

@@ -361,6 +361,11 @@ onBeforeMount(() => {
 onMounted(() => {
   listenForKeyboardInputs(timeData, integerPortion, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
+
+  // when the component is mounted, set 1 as the value of the active dropdown
+  if (timeData.topUnitValue === "" && timeData.bottomUnitValue === "") {
+    appendNumber(1)
+  }
 })
 
 onBeforeUnmount(() => {
