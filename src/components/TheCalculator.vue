@@ -226,6 +226,7 @@ const handleKeyboardInputs = (e, converter, numberInput, buttonsRef) => {
     "7",
     "8",
     "9",
+    ".",
     "Backspace",
     "Delete"
   ]
