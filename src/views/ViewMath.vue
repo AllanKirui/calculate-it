@@ -492,7 +492,8 @@ const handleKeyboardInputs = (e) => {
     "/",
     "=",
     "Backspace",
-    "Enter"
+    "Enter",
+    "Delete"
   ]
   const keyPressed = e.key
 
@@ -516,6 +517,8 @@ const handleKeyboardInputs = (e) => {
         evaluateExpression()
       } else if (keyPressed === "Backspace") {
         backspace()
+      } else if (keyPressed === "Delete") {
+        clear("all")
       } else {
         appendNumber(keyPressed)
       }
