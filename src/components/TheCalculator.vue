@@ -15,7 +15,7 @@ import { provide } from "vue"
 */
 // method for appending numbers to the converters,
 // different from the appendNumber() in ViewMath.vue
-const appendNumber = (number, converter, integerPortion) => {
+const appendNumber = (number, converter, numberInput) => {
   // the hasConvertedTo... flag prevents the watcher methods for topUnitValue
   // and bottomUnitValue from running twice inside child components
   if (converter.activeDropdown === "top") {
@@ -34,7 +34,7 @@ const appendNumber = (number, converter, integerPortion) => {
       !converter.topUnitValue
     )
       return
-    if (number === "." && integerPortion.topUnit.includes(".")) return
+    if (number === "." && numberInput.topUnit.includes(".")) return
   } else {
     if (
       number === 0 &&
@@ -42,35 +42,35 @@ const appendNumber = (number, converter, integerPortion) => {
       !converter.bottomUnitValue
     )
       return
-    if (number === "." && integerPortion.bottomUnit.includes(".")) return
+    if (number === "." && numberInput.bottomUnit.includes(".")) return
   }
 
   // convert the number to a string
   let stringNumber = number.toString()
   if (converter.activeDropdown === "top") {
-    integerPortion.topUnit += stringNumber
+    numberInput.topUnit += stringNumber
   } else {
-    integerPortion.bottomUnit += stringNumber
+    numberInput.bottomUnit += stringNumber
   }
 
   // get the Integer and Decimal parts of a number e.g 3.142
   let integerNumbers
   let decimalNumbers
-  let integerDisplay
+  let integerPortion
 
   if (converter.activeDropdown === "top") {
-    integerNumbers = removeCommas(integerPortion.topUnit.split(".")[0]) // integer = 3
-    decimalNumbers = integerPortion.topUnit.split(".")[1] // decimal = 142
+    integerNumbers = removeCommas(numberInput.topUnit.split(".")[0]) // integer = 3
+    decimalNumbers = numberInput.topUnit.split(".")[1] // decimal = 142
   } else {
-    integerNumbers = removeCommas(integerPortion.bottomUnit.split(".")[0])
-    decimalNumbers = integerPortion.bottomUnit.split(".")[1]
+    integerNumbers = removeCommas(numberInput.bottomUnit.split(".")[0])
+    decimalNumbers = numberInput.bottomUnit.split(".")[1]
   }
 
   // check if integerNumbers holds an actual number and convert that to a string
   if (isNaN(integerNumbers)) {
-    integerDisplay = ""
+    integerPortion = ""
   } else {
-    integerDisplay = integerNumbers.toLocaleString("en", {
+    integerPortion = integerNumbers.toLocaleString("en", {
       maximumFractionDigits: 0
     })
   }
@@ -78,26 +78,26 @@ const appendNumber = (number, converter, integerPortion) => {
   // if the decimal point is the first button to be clicked add a zero before it
   if (number === "." && isNaN(integerNumbers)) {
     if (converter.activeDropdown === "top") {
-      integerPortion.topUnit = "0."
-      integerDisplay = "0"
+      numberInput.topUnit = "0."
+      integerPortion = "0"
     } else {
-      integerPortion.bottomUnit = "0."
-      integerDisplay = "0"
+      numberInput.bottomUnit = "0."
+      integerPortion = "0"
     }
   }
 
   // handle displaying any decimal digits
   if (decimalNumbers != null) {
     if (converter.activeDropdown === "top") {
-      converter.topUnitValue = `${integerDisplay}.${decimalNumbers}`
+      converter.topUnitValue = `${integerPortion}.${decimalNumbers}`
     } else {
-      converter.bottomUnitValue = `${integerDisplay}.${decimalNumbers}`
+      converter.bottomUnitValue = `${integerPortion}.${decimalNumbers}`
     }
   } else {
     if (converter.activeDropdown === "top") {
-      converter.topUnitValue = integerDisplay
+      converter.topUnitValue = integerPortion
     } else {
-      converter.bottomUnitValue = integerDisplay
+      converter.bottomUnitValue = integerPortion
     }
   }
 }
@@ -115,16 +115,16 @@ const removeCommas = (stringNumber) => {
   return parseFloat(num)
 }
 
-const clearAll = (converter, integerPortion) => {
-  integerPortion.topUnit = ""
-  integerPortion.bottomUnit = ""
+const clearAll = (converter, numberInput) => {
+  numberInput.topUnit = ""
+  numberInput.bottomUnit = ""
   converter.topUnitValue = ""
   converter.bottomUnitValue = ""
 
-  storeConverterDataLocally(converter, integerPortion)
+  storeConverterDataLocally(converter, numberInput)
 }
 
-const clearChars = (converter, integerPortion) => {
+const clearChars = (converter, numberInput) => {
   // remove the last character from the expression shown on the calc display
   //
   // the hasConvertedTo... flag prevents the watcher methods
@@ -138,12 +138,12 @@ const clearChars = (converter, integerPortion) => {
       converter.topUnitValue = ""
 
     if (converter.topUnitValue === "") {
-      integerPortion.topUnit = converter.topUnitValue
+      numberInput.topUnit = converter.topUnitValue
       converter.hasConvertedToTopEquiv = true
       return
     }
 
-    integerPortion.topUnit = converter.topUnitValue
+    numberInput.topUnit = converter.topUnitValue
     converter.hasConvertedToTopEquiv = true
   }
 
@@ -158,12 +158,12 @@ const clearChars = (converter, integerPortion) => {
       converter.bottomUnitValue = ""
 
     if (converter.bottomUnitValue === "") {
-      integerPortion.bottomUnit = converter.bottomUnitValue
+      numberInput.bottomUnit = converter.bottomUnitValue
       converter.hasConvertedToBottomEquiv = true
       return
     }
 
-    integerPortion.bottomUnit = converter.bottomUnitValue
+    numberInput.bottomUnit = converter.bottomUnitValue
     converter.hasConvertedToBottomEquiv = true
   }
 
@@ -172,13 +172,13 @@ const clearChars = (converter, integerPortion) => {
     converter.topUnitValue.includes(",") ||
     converter.bottomUnitValue.includes(",")
   ) {
-    removeCommasFromUnitValues(converter, integerPortion)
+    removeCommasFromUnitValues(converter, numberInput)
   }
 
-  storeConverterDataLocally(converter, integerPortion)
+  storeConverterDataLocally(converter, numberInput)
 }
 
-const removeCommasFromUnitValues = (converter, integerPortion) => {
+const removeCommasFromUnitValues = (converter, numberInput) => {
   let numWithoutCommas,
     numWithCommas = ""
 
@@ -203,17 +203,17 @@ const removeCommasFromUnitValues = (converter, integerPortion) => {
       numWithCommas += "."
 
     converter.topUnitValue = numWithCommas
-    integerPortion.topUnit = converter.topUnitValue
+    numberInput.topUnit = converter.topUnitValue
   } else {
     if (converter.bottomUnitValue.endsWith(".") && !numWithCommas.includes("."))
       numWithCommas += "."
 
     converter.bottomUnitValue = numWithCommas
-    integerPortion.bottomUnit = converter.bottomUnitValue
+    numberInput.bottomUnit = converter.bottomUnitValue
   }
 }
 
-const handleKeyboardInputs = (e, converter, integerPortion, buttonsRef) => {
+const handleKeyboardInputs = (e, converter, numberInput, buttonsRef) => {
   // check which key was pressed and append the number or set operation
   const validKeys = [
     "0",
@@ -237,32 +237,32 @@ const handleKeyboardInputs = (e, converter, integerPortion, buttonsRef) => {
     // clear characters when backspace is pressed, clear all when delete is pressed
     switch (keyPressed) {
       case "Backspace":
-        clearChars(converter, integerPortion)
+        clearChars(converter, numberInput)
         break
       case "Delete":
         showRippleEffectOnButtons(buttonsRef, "AC")
-        clearAll(converter, integerPortion)
+        clearAll(converter, numberInput)
         break
       default:
-        appendNumber(keyPressed, converter, integerPortion)
+        appendNumber(keyPressed, converter, numberInput)
         break
     }
   }
 }
 
-const listenForKeyboardInputs = (converter, integerPortion, buttonsRef) => {
+const listenForKeyboardInputs = (converter, numberInput, buttonsRef) => {
   window.addEventListener("keyup", (e) =>
-    handleKeyboardInputs(e, converter, integerPortion, buttonsRef)
+    handleKeyboardInputs(e, converter, numberInput, buttonsRef)
   )
 }
 
 const removeListenerForKeyboardInputs = (
   converter,
-  integerPortion,
+  numberInput,
   buttonsRef
 ) => {
   window.removeEventListener("keyup", (e) =>
-    handleKeyboardInputs(e, converter, integerPortion, buttonsRef)
+    handleKeyboardInputs(e, converter, numberInput, buttonsRef)
   )
 }
 
@@ -331,14 +331,14 @@ const setRippleForClickedButton = (e) => {
   setTimeout(() => circle.remove(), 350)
 }
 
-const storeConverterDataLocally = (converter, integerPortion) => {
+const storeConverterDataLocally = (converter, numberInput) => {
   if (!localStorage) return
 
   const converterData = {
     topActiveUnit: converter.topActiveUnit,
     bottomActiveUnit: converter.bottomActiveUnit,
-    topUnit: integerPortion.topUnit || "",
-    bottomUnit: integerPortion.bottomUnit || "",
+    topUnit: numberInput.topUnit || "",
+    bottomUnit: numberInput.bottomUnit || "",
     topUnitValue: converter.topUnitValue || "",
     bottomUnitValue: converter.bottomUnitValue || "",
     activeDropdown: converter.activeDropdown
@@ -353,7 +353,7 @@ const storeConverterDataLocally = (converter, integerPortion) => {
   localStorage.setItem(converter.name, JSON.stringify(converterData))
 }
 
-const getStoredConverterData = (converter, integerPortion) => {
+const getStoredConverterData = (converter, numberInput) => {
   const storedData = JSON.parse(localStorage.getItem(converter.name))
 
   if (storedData) {
@@ -362,11 +362,11 @@ const getStoredConverterData = (converter, integerPortion) => {
     converter.bottomActiveUnit = storedData.bottomActiveUnit
 
     if (converter.activeDropdown === "top") {
-      integerPortion.topUnit = storedData.topUnit
+      numberInput.topUnit = storedData.topUnit
       converter.topUnitValue = storedData.topUnitValue
 
       if (converter.name === "bmiData") {
-        integerPortion.bottomUnit = storedData.bottomUnit
+        numberInput.bottomUnit = storedData.bottomUnit
         converter.bottomUnitValue = storedData.bottomUnitValue
       } else {
         converter.hasConvertedToTopEquiv = true
@@ -374,11 +374,11 @@ const getStoredConverterData = (converter, integerPortion) => {
     }
 
     if (converter.activeDropdown === "bottom") {
-      integerPortion.bottomUnit = storedData.bottomUnit
+      numberInput.bottomUnit = storedData.bottomUnit
       converter.bottomUnitValue = storedData.bottomUnitValue
 
       if (converter.name === "bmiData") {
-        integerPortion.topUnit = storedData.topUnit
+        numberInput.topUnit = storedData.topUnit
         converter.topUnitValue = storedData.topUnitValue
       } else {
         converter.hasConvertedToBottomEquiv = true
