@@ -150,8 +150,8 @@ const hasOutOfRangeBMI = ref(false)
 const userBMI = ref(null)
 const bmiRange = ref(null)
 
-// integer part of a float i.e 3.142 => 3
-const integerPortion = reactive({
+// number input for the top and bottom units
+const numberInput = reactive({
   topUnit: "",
   bottomUnit: ""
 })
@@ -209,7 +209,7 @@ watch(
         break
     }
 
-    storeConverterDataLocally(bmiData, integerPortion)
+    storeConverterDataLocally(bmiData, numberInput)
   }
 )
 
@@ -231,7 +231,7 @@ watch(
         break
     }
 
-    storeConverterDataLocally(bmiData, integerPortion)
+    storeConverterDataLocally(bmiData, numberInput)
   }
 )
 
@@ -240,7 +240,7 @@ watch(
   () => bmiData.topUnitValue,
   (newValue) => {
     if (!newValue) appendNumber(0)
-    storeConverterDataLocally(bmiData, integerPortion)
+    storeConverterDataLocally(bmiData, numberInput)
   }
 )
 
@@ -248,7 +248,7 @@ watch(
   () => bmiData.bottomUnitValue,
   (newValue) => {
     if (!newValue) appendNumber(0)
-    storeConverterDataLocally(bmiData, integerPortion)
+    storeConverterDataLocally(bmiData, numberInput)
   }
 )
 
@@ -257,10 +257,10 @@ watch(
   () => bmiData.activeDropdown,
   (newValue) => {
     // reset the value that was previously entered for a unit
-    integerPortion.topUnit = ""
-    integerPortion.bottomUnit = ""
+    numberInput.topUnit = ""
+    numberInput.bottomUnit = ""
 
-    storeConverterDataLocally(bmiData, integerPortion)
+    storeConverterDataLocally(bmiData, numberInput)
   }
 )
 
@@ -270,12 +270,12 @@ watch(
 // retrieve any locally stored converter data
 onBeforeMount(() => {
   if (!localStorage) return
-  getStoredConverterData(bmiData, integerPortion)
+  getStoredConverterData(bmiData, numberInput)
 })
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(bmiData, integerPortion, buttonsContainerRef)
+  listenForKeyboardInputs(bmiData, numberInput, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
 
   // when the component is first mounted, set zero as the value of the active dropdown
@@ -285,14 +285,14 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  removeListenerForKeyboardInputs(bmiData, integerPortion, buttonsContainerRef)
+  removeListenerForKeyboardInputs(bmiData, numberInput, buttonsContainerRef)
 })
 
 /*
   Methods
 */
 const appendNumber = (number) => {
-  appendNumberToConverter(number, bmiData, integerPortion)
+  appendNumberToConverter(number, bmiData, numberInput)
 }
 
 const setActiveDropdown = (dropdown) => {
@@ -310,13 +310,13 @@ const setActiveUnitBottom = (unit) => {
 const clear = () => {
   if (!bmiData.topUnitValue && !bmiData.bottomUnitValue) return
 
-  clearAll(bmiData, integerPortion)
+  clearAll(bmiData, numberInput)
 }
 
 const backspace = () => {
   if (!bmiData.topUnitValue && !bmiData.bottomUnitValue) return
 
-  clearChars(bmiData, integerPortion)
+  clearChars(bmiData, numberInput)
 }
 
 const calculateBMI = () => {

@@ -77,8 +77,8 @@ const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
 
-// integer part of a float i.e 3.142 => 3
-const integerPortion = reactive({
+// number input for the top and bottom units
+const numberInput = reactive({
   topUnit: "",
   bottomUnit: ""
 })
@@ -249,7 +249,7 @@ watch(
       timeData.hasConvertedToBottomEquiv = true
     }
 
-    storeConverterDataLocally(timeData, integerPortion)
+    storeConverterDataLocally(timeData, numberInput)
   }
 )
 
@@ -298,7 +298,7 @@ watch(
       timeData.hasConvertedToTopEquiv = true
     }
 
-    storeConverterDataLocally(timeData, integerPortion)
+    storeConverterDataLocally(timeData, numberInput)
   }
 )
 
@@ -314,7 +314,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(timeData, integerPortion)
+    storeConverterDataLocally(timeData, numberInput)
   }
 )
 
@@ -329,7 +329,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(timeData, integerPortion)
+    storeConverterDataLocally(timeData, numberInput)
   }
 )
 
@@ -341,10 +341,10 @@ watch(
     timeData.hasConvertedToBottomEquiv = false
 
     // reset the value that was previously entered for a unit
-    integerPortion.topUnit = ""
-    integerPortion.bottomUnit = ""
+    numberInput.topUnit = ""
+    numberInput.bottomUnit = ""
 
-    storeConverterDataLocally(timeData, integerPortion)
+    storeConverterDataLocally(timeData, numberInput)
   }
 )
 
@@ -354,12 +354,12 @@ watch(
 // retrieve any locally stored converter data
 onBeforeMount(() => {
   if (!localStorage) return
-  getStoredConverterData(timeData, integerPortion)
+  getStoredConverterData(timeData, numberInput)
 })
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(timeData, integerPortion, buttonsContainerRef)
+  listenForKeyboardInputs(timeData, numberInput, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
 
   // when the component is mounted, set 1 as the value of the active dropdown
@@ -369,14 +369,14 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  removeListenerForKeyboardInputs(timeData, integerPortion, buttonsContainerRef)
+  removeListenerForKeyboardInputs(timeData, numberInput, buttonsContainerRef)
 })
 
 /*
   Methods
 */
 const appendNumber = (number) => {
-  appendNumberToConverter(number, timeData, integerPortion)
+  appendNumberToConverter(number, timeData, numberInput)
 }
 
 const convertValues = (dropdown, unitValue) => {
@@ -603,23 +603,23 @@ const setActiveDropdown = (dropdown) => {
 
 const setActiveUnitTop = (unit) => {
   timeData.topActiveUnit = unit
-  storeConverterDataLocally(timeData, integerPortion)
+  storeConverterDataLocally(timeData, numberInput)
 }
 
 const setActiveUnitBottom = (unit) => {
   timeData.bottomActiveUnit = unit
-  storeConverterDataLocally(timeData, integerPortion)
+  storeConverterDataLocally(timeData, numberInput)
 }
 
 const clear = () => {
   if (!timeData.topUnitValue && !timeData.bottomUnitValue) return
 
-  clearAll(timeData, integerPortion)
+  clearAll(timeData, numberInput)
 }
 
 const backspace = () => {
   if (!timeData.topUnitValue && !timeData.bottomUnitValue) return
 
-  clearChars(timeData, integerPortion)
+  clearChars(timeData, numberInput)
 }
 </script>

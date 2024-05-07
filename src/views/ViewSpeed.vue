@@ -77,8 +77,8 @@ const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
 
-// integer part of a float i.e 3.142 => 3
-const integerPortion = reactive({
+// number input for the top and bottom units
+const numberInput = reactive({
   topUnit: "",
   bottomUnit: ""
 })
@@ -299,7 +299,7 @@ watch(
       speedData.hasConvertedToBottomEquiv = true
     }
 
-    storeConverterDataLocally(speedData, integerPortion)
+    storeConverterDataLocally(speedData, numberInput)
   }
 )
 
@@ -354,7 +354,7 @@ watch(
       speedData.hasConvertedToTopEquiv = true
     }
 
-    storeConverterDataLocally(speedData, integerPortion)
+    storeConverterDataLocally(speedData, numberInput)
   }
 )
 
@@ -370,7 +370,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(speedData, integerPortion)
+    storeConverterDataLocally(speedData, numberInput)
   }
 )
 
@@ -385,7 +385,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(speedData, integerPortion)
+    storeConverterDataLocally(speedData, numberInput)
   }
 )
 
@@ -397,10 +397,10 @@ watch(
     speedData.hasConvertedToBottomEquiv = false
 
     // reset the value that was previously entered for a unit
-    integerPortion.topUnit = ""
-    integerPortion.bottomUnit = ""
+    numberInput.topUnit = ""
+    numberInput.bottomUnit = ""
 
-    storeConverterDataLocally(speedData, integerPortion)
+    storeConverterDataLocally(speedData, numberInput)
   }
 )
 
@@ -410,12 +410,12 @@ watch(
 // retrieve any locally stored converter data
 onBeforeMount(() => {
   if (!localStorage) return
-  getStoredConverterData(speedData, integerPortion)
+  getStoredConverterData(speedData, numberInput)
 })
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(speedData, integerPortion, buttonsContainerRef)
+  listenForKeyboardInputs(speedData, numberInput, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
 
   // when the component is mounted, set 1 as the value of the active dropdown
@@ -425,18 +425,14 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  removeListenerForKeyboardInputs(
-    speedData,
-    integerPortion,
-    buttonsContainerRef
-  )
+  removeListenerForKeyboardInputs(speedData, numberInput, buttonsContainerRef)
 })
 
 /*
   Methods
 */
 const appendNumber = (number) => {
-  appendNumberToConverter(number, speedData, integerPortion)
+  appendNumberToConverter(number, speedData, numberInput)
 }
 
 const convertValues = (dropdown, unitValue) => {
@@ -816,23 +812,23 @@ const setActiveDropdown = (dropdown) => {
 
 const setActiveUnitTop = (unit) => {
   speedData.topActiveUnit = unit
-  storeConverterDataLocally(speedData, integerPortion)
+  storeConverterDataLocally(speedData, numberInput)
 }
 
 const setActiveUnitBottom = (unit) => {
   speedData.bottomActiveUnit = unit
-  storeConverterDataLocally(speedData, integerPortion)
+  storeConverterDataLocally(speedData, numberInput)
 }
 
 const clear = () => {
   if (!speedData.topUnitValue && !speedData.bottomUnitValue) return
 
-  clearAll(speedData, integerPortion)
+  clearAll(speedData, numberInput)
 }
 
 const backspace = () => {
   if (!speedData.topUnitValue && !speedData.bottomUnitValue) return
 
-  clearChars(speedData, integerPortion)
+  clearChars(speedData, numberInput)
 }
 </script>

@@ -91,8 +91,8 @@ const route = useRoute()
 
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
 
-// integer part of a float i.e 3.142 => 3
-const integerPortion = ref("")
+// number input on the calc display
+const numberInput = ref("")
 
 // reactive data object for related math data
 const mathData = reactive({
@@ -160,55 +160,55 @@ const appendNumber = (number) => {
   }
   mathData.hasEvaluated = false
 
-  // reset the integerPortion ref
+  // reset the numberInput ref
   if (mathData.previousOperand !== "" && mathData.currentOperand === "")
-    integerPortion.value = ""
+    numberInput.value = ""
 
   // return if zero is clicked and there are no previous and current operands
   if (number === 0 && !mathData.currentOperand && !mathData.previousOperand)
     return
 
   // if the number already contains a decimal point return
-  if (number === "." && integerPortion.value.includes(".")) return
+  if (number === "." && numberInput.value.includes(".")) return
 
   // convert the number to a string
   let stringNumber = number.toString()
-  integerPortion.value += stringNumber
+  numberInput.value += stringNumber
 
   // get the Integer and Decimal parts of a number e.g 3.142
-  let integerNumbers = removeCommas(integerPortion.value.split(".")[0]) // integer = 3
-  let decimalNumbers = integerPortion.value.split(".")[1] // decimal = 142
-  let integerDisplay
+  let integerNumbers = removeCommas(numberInput.value.split(".")[0]) // integer = 3
+  let decimalNumbers = numberInput.value.split(".")[1] // decimal = 142
+  let integerPortion
 
   // check if integerNumbers holds an actual number and convert that to a string
   if (isNaN(integerNumbers)) {
-    integerDisplay = ""
+    integerPortion = ""
   } else {
-    integerDisplay = integerNumbers.toLocaleString("en", {
+    integerPortion = integerNumbers.toLocaleString("en", {
       maximumFractionDigits: 0
     })
   }
 
   // if the decimal point is the first button to be clicked add a zero before it
   if (number === "." && isNaN(integerNumbers)) {
-    integerPortion.value = "0."
-    integerDisplay = "0"
-    mathData.result = integerDisplay
+    numberInput.value = "0."
+    integerPortion = "0"
+    mathData.result = integerPortion
   }
 
   // handle displaying any decimal digits
   if (decimalNumbers != null) {
-    mathData.currentOperand = `${integerDisplay}.${decimalNumbers}`
+    mathData.currentOperand = `${integerPortion}.${decimalNumbers}`
 
     // Don't show the decimal part if it's only zeros after the point i.e 3.0 or 3.0000 just equals 3
     if (decimalNumbers.length > 0 && parseFloat(decimalNumbers) === 0) {
-      mathData.result = integerDisplay
+      mathData.result = integerPortion
     } else if (decimalNumbers.length > 0) {
-      mathData.result = `${integerDisplay}.${decimalNumbers}`
+      mathData.result = `${integerPortion}.${decimalNumbers}`
     }
   } else {
-    mathData.currentOperand = integerDisplay
-    mathData.result = integerDisplay
+    mathData.currentOperand = integerPortion
+    mathData.result = integerPortion
   }
 
   updateDisplay()
@@ -230,7 +230,7 @@ const setOperation = (operation) => {
 
   // reset values
   mathData.previousOperand = ""
-  integerPortion.value = ""
+  numberInput.value = ""
 
   // if an operator is clicked and there is no previous operand or current operand
   if (mathData.currentOperand === "" && mathData.previousOperand === "")
@@ -327,7 +327,7 @@ const storeMathDataLocally = () => {
   localStorage.setItem(
     "mathData",
     JSON.stringify({
-      integerPortion: integerPortion.value ?? "",
+      numberInput: numberInput.value ?? "",
       expression: mathData.expression ?? null,
       currentOperand: mathData.currentOperand ?? "",
       previousOperand: mathData.previousOperand ?? "",
@@ -343,7 +343,7 @@ const getStoredMathData = () => {
   const storedMathData = JSON.parse(localStorage.getItem("mathData"))
 
   if (storedMathData) {
-    integerPortion.value = storedMathData.integerPortion
+    numberInput.value = storedMathData.numberInput
     mathData.expression = storedMathData.expression
     mathData.currentOperand = storedMathData.currentOperand
     mathData.previousOperand = storedMathData.previousOperand
@@ -355,7 +355,7 @@ const getStoredMathData = () => {
 }
 
 const clear = (type) => {
-  integerPortion.value = ""
+  numberInput.value = ""
   mathData.currentOperand = ""
   mathData.result = ""
   mathData.previousOperand = ""
@@ -396,7 +396,7 @@ const backspace = () => {
 
     mathData.previousOperand = previous
     mathData.currentOperand = current
-    integerPortion.value = mathData.currentOperand
+    numberInput.value = mathData.currentOperand
 
     // remove any comma seperators from the current operand
     if (mathData.currentOperand.includes(",")) {
@@ -415,7 +415,7 @@ const backspace = () => {
 
   // If only the current operand is available, update appropriate props
   if (mathData.currentOperand !== "") {
-    integerPortion.value = mathData.currentOperand
+    numberInput.value = mathData.currentOperand
     mathData.result = mathData.currentOperand
 
     // if the currentOperand holds something like 3. the result should show 3 instead of 3.
@@ -469,7 +469,7 @@ const removeCommasFromCurrentOperand = () => {
     numWithCommas += "."
 
   mathData.currentOperand = numWithCommas
-  integerPortion.value = mathData.currentOperand
+  numberInput.value = mathData.currentOperand
 }
 
 const handleKeyboardInputs = (e) => {

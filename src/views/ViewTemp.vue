@@ -79,8 +79,8 @@ const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
 
-// integer part of a float i.e 3.142 => 3
-const integerPortion = reactive({
+// number input for the top and bottom units
+const numberInput = reactive({
   topUnit: "",
   bottomUnit: ""
 })
@@ -190,7 +190,7 @@ watch(
       temperatureData.hasConvertedToBottomEquiv = true
     }
 
-    storeConverterDataLocally(temperatureData, integerPortion)
+    storeConverterDataLocally(temperatureData, numberInput)
   }
 )
 
@@ -234,7 +234,7 @@ watch(
       temperatureData.hasConvertedToTopEquiv = true
     }
 
-    storeConverterDataLocally(temperatureData, integerPortion)
+    storeConverterDataLocally(temperatureData, numberInput)
   }
 )
 
@@ -251,7 +251,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(temperatureData, integerPortion)
+    storeConverterDataLocally(temperatureData, numberInput)
   }
 )
 
@@ -267,7 +267,7 @@ watch(
       newValue,
       convertValues
     )
-    storeConverterDataLocally(temperatureData, integerPortion)
+    storeConverterDataLocally(temperatureData, numberInput)
   }
 )
 
@@ -279,10 +279,10 @@ watch(
     temperatureData.hasConvertedToBottomEquiv = false
 
     // reset the value that was previously entered for a unit
-    integerPortion.topUnit = ""
-    integerPortion.bottomUnit = ""
+    numberInput.topUnit = ""
+    numberInput.bottomUnit = ""
 
-    storeConverterDataLocally(temperatureData, integerPortion)
+    storeConverterDataLocally(temperatureData, numberInput)
   }
 )
 
@@ -292,12 +292,12 @@ watch(
 // retrieve any locally stored converter data
 onBeforeMount(() => {
   if (!localStorage) return
-  getStoredConverterData(temperatureData, integerPortion)
+  getStoredConverterData(temperatureData, numberInput)
 })
 
 // set up a listener on the buttons once the component is mounted
 onMounted(() => {
-  listenForKeyboardInputs(temperatureData, integerPortion, buttonsContainerRef)
+  listenForKeyboardInputs(temperatureData, numberInput, buttonsContainerRef)
   showRippleEffectOnButtons(buttonsContainerRef)
 
   // when the component is first mounted, set zero as the value of the active dropdown
@@ -312,7 +312,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   removeListenerForKeyboardInputs(
     temperatureData,
-    integerPortion,
+    numberInput,
     buttonsContainerRef
   )
 })
@@ -321,7 +321,7 @@ onBeforeUnmount(() => {
   Methods
 */
 const appendNumber = (number) => {
-  appendNumberToConverter(number, temperatureData, integerPortion)
+  appendNumberToConverter(number, temperatureData, numberInput)
 }
 
 const convertValues = (dropdown, unitValue) => {
@@ -488,37 +488,37 @@ const setActiveDropdown = (dropdown) => {
 
 const setActiveUnitTop = (unit) => {
   temperatureData.topActiveUnit = unit
-  storeConverterDataLocally(temperatureData, integerPortion)
+  storeConverterDataLocally(temperatureData, numberInput)
 }
 
 const setActiveUnitBottom = (unit) => {
   temperatureData.bottomActiveUnit = unit
-  storeConverterDataLocally(temperatureData, integerPortion)
+  storeConverterDataLocally(temperatureData, numberInput)
 }
 
 const clear = () => {
   if (!temperatureData.topUnitValue && !temperatureData.bottomUnitValue) return
 
-  clearAll(temperatureData, integerPortion)
+  clearAll(temperatureData, numberInput)
 }
 
 const backspace = () => {
   if (!temperatureData.topUnitValue && !temperatureData.bottomUnitValue) return
 
-  clearChars(temperatureData, integerPortion)
+  clearChars(temperatureData, numberInput)
 }
 
 const toggleNegativeValue = () => {
   if (temperatureData.activeDropdown === "top") {
     temperatureData.topUnitValue = `${-temperatureData.topUnitValue}`
-    integerPortion.topUnit = temperatureData.topUnitValue
+    numberInput.topUnit = temperatureData.topUnitValue
 
     // the hasConvertedTo... flag prevents the watcher methods for topUnitValue
     // and bottomUnitValue from running twice inside child components
     temperatureData.hasConvertedToTopEquiv = true
   } else {
     temperatureData.bottomUnitValue = `${-temperatureData.bottomUnitValue}`
-    integerPortion.bottomUnit = temperatureData.bottomUnitValue
+    numberInput.bottomUnit = temperatureData.bottomUnitValue
     temperatureData.hasConvertedToBottomEquiv = true
   }
 }
