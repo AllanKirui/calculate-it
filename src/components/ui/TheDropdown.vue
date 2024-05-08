@@ -14,31 +14,51 @@
     </div>
 
     <!-- Menu Items -->
-    <transition
-      enter-active-class="transition ease-out duration-100"
-      enter-from-class="transform opacity-0 scale-95"
-      enter-to-class="transform opacity-100 scale-100"
-      leave-active-class="transition ease-in duration-75"
-      leave-from-class="transform opacity-100 scale-100"
-      leave-to-class="transform opacity-0 scale-95"
-    >
-      <MenuItems
-        class="absolute z-10 mt-2 max-h-60 scrollable dropdown-items overflow-scroll w-4/5 sm:w-2/3 md:w-1/2 origin-top-left rounded-md bg-macaroni-and-cheese shadow-lg ring-2 ring-mellow-apricot ring-opacity-1 focus:outline-none text-base md:text-lg text-seal-brown"
+    <Teleport to="body">
+      <transition
+        enter-active-class="transition ease-out duration-100"
+        enter-from-class="transform opacity-0 scale-95"
+        enter-to-class="transform opacity-100 scale-100"
+        leave-active-class="transition ease-in duration-75"
+        leave-from-class="transform opacity-100 scale-100"
+        leave-to-class="transform opacity-0 scale-95"
       >
-        <div v-for="unit in calcUnits" :key="unit" class="py-1">
-          <MenuItem v-slot="{ active }">
-            <a
-              @click="
-                $emit('setActiveUnit', unit.shortName ? unit.shortName : unit)
-              "
-              href="#"
-              :class="[active ? 'bg-mellow-apricot' : '', 'block px-4 py-2']"
-              >{{ unit.longName ? unit.longName : unit }}</a
+        <MenuItems
+          class="absolute top-0 left-0 z-50 w-full h-full p-5 scrollable overflow-scroll origin-center rounded-md bg-macaroni-and-cheese bg-opacity-95 shadow-lg ring-2 ring-mellow-apricot ring-opacity-1 focus:outline-none text-base md:text-lg text-seal-brown"
+        >
+          <!-- Menu Items Wrapper -->
+          <div class="pb-10">
+            <div v-for="unit in calcUnits" :key="unit" class="py-1">
+              <MenuItem v-slot="{ active }">
+                <a
+                  @click="
+                    $emit(
+                      'setActiveUnit',
+                      unit.shortName ? unit.shortName : unit
+                    )
+                  "
+                  href="#"
+                  :class="[
+                    active ? 'bg-mellow-apricot' : '',
+                    'block px-2 py-2'
+                  ]"
+                  >{{ unit.longName ? unit.longName : unit }}</a
+                >
+              </MenuItem>
+            </div>
+          </div>
+
+          <!-- Close Button Wrapper -->
+          <div class="fixed w-full px-5 left-0 right-0 bottom-5">
+            <button
+              class="w-full p-2 bg-sandy-brown text-seal-brown rounded-md"
             >
-          </MenuItem>
-        </div>
-      </MenuItems>
-    </transition>
+              Close
+            </button>
+          </div>
+        </MenuItems>
+      </transition>
+    </Teleport>
   </Menu>
 </template>
 
