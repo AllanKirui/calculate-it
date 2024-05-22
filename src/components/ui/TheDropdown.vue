@@ -1,5 +1,5 @@
 <template>
-  <Menu as="div" class="text-left">
+  <Menu v-slot="{ close }" as="div" class="text-left">
     <!-- Initial Option -->
     <div>
       <MenuButton
@@ -52,6 +52,7 @@
           <div class="fixed w-full px-5 left-0 right-0 bottom-5">
             <button
               class="w-full p-2 bg-sandy-brown text-seal-brown rounded-md"
+              @click="close"
             >
               Close
             </button>
