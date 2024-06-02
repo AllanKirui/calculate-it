@@ -40,7 +40,7 @@
                   href="#"
                   :class="[
                     active ? 'bg-mellow-apricot' : '',
-                    'block px-2 py-2'
+                    'block px-2 py-2 rounded-md'
                   ]"
                   >{{ unit.longName ? unit.longName : unit }}</a
                 >
