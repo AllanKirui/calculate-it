@@ -142,7 +142,7 @@
 }
 
 .display-container.math-calculator {
-  @apply flex flex-col justify-end gap-2;
+  @apply md:min-h-[160px] justify-end gap-2;
 }
 
 .display-container .bg-text {
