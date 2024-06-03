@@ -1,40 +1,40 @@
 <template>
-  <!-- Dropdowns containing unit options -->
-  <!-- Top Units -->
-  <div @click="closeBmiResults" class="dropdown-container top-dropdown">
-    <TheDropdown
-      :calc-units="weightUnits"
-      unit-type="Weight"
-      :active-unit="bmiData.topActiveUnit"
-      @setActiveUnit="setActiveUnitTop"
-    />
-    <UnitValue
-      dropdown-owner="top"
-      :converter-data="bmiData"
-      @setActiveDropdown="setActiveDropdown"
-    />
-  </div>
-
-  <!-- Bottom Units -->
-  <div @click="closeBmiResults" class="dropdown-container bottom-dropdown">
-    <TheDropdown
-      :calc-units="heightUnits"
-      unit-type="Height"
-      :active-unit="bmiData.bottomActiveUnit"
-      @setActiveUnit="setActiveUnitBottom"
-    />
-    <UnitValue
-      dropdown-owner="bottom"
-      :converter-data="bmiData"
-      @setActiveDropdown="setActiveDropdown"
-    />
-  </div>
-
   <!-- The Output -->
   <div class="display-container">
     <!-- Background Text -->
     <div class="bg-text">
       <span>{{ $route.name }}</span>
+    </div>
+
+    <!-- Dropdowns containing unit options -->
+    <!-- Top Units -->
+    <div @click="closeBmiResults" class="dropdown-container">
+      <TheDropdown
+        :calc-units="weightUnits"
+        unit-type="Weight"
+        :active-unit="bmiData.topActiveUnit"
+        @setActiveUnit="setActiveUnitTop"
+      />
+      <UnitValue
+        dropdown-owner="top"
+        :converter-data="bmiData"
+        @setActiveDropdown="setActiveDropdown"
+      />
+    </div>
+
+    <!-- Bottom Units -->
+    <div @click="closeBmiResults" class="dropdown-container">
+      <TheDropdown
+        :calc-units="heightUnits"
+        unit-type="Height"
+        :active-unit="bmiData.bottomActiveUnit"
+        @setActiveUnit="setActiveUnitBottom"
+      />
+      <UnitValue
+        dropdown-owner="bottom"
+        :converter-data="bmiData"
+        @setActiveDropdown="setActiveDropdown"
+      />
     </div>
   </div>
 

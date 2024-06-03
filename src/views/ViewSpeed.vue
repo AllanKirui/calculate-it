@@ -1,38 +1,38 @@
 <template>
-  <!-- Dropdowns containing unit options -->
-  <!-- Top Units -->
-  <div class="dropdown-container top-dropdown">
-    <TheDropdown
-      :calc-units="calcUnits"
-      :active-unit="speedData.topActiveUnit"
-      @setActiveUnit="setActiveUnitTop"
-    />
-    <UnitValue
-      dropdown-owner="top"
-      :converter-data="speedData"
-      @setActiveDropdown="setActiveDropdown"
-    />
-  </div>
-
-  <!-- Bottom Units -->
-  <div class="dropdown-container bottom-dropdown">
-    <TheDropdown
-      :calc-units="calcUnits"
-      :active-unit="speedData.bottomActiveUnit"
-      @setActiveUnit="setActiveUnitBottom"
-    />
-    <UnitValue
-      dropdown-owner="bottom"
-      :converter-data="speedData"
-      @setActiveDropdown="setActiveDropdown"
-    />
-  </div>
-
   <!-- The Output -->
   <div class="display-container">
     <!-- Background Text -->
     <div class="bg-text">
       <span>{{ $route.name }}</span>
+    </div>
+
+    <!-- Dropdowns containing unit options -->
+    <!-- Top Units -->
+    <div class="dropdown-container">
+      <TheDropdown
+        :calc-units="calcUnits"
+        :active-unit="speedData.topActiveUnit"
+        @setActiveUnit="setActiveUnitTop"
+      />
+      <UnitValue
+        dropdown-owner="top"
+        :converter-data="speedData"
+        @setActiveDropdown="setActiveDropdown"
+      />
+    </div>
+
+    <!-- Bottom Units -->
+    <div class="dropdown-container">
+      <TheDropdown
+        :calc-units="calcUnits"
+        :active-unit="speedData.bottomActiveUnit"
+        @setActiveUnit="setActiveUnitBottom"
+      />
+      <UnitValue
+        dropdown-owner="bottom"
+        :converter-data="speedData"
+        @setActiveDropdown="setActiveDropdown"
+      />
     </div>
   </div>
 
