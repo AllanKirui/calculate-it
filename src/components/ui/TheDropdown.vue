@@ -23,9 +23,7 @@
         leave-from-class="transform opacity-100 scale-100"
         leave-to-class="transform opacity-0 scale-95"
       >
-        <MenuItems
-          class="absolute top-0 left-0 z-50 w-full h-full p-5 scrollable overflow-scroll origin-center rounded-md bg-macaroni-and-cheese bg-opacity-95 shadow-lg ring-2 ring-mellow-apricot ring-opacity-1 focus:outline-none text-base md:text-lg text-seal-brown"
-        >
+        <MenuItems class="menu-items-wrapper">
           <!-- Menu Items Wrapper -->
           <div class="pb-10">
             <div v-for="unit in calcUnits" :key="unit" class="py-1">
@@ -49,7 +47,7 @@
           </div>
 
           <!-- Close Button Wrapper -->
-          <div class="fixed w-full px-5 left-0 right-0 bottom-5">
+          <div class="absolute w-full px-5 left-0 right-0 bottom-5">
             <button
               class="w-full p-2 bg-sandy-brown text-seal-brown rounded-md"
               @click="close"
