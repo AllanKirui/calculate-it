@@ -473,6 +473,31 @@ const convertResultToExponential = (converter) => {
   }
 }
 
+const setNumberOfFractionDigits = (number) => {
+  // set the number of fraction digits to show based on how large or small
+  // the interger portion of the number is
+  let convertedValue
+  const stringNumber = number.toString()
+  const integerPortion = stringNumber.split(".")[0]
+
+  // check if the number is in decimal or exponential (e) notation
+  if (stringNumber.includes(".") || stringNumber.includes("e")) {
+    if (integerPortion.length > 7) {
+      convertedValue = number.toLocaleString("en", {
+        maximumFractionDigits: 2
+      })
+    } else {
+      convertedValue = number.toLocaleString("en", {
+        maximumFractionDigits: 12
+      })
+    }
+  } else {
+    convertedValue = number.toLocaleString("en")
+  }
+
+  return convertedValue
+}
+
 provide("appendNumber", appendNumber)
 provide("removeCommas", removeCommas)
 provide("clearAll", clearAll)
@@ -485,4 +510,5 @@ provide("getStoredConverterData", getStoredConverterData)
 provide("convertTopUnitToBottomEquiv", convertTopUnitToBottomEquiv)
 provide("convertBottomUnitToTopEquiv", convertBottomUnitToTopEquiv)
 provide("convertResultToExponential", convertResultToExponential)
+provide("setNumberOfFractionDigits", setNumberOfFractionDigits)
 </script>
