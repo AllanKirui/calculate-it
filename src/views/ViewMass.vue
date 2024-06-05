@@ -74,6 +74,7 @@ const getStoredConverterData = inject("getStoredConverterData")
 const convertTopUnitToBottomEquiv = inject("convertTopUnitToBottomEquiv")
 const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 const convertResultToExponential = inject("convertResultToExponential")
+const setNumberOfFractionDigits = inject("setNumberOfFractionDigits")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
@@ -396,11 +397,7 @@ const convertValues = (dropdown, unitValue) => {
       break
   }
 
-  convertedValue = convertedValue.toLocaleString("en", {
-    maximumFractionDigits: 7
-  })
-
-  return convertedValue
+  return setNumberOfFractionDigits(convertedValue)
 }
 
 const setActiveDropdown = (dropdown) => {
