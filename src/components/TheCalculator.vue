@@ -428,7 +428,11 @@ const convertBottomUnitToTopEquiv = (converter, unitValue, convertValues) => {
 
 const convertResultToExponential = (converter) => {
   // return if converting a unit's value to the same unit
-  if (converter.bottomUnitName === converter.topUnitName) return
+  if (
+    converter.bottomUnitName === converter.topUnitName &&
+    converter.bottomUnitValue === converter.topUnitValue
+  )
+    return
 
   let number
 
