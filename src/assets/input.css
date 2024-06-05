@@ -197,5 +197,5 @@
 }
 
 .menu-items-wrapper {
-  @apply absolute top-0 md:top-[100px] left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:max-w-3xl h-screen md:h-auto md:min-h-[510px] p-5 scrollable overflow-scroll origin-center rounded-md bg-macaroni-and-cheese bg-opacity-95 shadow-lg ring-2 ring-mellow-apricot focus:outline-none text-base md:text-lg text-seal-brown;
+  @apply absolute top-0 md:top-[100px] left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:max-w-3xl h-screen md:h-auto md:min-h-[510px] p-5 scrollable overflow-scroll origin-center rounded-md bg-macaroni-and-cheese bg-opacity-95 shadow-lg ring-2 ring-mellow-apricot focus:outline-none text-lg text-seal-brown;
 }
