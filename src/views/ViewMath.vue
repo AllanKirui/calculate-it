@@ -324,7 +324,8 @@ const convertResultToExponential = (number) => {
     }
   }
 
-  // check if the number is greater than a billion
+  // check if the number integer portion of the number is greater than a billion
+  // TODO should not check string number
   if (stringNumber.length > 9) {
     mathData.result = numWithoutCommas.toExponential()
   }

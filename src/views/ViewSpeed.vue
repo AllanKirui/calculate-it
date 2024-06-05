@@ -73,6 +73,7 @@ const storeConverterDataLocally = inject("storeConverterDataLocally")
 const getStoredConverterData = inject("getStoredConverterData")
 const convertTopUnitToBottomEquiv = inject("convertTopUnitToBottomEquiv")
 const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
+const convertResultToExponential = inject("convertResultToExponential")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
@@ -299,6 +300,7 @@ watch(
       speedData.hasConvertedToBottomEquiv = true
     }
 
+    convertResultToExponential(speedData)
     storeConverterDataLocally(speedData, numberInput)
   }
 )
@@ -354,6 +356,7 @@ watch(
       speedData.hasConvertedToTopEquiv = true
     }
 
+    convertResultToExponential(speedData)
     storeConverterDataLocally(speedData, numberInput)
   }
 )
@@ -370,6 +373,7 @@ watch(
       newValue,
       convertValues
     )
+    convertResultToExponential(speedData)
     storeConverterDataLocally(speedData, numberInput)
   }
 )
@@ -385,6 +389,7 @@ watch(
       newValue,
       convertValues
     )
+    convertResultToExponential(speedData)
     storeConverterDataLocally(speedData, numberInput)
   }
 )

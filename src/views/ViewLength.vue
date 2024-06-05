@@ -73,6 +73,7 @@ const storeConverterDataLocally = inject("storeConverterDataLocally")
 const getStoredConverterData = inject("getStoredConverterData")
 const convertTopUnitToBottomEquiv = inject("convertTopUnitToBottomEquiv")
 const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
+const convertResultToExponential = inject("convertResultToExponential")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
@@ -273,6 +274,7 @@ watch(
       lengthData.hasConvertedToBottomEquiv = true
     }
 
+    convertResultToExponential(lengthData)
     storeConverterDataLocally(lengthData, numberInput)
   }
 )
@@ -325,6 +327,7 @@ watch(
       lengthData.hasConvertedToTopEquiv = true
     }
 
+    convertResultToExponential(lengthData)
     storeConverterDataLocally(lengthData, numberInput)
   }
 )
@@ -341,6 +344,7 @@ watch(
       newValue,
       convertValues
     )
+    convertResultToExponential(lengthData)
     storeConverterDataLocally(lengthData, numberInput)
   }
 )
@@ -356,6 +360,7 @@ watch(
       newValue,
       convertValues
     )
+    convertResultToExponential(lengthData)
     storeConverterDataLocally(lengthData, numberInput)
   }
 )
