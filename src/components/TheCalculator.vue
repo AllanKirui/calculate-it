@@ -426,6 +426,49 @@ const convertBottomUnitToTopEquiv = (converter, unitValue, convertValues) => {
     : converter.defaultResult
 }
 
+const convertResultToExponential = (converter) => {
+  // return if converting a unit's value to the same unit
+  if (converter.bottomUnitName === converter.topUnitName) return
+
+  let number
+
+  if (converter.activeDropdown === "top") {
+    number = converter.bottomUnitValue
+  } else {
+    number = converter.topUnitValue
+  }
+
+  if (!number) return
+
+  const numWithoutCommas = removeCommas(number)
+  const stringNumber = numWithoutCommas.toString()
+  const integerPortion = stringNumber.split(".")[0]
+
+  // check if the number starts with a zero followed by a decimal point and four or more zeros
+  if (number.includes(".")) {
+    const regex = /^0\.0{4,}/
+
+    if (regex.test(number)) {
+      if (converter.activeDropdown === "top") {
+        converter.bottomUnitValue = numWithoutCommas.toExponential()
+      } else {
+        converter.topUnitValue = numWithoutCommas.toExponential()
+      }
+    }
+  }
+
+  // check if the integer portion of the number is greater than a billion
+  if (integerPortion.length > 9) {
+    const largeNumber = parseFloat(numWithoutCommas.toFixed(0))
+
+    if (converter.activeDropdown === "top") {
+      converter.bottomUnitValue = largeNumber.toExponential()
+    } else {
+      converter.topUnitValue = largeNumber.toExponential()
+    }
+  }
+}
+
 provide("appendNumber", appendNumber)
 provide("removeCommas", removeCommas)
 provide("clearAll", clearAll)
@@ -437,4 +480,5 @@ provide("storeConverterDataLocally", storeConverterDataLocally)
 provide("getStoredConverterData", getStoredConverterData)
 provide("convertTopUnitToBottomEquiv", convertTopUnitToBottomEquiv)
 provide("convertBottomUnitToTopEquiv", convertBottomUnitToTopEquiv)
+provide("convertResultToExponential", convertResultToExponential)
 </script>
