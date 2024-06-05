@@ -273,7 +273,10 @@ const compute = () => {
     current = 0
   }
 
-  if (isNaN(prev) || isNaN(current)) return
+  if (isNaN(prev) || isNaN(current)) {
+    convertResultToExponential(mathData.result)
+    return
+  }
 
   switch (mathData.operation) {
     case "+":
@@ -299,6 +302,32 @@ const compute = () => {
   })
 
   mathData.currentOperand = mathData.result
+  convertResultToExponential(mathData.result)
+}
+
+const convertResultToExponential = (number) => {
+  const numWithoutCommas = removeCommas(number)
+  const stringNumber = numWithoutCommas.toString()
+
+  // check if the number is zero and if there is no ongoing operation
+  if (numWithoutCommas === 0 && mathData.operation === "") {
+    mathData.result = numWithoutCommas
+    return
+  }
+
+  // check if the number starts with a zero followed by a decimal point and four or more zeros
+  if (number.includes(".")) {
+    const regex = /^0\.0{4,}/
+
+    if (regex.test(number)) {
+      mathData.result = numWithoutCommas.toExponential()
+    }
+  }
+
+  // check if the number is greater than a billion
+  if (stringNumber.length > 9) {
+    mathData.result = numWithoutCommas.toExponential()
+  }
 }
 
 const evaluateExpression = () => {
