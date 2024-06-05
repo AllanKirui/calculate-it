@@ -88,7 +88,7 @@ const numberInput = reactive({
 const calcUnits = ref({
   lightspeed: {
     shortName: "c",
-    longName: "Lightspeed y"
+    longName: "Lightspeed c"
   },
   mach: {
     shortName: "Ma",
