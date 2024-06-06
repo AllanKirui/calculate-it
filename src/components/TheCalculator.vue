@@ -476,26 +476,27 @@ const convertResultToExponential = (converter) => {
 const setNumberOfFractionDigits = (number) => {
   // set the number of fraction digits to show based on how large or small
   // the interger portion of the number is
-  let convertedValue
+  let modifiedNumber
   const stringNumber = number.toString()
   const integerPortion = stringNumber.split(".")[0]
 
-  // check if the number is in decimal or exponential (e) notation
-  if (stringNumber.includes(".") || stringNumber.includes("e")) {
-    if (integerPortion.length > 7) {
-      convertedValue = number.toLocaleString("en", {
-        maximumFractionDigits: 2
-      })
-    } else {
-      convertedValue = number.toLocaleString("en", {
-        maximumFractionDigits: 12
-      })
-    }
-  } else {
-    convertedValue = number.toLocaleString("en")
+  // if the number does not have decimal and exponential (e) notation
+  if (!stringNumber.includes(".") && !stringNumber.includes("e")) {
+    modifiedNumber = number.toLocaleString("en")
+    return modifiedNumber
   }
 
-  return convertedValue
+  if (integerPortion.length >= 7) {
+    modifiedNumber = number.toLocaleString("en", {
+      maximumFractionDigits: 2
+    })
+  } else {
+    modifiedNumber = number.toLocaleString("en", {
+      maximumFractionDigits: 12
+    })
+  }
+
+  return modifiedNumber
 }
 
 provide("appendNumber", appendNumber)

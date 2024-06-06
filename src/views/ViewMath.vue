@@ -90,6 +90,7 @@ import { useRoute } from "vue-router"
 const route = useRoute()
 
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
+const setNumberOfFractionDigits = inject("setNumberOfFractionDigits")
 
 // number input on the calc display
 const numberInput = ref("")
@@ -205,6 +206,7 @@ const appendNumber = (number) => {
       mathData.result = integerPortion
     } else if (decimalNumbers.length > 0) {
       mathData.result = `${integerPortion}.${decimalNumbers}`
+      mathData.result = setNumberOfFractionDigits(removeCommas(mathData.result))
     }
   } else {
     mathData.currentOperand = integerPortion
@@ -296,10 +298,7 @@ const compute = () => {
       return
   }
 
-  // make the result comma separated with a max of 7 fraction digits
-  mathData.result = result.toLocaleString("en", {
-    maximumFractionDigits: 7
-  })
+  mathData.result = setNumberOfFractionDigits(result)
 
   mathData.currentOperand = mathData.result
   convertResultToExponential(mathData.result)
@@ -462,6 +461,8 @@ const backspace = () => {
       if (mathData.currentOperand.endsWith(".")) {
         mathData.result = mathData.currentOperand.slice(0, -1)
       }
+
+      mathData.result = setNumberOfFractionDigits(removeCommas(mathData.result))
     }
   }
 
