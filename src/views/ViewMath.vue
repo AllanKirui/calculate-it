@@ -308,6 +308,7 @@ const compute = () => {
 const convertResultToExponential = (number) => {
   const numWithoutCommas = removeCommas(number)
   const stringNumber = numWithoutCommas.toString()
+  const integerPortion = stringNumber.split(".")[0]
 
   // check if the number is zero and if there is no ongoing operation
   if (numWithoutCommas === 0 && mathData.operation === "") {
@@ -325,8 +326,7 @@ const convertResultToExponential = (number) => {
   }
 
   // check if the number integer portion of the number is greater than a billion
-  // TODO should not check string number
-  if (stringNumber.length > 9) {
+  if (integerPortion.length > 9) {
     mathData.result = numWithoutCommas.toExponential()
   }
 }
