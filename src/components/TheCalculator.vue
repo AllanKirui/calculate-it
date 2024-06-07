@@ -501,9 +501,19 @@ const convertResultToExponential = (converter) => {
     const largeNumber = parseFloat(numWithoutCommas.toFixed(0))
 
     if (converter.activeDropdown === "top") {
-      converter.bottomUnitValue = largeNumber.toExponential()
+      // set the number of fractional digits shown when in exponential
+      if (largeNumber.toString().length > 14) {
+        converter.bottomUnitValue = largeNumber.toExponential(8)
+      } else {
+        converter.bottomUnitValue = largeNumber.toExponential()
+      }
     } else {
-      converter.topUnitValue = largeNumber.toExponential()
+      // set the number of fractional digits shown when in exponential
+      if (largeNumber.toString().length > 14) {
+        converter.topUnitValue = largeNumber.toExponential(8)
+      } else {
+        converter.topUnitValue = largeNumber.toExponential()
+      }
     }
   }
 }
