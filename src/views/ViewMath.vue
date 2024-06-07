@@ -320,8 +320,13 @@ const compute = () => {
       return
   }
 
-  mathData.result = setNumberOfFractionDigits(result)
+  // handle the case of dividing by a number by zero
+  if (result === Infinity) {
+    mathData.result = "Can't divide by zero"
+    return
+  }
 
+  mathData.result = setNumberOfFractionDigits(result)
   mathData.currentOperand = mathData.result
   convertResultToExponential(mathData.result)
 }
