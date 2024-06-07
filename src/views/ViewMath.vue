@@ -348,7 +348,7 @@ const convertResultToExponential = (number) => {
 
   // check if the number integer portion of the number is greater than a billion
   if (integerPortion.length > 9) {
-    mathData.result = numWithoutCommas.toExponential()
+    mathData.result = numWithoutCommas.toExponential(8)
   }
 }
 
