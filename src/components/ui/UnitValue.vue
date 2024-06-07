@@ -43,7 +43,8 @@ const setStyles = () => {
   if (props.dropdownOwner === "top") {
     if (
       props.converterData.topUnitValue &&
-      props.converterData.topUnitValue.length > 16
+      props.converterData.topUnitValue.length > 16 &&
+      window.innerWidth < 480
     )
       styles += " text-2xl"
   }
@@ -51,7 +52,8 @@ const setStyles = () => {
   if (props.dropdownOwner === "bottom") {
     if (
       props.converterData.bottomUnitValue &&
-      props.converterData.bottomUnitValue.length > 16
+      props.converterData.bottomUnitValue.length > 16 &&
+      window.innerWidth < 480
     )
       styles += " text-2xl"
   }
