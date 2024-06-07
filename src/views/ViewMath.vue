@@ -153,6 +153,7 @@ onBeforeUnmount(() => {
 */
 const appendNumber = (number) => {
   if (route.name !== "math") return
+  if (checkNumberLength(mathData.currentOperand)) return
 
   // if the expression has been evaluated, store the expression and clear the screen
   if (mathData.hasEvaluated) {
@@ -214,6 +215,27 @@ const appendNumber = (number) => {
   }
 
   updateDisplay()
+}
+
+const checkNumberLength = (number) => {
+  // limit the size of the number that a user can input
+  const MAX_INTEGER_LENGTH = 15
+  const MAX_FLOAT_LENGTH = 18
+
+  let numToCheck
+
+  if (number.includes(",")) {
+    numToCheck = removeCommas(number).toString()
+  } else {
+    numToCheck = number
+  }
+
+  if (numToCheck.includes(".")) {
+    if (numToCheck.length + 1 > MAX_FLOAT_LENGTH) return true
+  } else {
+    if (numToCheck.length + 1 > MAX_INTEGER_LENGTH) return true
+  }
+  return false
 }
 
 const setOperation = (operation) => {
