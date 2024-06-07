@@ -16,6 +16,8 @@ import { provide } from "vue"
 // method for appending numbers to the converters,
 // different from the appendNumber() in ViewMath.vue
 const appendNumber = (number, converter, numberInput) => {
+  if (checkNumberLength(numberInput, converter.activeDropdown)) return
+
   // the hasConvertedTo... flag prevents the watcher methods for topUnitValue
   // and bottomUnitValue from running twice inside child components
   if (converter.activeDropdown === "top") {
@@ -100,6 +102,39 @@ const appendNumber = (number, converter, numberInput) => {
       converter.bottomUnitValue = integerPortion
     }
   }
+}
+
+const checkNumberLength = (numberInput, activeDropdown) => {
+  // function to limit the size of the number that a user can input
+  const MAX_INTEGER_LENGTH = 15
+  const MAX_FLOAT_LENGTH = 18
+
+  let numToCheck
+
+  // remove any commas from the unit values
+  if (activeDropdown === "top") {
+    if (numberInput.topUnit.includes(",")) {
+      numToCheck = removeCommas(numberInput.topUnit).toString()
+    } else {
+      numToCheck = numberInput.topUnit
+    }
+  }
+
+  if (activeDropdown === "bottom") {
+    if (numberInput.bottomUnit.includes(",")) {
+      numToCheck = removeCommas(numberInput.bottomUnit).toString()
+    } else {
+      numToCheck = numberInput.bottomUnit
+    }
+  }
+
+  // check whether the number exceeds the limits or not
+  if (numToCheck.includes(".")) {
+    if (numToCheck.length + 1 > MAX_FLOAT_LENGTH) return true
+  } else {
+    if (numToCheck.length + 1 > MAX_INTEGER_LENGTH) return true
+  }
+  return false
 }
 
 const removeCommas = (stringNumber) => {
