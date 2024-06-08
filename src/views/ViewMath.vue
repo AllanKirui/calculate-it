@@ -6,7 +6,7 @@
     <div class="absolute top-4 right-0 w-5 h-8 bg-liver blur-lg z-10"></div>
 
     <!-- Background Text -->
-    <div class="bg-text">
+    <div class="bg-text math-calculator">
       <span>{{ $route.name }}</span>
     </div>
 
