@@ -1,8 +1,6 @@
 <template>
   <!-- Calculator Container -->
-  <div
-    class="calculator-height relative max-w-3xl mx-auto md:h-auto md:mt-3 px-4 py-2 bg-navajo-white shadow-xl rounded-xl"
-  >
+  <div class="calculator-container">
     <RouterView />
   </div>
 </template>
