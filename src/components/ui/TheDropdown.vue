@@ -2,9 +2,7 @@
   <Menu v-slot="{ close }" as="div" class="text-left">
     <!-- Initial Option -->
     <div>
-      <MenuButton
-        class="inline-flex w-full items-center justify-center gap-x-1.5 rounded-md px-3 py-2 text-lg text-navajo-white shadow-sm"
-      >
+      <MenuButton class="menu-button">
         {{ unitType || activeUnit }}
         <ChevronDownIcon
           class="-mr-1 h-6 w-6 text-navajo-white"
