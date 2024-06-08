@@ -132,8 +132,9 @@
 }
 
 /* calculator screen & button container heights */
-.calculator-height {
+.calculator-container {
   height: calc(100vh - 80px);
+  @apply relative max-w-3xl mx-auto md:h-auto md:mt-3 px-3 sm:px-4 py-2 bg-navajo-white shadow-xl rounded-xl;
 }
 
 .display-container {
@@ -181,7 +182,7 @@
 
 /* dropdown styles */
 .dropdown-container {
-  @apply sm:px-2 py-2 md:py-1 relative flex text-2xl sm:text-4xl text-navajo-white;
+  @apply sm:px-2 py-2 md:py-1 relative flex text-3xl sm:text-4xl text-navajo-white;
 }
 
 .dropdown-container .results-wrapper {
@@ -202,4 +203,22 @@
 
 .menu-items-wrapper {
   @apply absolute top-0 md:top-[100px] left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:max-w-3xl h-screen md:h-auto md:min-h-[510px] p-5 scrollable overflow-scroll origin-center rounded-md bg-macaroni-and-cheese bg-opacity-95 shadow-lg ring-2 ring-mellow-apricot focus:outline-none text-lg text-seal-brown;
+}
+
+@media (max-width: 321px) {
+  .display-container .bg-text:not(.bg-text.math-calculator) {
+    @apply right-4;
+  }
+
+  .dropdown-container {
+    @apply flex flex-col;
+  }
+
+  .dropdown-container .menu-button {
+    @apply py-1 justify-start;
+  }
+
+  .dropdown-container .unit-name-wrapper {
+    @apply relative text-right;
+  }
 }
