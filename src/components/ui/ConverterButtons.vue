@@ -186,7 +186,7 @@ const handleClick = (eventToEmit, data, e) => {
   e.target.blur()
 
   // if there if no data, just emit the name of the custom event
-  if (!data) {
+  if (data === null) {
     emit(eventToEmit)
     return
   }
