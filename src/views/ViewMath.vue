@@ -113,6 +113,9 @@ const mathData = reactive({
   history: null
 })
 
+// keep track of the length of the expression on screen
+const expressionLength = ref(null)
+
 // convert the template ref into a data ref
 const historyRef = ref(null)
 const buttonsContainerRef = ref(null)
@@ -134,6 +137,16 @@ watch(
           }
         }
       )
+    }
+  }
+)
+
+// watcher to keep track of the length of the expression
+watch(
+  () => mathData.expression,
+  (newExp) => {
+    if (newExp) {
+      expressionLength.value = newExp.length
     }
   }
 )
@@ -283,7 +296,12 @@ const updateDisplay = () => {
     mathData.operation &&
     mathData.currentOperand
   ) {
-    mathData.expression = `${mathData.previousOperand}${mathData.operation}${mathData.currentOperand}`
+    // add a space before the operation to break the expression if it gets too long
+    if (expressionLength.value >= 22) {
+      mathData.expression = `${mathData.previousOperand} ${mathData.operation}${mathData.currentOperand}`
+    } else {
+      mathData.expression = `${mathData.previousOperand}${mathData.operation}${mathData.currentOperand}`
+    }
   } else if (mathData.previousOperand && mathData.operation) {
     mathData.expression = `${mathData.previousOperand}${mathData.operation}`
   } else if (mathData.currentOperand) {
