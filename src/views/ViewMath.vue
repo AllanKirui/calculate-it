@@ -12,20 +12,26 @@
 
     <!-- Previous Operations -->
     <!-- use the transition-group component to animate the expressions being added to the history -->
-    <div class="expressions-wrapper z-20" ref="historyRef">
+    <div class="expressions-history-wrapper z-20" ref="historyRef">
       <transition-group tag="div" name="expressions">
         <span
-          class="inline-block mb-2 md:mb-0 md:ml-4 text-lg"
+          class="inline-block mb-1 md:mb-0 md:ml-4 text-lg"
           v-for="expression in mathData.history"
           :key="expression"
         >
-          {{ expression }}
+          <span class="block md:inline-block leading-snug"
+            >{{ expression.prevOperand }}{{ expression.operator
+            }}{{ expression.currOperand }}</span
+          >
+          <span class="relative -top-1 md:top-0">
+            = {{ expression.result }}</span
+          >
         </span>
       </transition-group>
     </div>
 
     <!-- Current Expression -->
-    <div class="text-right">
+    <div class="expression-wrapper">
       <div v-if="mathData.expression">
         <!-- Current Operand -->
         <h2
@@ -33,7 +39,7 @@
           :class="[
             mathData.hasEvaluated
               ? 'text-2xl md:text-[26px]'
-              : 'text-4xl md:text-[40px]'
+              : 'text-3xl md:text-[40px]'
           ]"
         >
           {{ mathData.expression }}
@@ -44,7 +50,7 @@
           class="md:mt-1 duration-200"
           :class="[
             mathData.hasEvaluated
-              ? 'text-4xl md:text-[40px] text-navajo-white'
+              ? 'text-3xl sm:text-4xl md:text-[40px] text-navajo-white'
               : 'text-2xl md:text-[26px]'
           ]"
         >
@@ -364,17 +370,43 @@ const evaluateExpression = () => {
 
 const storeExpression = () => {
   if (!mathData.expression) return
-
-  let fullExpression = `${mathData.expression} = ${mathData.result}`
+  const newExpression = parseExpression(mathData.expression)
+  newExpression.result = mathData.result
 
   // if the history array has existing elements, add more to it
   if (mathData.history && mathData.history[0]) {
-    mathData.history.push(fullExpression)
+    mathData.history.push(newExpression)
     return
   }
 
   // otherwise create the history array and add the first item
-  mathData.history = new Array(fullExpression)
+  mathData.history = new Array(newExpression)
+}
+
+const parseExpression = (expression) => {
+  // the operators and their corresponding regex
+  const operators = [
+    { symbol: "+", regex: /\+/ },
+    { symbol: "-", regex: /-/ },
+    { symbol: "÷", regex: /÷/ },
+    { symbol: "×", regex: /×/ }
+  ]
+
+  // iterate through each operator to check and split the expression
+  for (let operator of operators) {
+    if (expression.includes(operator.symbol)) {
+      // split the expression by the operator
+      const operands = expression.split(operator.regex)
+      const prevOperand = operands[0]
+      const currOperand = operands[1]
+
+      return {
+        prevOperand: prevOperand,
+        operator: operator.symbol,
+        currOperand: currOperand
+      }
+    }
+  }
 }
 
 const storeMathDataLocally = () => {
