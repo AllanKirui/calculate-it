@@ -160,8 +160,8 @@
 }
 
 /* animation styles for expressions added to the history container */
-.expressions-wrapper div {
-  @apply scrollable flex flex-col md:block pr-1 md:pr-0 md:pb-1 text-right whitespace-nowrap max-h-32 sm:max-h-40 md:max-h-full overflow-y-auto md:overflow-x-auto;
+.expressions-history-wrapper div {
+  @apply scrollable flex flex-col md:block pr-1 md:pr-0 md:pb-1 text-right md:whitespace-nowrap max-h-32 sm:max-h-40 md:max-h-full overflow-y-auto md:overflow-x-auto;
 }
 
 .expressions-enter-from {
@@ -178,6 +178,10 @@
 
 .expressions-move {
   transition: all 0.3s ease;
+}
+
+.expression-wrapper {
+  @apply text-right z-20;
 }
 
 /* dropdown styles */
@@ -220,5 +224,9 @@
 
   .dropdown-container .unit-name-wrapper {
     @apply relative text-right;
+  }
+
+  .expression-wrapper h2 {
+    @apply text-2xl;
   }
 }
