@@ -292,7 +292,24 @@ onBeforeUnmount(() => {
   Methods
 */
 const appendNumber = (number) => {
+  if (checkNumberLength(numberInput, bmiData.activeDropdown)) return
   appendNumberToConverter(number, bmiData, numberInput)
+}
+
+const checkNumberLength = (numberInput, activeDropdown) => {
+  // limit the size of the number that a user can input
+  const MAX_INTEGER_LENGTH = 3
+
+  let numToCheck
+
+  if (activeDropdown === "top") {
+    numToCheck = numberInput.topUnit
+  } else {
+    numToCheck = numberInput.bottomUnit
+  }
+
+  if (numToCheck.length + 1 > MAX_INTEGER_LENGTH) return true
+  return false
 }
 
 const setActiveDropdown = (dropdown) => {
