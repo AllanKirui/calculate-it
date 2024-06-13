@@ -52,10 +52,7 @@
       @calculateBMI="calculateBMI"
     />
   </div>
-  <div
-    v-else-if="hasBMI && !hasOutOfRangeBMI"
-    class="bg-navajo-white h-1/2 md:min-h-full relative -top-5 md:-top-0 rounded-xl rounded-s-none rounded-e-none"
-  >
+  <div v-else-if="hasBMI && !hasOutOfRangeBMI">
     <div class="px-8 py-4">
       <!-- BMI Results Wrapper -->
       <div
@@ -70,7 +67,7 @@
 
       <!-- Information Wrapper -->
       <div>
-        <h3 class="mt-3 text-xl text-center">Information</h3>
+        <h3 class="hidden md:block mt-3 text-xl text-center">Information</h3>
         <div class="mt-5 flex text-center text-sm">
           <span class="w-5/6">Underweight</span>
           <span class="w-full">Normal</span>
@@ -99,19 +96,19 @@
   </div>
   <div
     v-else-if="!hasBMI && hasOutOfRangeBMI"
-    class="bg-navajo-white h-1/2 md:min-h-full relative mt-auto rounded-xl rounded-s-none rounded-e-none"
+    class="flex flex-col justify-end"
   >
     <div class="px-8 py-4 text-center">
       <p>Oops! Something went wrong.</p>
       <p>Please check your units and retry.</p>
+      <button
+        @click="closeBmiResults"
+        class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md"
+      >
+        Close
+      </button>
+      <p class="mt-2 text-center text-xs">Powered by Calculate It!</p>
     </div>
-    <button
-      @click="closeBmiResults"
-      class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md"
-    >
-      Close
-    </button>
-    <p class="mt-2 text-center text-xs">Powered by Calculate It!</p>
   </div>
 </template>
 
