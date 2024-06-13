@@ -23,7 +23,7 @@
       >
         <MenuItems class="menu-items-wrapper">
           <!-- Menu Items Wrapper -->
-          <div class="pb-10">
+          <div class="pb-10" ref="menuItemsSubWrapper">
             <div v-for="unit in calcUnits" :key="unit" class="py-1">
               <MenuItem v-slot="{ active }">
                 <a
@@ -62,6 +62,7 @@
 <script setup>
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
 import { ChevronDownIcon } from "@heroicons/vue/20/solid"
+import { ref, watch, onMounted } from "vue"
 
 defineProps({
   unitType: { type: String },
@@ -70,4 +71,43 @@ defineProps({
 })
 
 defineEmits(["setActiveUnit"])
+
+const menuItemsSubWrapper = ref(null)
+const isActive = ref(false)
+
+// watch the menu items wrapper for it's open state
+watch(
+  () => menuItemsSubWrapper.value,
+  (newElement) => {
+    // if the menu is active, get the menu state from the parent element
+    if (newElement) {
+      const menuState = newElement.parentElement.getAttribute(
+        "data-headlessui-state"
+      )
+      isActive.value = menuState === "open" ? true : false
+      adjustMenuHeight()
+    } else {
+      isActive.value = false
+    }
+  }
+)
+
+const adjustMenuHeight = () => {
+  if (!isActive.value) return
+  const menuItemsWrapper = menuItemsSubWrapper.value.parentElement
+
+  const vh = window.innerHeight * 0.01
+  document.documentElement.style.setProperty("--vh", `${vh}px`)
+
+  // set the dynamic height for screens smaller than 768px
+  if (window.innerWidth < 768) {
+    menuItemsWrapper.style.minHeight = "calc(var(--vh, 1vh) * 100)"
+  } else {
+    menuItemsWrapper.style.minHeight = "510px"
+  }
+}
+
+onMounted(() => {
+  window.addEventListener("resize", adjustMenuHeight)
+})
 </script>
