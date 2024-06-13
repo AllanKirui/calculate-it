@@ -28,7 +28,7 @@
 @layer components {
   /* button styles */
   .btn {
-    @apply relative md:py-2.5 w-full rounded-xl md:rounded-lg shadow-sm duration-200 overflow-hidden;
+    @apply relative md:py-2.5 w-full rounded-xl md:rounded-lg shadow-md duration-200 overflow-hidden;
   }
 
   .btn-numbers {
