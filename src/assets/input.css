@@ -133,7 +133,11 @@
 
 /* calculator screen & button container heights */
 .calculator-container {
-  @apply relative grid grid-cols-1 grid-rows-2 md:block max-w-3xl mx-auto md:mt-3 px-3 sm:px-4 py-2 bg-navajo-white md:shadow-xl rounded-xl;
+  @apply relative max-w-3xl mx-auto md:mt-3 bg-navajo-white md:shadow-xl rounded-xl;
+}
+
+.component-wrapper {
+  @apply grid grid-cols-1 grid-rows-2 md:block px-3 sm:px-4 py-2;
 }
 
 .display-container {
