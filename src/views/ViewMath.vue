@@ -1,81 +1,83 @@
 <template>
-  <!-- The Output -->
-  <div class="display-container math-calculator">
-    <!-- Blurred Left & Right Edges For Previous Operations -->
-    <div class="absolute top-4 left-4 w-5 h-8 bg-liver blur-md z-10"></div>
-    <div class="absolute top-4 right-0 w-5 h-8 bg-liver blur-lg z-10"></div>
+  <div class="component-wrapper">
+    <!-- The Output -->
+    <div class="display-container math-calculator">
+      <!-- Blurred Left & Right Edges For Previous Operations -->
+      <div class="absolute top-4 left-4 w-5 h-8 bg-liver blur-md z-10"></div>
+      <div class="absolute top-4 right-0 w-5 h-8 bg-liver blur-lg z-10"></div>
 
-    <!-- Background Text -->
-    <div class="bg-text math-calculator">
-      <span>{{ $route.name }}</span>
-    </div>
-
-    <!-- Previous Operations -->
-    <!-- use the transition-group component to animate the expressions being added to the history -->
-    <div class="expressions-history-wrapper z-20" ref="historyRef">
-      <transition-group tag="div" name="expressions">
-        <span
-          class="inline-block mb-1 md:mb-0 md:ml-4 text-lg"
-          v-for="expression in mathData.history"
-          :key="expression"
-        >
-          <span class="block md:inline-block leading-snug"
-            >{{ expression.prevOperand }}{{ expression.operator
-            }}{{ expression.currOperand }}</span
-          >
-          <span class="relative -top-1 md:top-0">
-            = {{ expression.result }}</span
-          >
-        </span>
-      </transition-group>
-    </div>
-
-    <!-- Current Expression -->
-    <div class="expression-wrapper">
-      <div v-if="mathData.expression">
-        <!-- Current Operand -->
-        <h2
-          class="text-navajo-white duration-200"
-          :class="[
-            mathData.hasEvaluated
-              ? 'text-2xl md:text-[26px]'
-              : 'text-3xl md:text-[40px]'
-          ]"
-        >
-          {{ mathData.expression }}
-        </h2>
-
-        <!-- Result -->
-        <h3
-          class="md:mt-1 duration-200"
-          :class="[
-            mathData.hasEvaluated
-              ? 'text-3xl sm:text-4xl md:text-[40px] text-navajo-white'
-              : 'text-2xl md:text-[26px]'
-          ]"
-        >
-          = {{ mathData.result }}
-        </h3>
+      <!-- Background Text -->
+      <div class="bg-text math-calculator">
+        <span>{{ $route.name }}</span>
       </div>
-      <div v-else>
-        <!-- Default Result -->
-        <h2 class="text-4xl md:text-[40px] text-navajo-white">
-          {{ mathData.defaultResult }}
-        </h2>
+
+      <!-- Previous Operations -->
+      <!-- use the transition-group component to animate the expressions being added to the history -->
+      <div class="expressions-history-wrapper z-20" ref="historyRef">
+        <transition-group tag="div" name="expressions">
+          <span
+            class="inline-block mb-1 md:mb-0 md:ml-4 text-lg"
+            v-for="expression in mathData.history"
+            :key="expression"
+          >
+            <span class="block md:inline-block leading-snug"
+              >{{ expression.prevOperand }}{{ expression.operator
+              }}{{ expression.currOperand }}</span
+            >
+            <span class="relative -top-1 md:top-0">
+              = {{ expression.result }}</span
+            >
+          </span>
+        </transition-group>
+      </div>
+
+      <!-- Current Expression -->
+      <div class="expression-wrapper">
+        <div v-if="mathData.expression">
+          <!-- Current Operand -->
+          <h2
+            class="text-navajo-white duration-200"
+            :class="[
+              mathData.hasEvaluated
+                ? 'text-2xl md:text-[26px]'
+                : 'text-3xl md:text-[40px]'
+            ]"
+          >
+            {{ mathData.expression }}
+          </h2>
+
+          <!-- Result -->
+          <h3
+            class="md:mt-1 duration-200"
+            :class="[
+              mathData.hasEvaluated
+                ? 'text-3xl sm:text-4xl md:text-[40px] text-navajo-white'
+                : 'text-2xl md:text-[26px]'
+            ]"
+          >
+            = {{ mathData.result }}
+          </h3>
+        </div>
+        <div v-else>
+          <!-- Default Result -->
+          <h2 class="text-4xl md:text-[40px] text-navajo-white">
+            {{ mathData.defaultResult }}
+          </h2>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- The Buttons -->
-  <div ref="buttonsContainerRef" class="buttons-container math-calculator">
-    <ConverterButtons
-      mode="math"
-      @appendNumber="appendNumber"
-      @clear="clear"
-      @backspace="backspace"
-      @setOperation="setOperation"
-      @evaluateExpression="evaluateExpression"
-    />
+    <!-- The Buttons -->
+    <div ref="buttonsContainerRef" class="buttons-container math-calculator">
+      <ConverterButtons
+        mode="math"
+        @appendNumber="appendNumber"
+        @clear="clear"
+        @backspace="backspace"
+        @setOperation="setOperation"
+        @evaluateExpression="evaluateExpression"
+      />
+    </div>
   </div>
 </template>
 
@@ -97,6 +99,7 @@ const route = useRoute()
 
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
 const setNumberOfFractionDigits = inject("setNumberOfFractionDigits")
+const adjustCalculatorHeight = inject("adjustCalculatorHeight")
 
 // number input on the calc display
 const numberInput = ref("")
@@ -161,10 +164,14 @@ onBeforeMount(() => {
 onMounted(() => {
   showRippleEffectOnButtons(buttonsContainerRef)
   listenForKeyboardInputs()
+
+  window.addEventListener("resize", adjustCalculatorHeight)
+  adjustCalculatorHeight()
 })
 
 onBeforeUnmount(() => {
   removeListenerForKeyboardInputs()
+  window.removeEventListener("resize", adjustCalculatorHeight)
 })
 
 /*

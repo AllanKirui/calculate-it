@@ -1,48 +1,50 @@
 <template>
-  <!-- The Output -->
-  <div class="display-container">
-    <!-- Background Text -->
-    <div class="bg-text">
-      <span>{{ $route.name }}</span>
+  <div class="component-wrapper">
+    <!-- The Output -->
+    <div class="display-container">
+      <!-- Background Text -->
+      <div class="bg-text">
+        <span>{{ $route.name }}</span>
+      </div>
+
+      <!-- Dropdowns containing unit options -->
+      <!-- Top Units -->
+      <div class="dropdown-container">
+        <TheDropdown
+          :calc-units="calcUnits"
+          :active-unit="massData.topActiveUnit"
+          @setActiveUnit="setActiveUnitTop"
+        />
+        <UnitValue
+          dropdown-owner="top"
+          :converter-data="massData"
+          @setActiveDropdown="setActiveDropdown"
+        />
+      </div>
+
+      <!-- Bottom Units -->
+      <div class="dropdown-container">
+        <TheDropdown
+          :calc-units="calcUnits"
+          :active-unit="massData.bottomActiveUnit"
+          @setActiveUnit="setActiveUnitBottom"
+        />
+        <UnitValue
+          dropdown-owner="bottom"
+          :converter-data="massData"
+          @setActiveDropdown="setActiveDropdown"
+        />
+      </div>
     </div>
 
-    <!-- Dropdowns containing unit options -->
-    <!-- Top Units -->
-    <div class="dropdown-container">
-      <TheDropdown
-        :calc-units="calcUnits"
-        :active-unit="massData.topActiveUnit"
-        @setActiveUnit="setActiveUnitTop"
-      />
-      <UnitValue
-        dropdown-owner="top"
-        :converter-data="massData"
-        @setActiveDropdown="setActiveDropdown"
+    <!-- The Buttons -->
+    <div class="buttons-container" ref="buttonsContainerRef">
+      <ConverterButtons
+        @appendNumber="appendNumber"
+        @clear="clear"
+        @backspace="backspace"
       />
     </div>
-
-    <!-- Bottom Units -->
-    <div class="dropdown-container">
-      <TheDropdown
-        :calc-units="calcUnits"
-        :active-unit="massData.bottomActiveUnit"
-        @setActiveUnit="setActiveUnitBottom"
-      />
-      <UnitValue
-        dropdown-owner="bottom"
-        :converter-data="massData"
-        @setActiveDropdown="setActiveDropdown"
-      />
-    </div>
-  </div>
-
-  <!-- The Buttons -->
-  <div class="buttons-container" ref="buttonsContainerRef">
-    <ConverterButtons
-      @appendNumber="appendNumber"
-      @clear="clear"
-      @backspace="backspace"
-    />
   </div>
 </template>
 
@@ -75,6 +77,7 @@ const convertTopUnitToBottomEquiv = inject("convertTopUnitToBottomEquiv")
 const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
 const convertResultToExponential = inject("convertResultToExponential")
 const setNumberOfFractionDigits = inject("setNumberOfFractionDigits")
+const adjustCalculatorHeight = inject("adjustCalculatorHeight")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
@@ -393,10 +396,14 @@ onMounted(() => {
   if (massData.topUnitValue === "" && massData.bottomUnitValue === "") {
     appendNumber(1)
   }
+
+  window.addEventListener("resize", adjustCalculatorHeight)
+  adjustCalculatorHeight()
 })
 
 onBeforeUnmount(() => {
   removeListenerForKeyboardInputs(massData, numberInput, buttonsContainerRef)
+  window.removeEventListener("resize", adjustCalculatorHeight)
 })
 
 /*

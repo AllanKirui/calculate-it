@@ -1,113 +1,115 @@
 <template>
-  <!-- The Output -->
-  <div class="display-container">
-    <!-- Background Text -->
-    <div class="bg-text">
-      <span>{{ $route.name }}</span>
-    </div>
-
-    <!-- Dropdowns containing unit options -->
-    <!-- Top Units -->
-    <div @click="closeBmiResults" class="dropdown-container">
-      <TheDropdown
-        :calc-units="weightUnits"
-        unit-type="Weight"
-        :active-unit="bmiData.topActiveUnit"
-        @setActiveUnit="setActiveUnitTop"
-      />
-      <UnitValue
-        dropdown-owner="top"
-        :converter-data="bmiData"
-        @setActiveDropdown="setActiveDropdown"
-      />
-    </div>
-
-    <!-- Bottom Units -->
-    <div @click="closeBmiResults" class="dropdown-container">
-      <TheDropdown
-        :calc-units="heightUnits"
-        unit-type="Height"
-        :active-unit="bmiData.bottomActiveUnit"
-        @setActiveUnit="setActiveUnitBottom"
-      />
-      <UnitValue
-        dropdown-owner="bottom"
-        :converter-data="bmiData"
-        @setActiveDropdown="setActiveDropdown"
-      />
-    </div>
-  </div>
-
-  <!-- The Buttons -->
-  <div
-    v-if="!hasBMI && !hasOutOfRangeBMI"
-    class="buttons-container"
-    ref="buttonsContainerRef"
-  >
-    <ConverterButtons
-      mode="bmi"
-      @appendNumber="appendNumber"
-      @clear="clear"
-      @backspace="backspace"
-      @calculateBMI="calculateBMI"
-    />
-  </div>
-  <div v-else-if="hasBMI && !hasOutOfRangeBMI">
-    <div class="px-8 py-4">
-      <!-- BMI Results Wrapper -->
-      <div
-        class="flex justify-center items-center gap-3 pb-2 border-b-4 border-sandy-brown"
-      >
-        <h2 class="text-6xl">{{ userBMI }}</h2>
-        <div class="flex flex-col items-center">
-          <span class="text-3xl">BMI</span>
-          <span class="text-sm">{{ bmiRange }}</span>
-        </div>
+  <div class="component-wrapper">
+    <!-- The Output -->
+    <div class="display-container">
+      <!-- Background Text -->
+      <div class="bg-text">
+        <span>{{ $route.name }}</span>
       </div>
 
-      <!-- Information Wrapper -->
-      <div>
-        <h3 class="hidden md:block mt-3 text-xl text-center">Information</h3>
-        <div class="mt-5 flex text-center text-sm">
-          <span class="w-5/6">Underweight</span>
-          <span class="w-full">Normal</span>
-          <span class="w-5/6">Overweight</span>
-        </div>
-        <div class="mt-3 flex">
-          <span class="h-2 w-5/6 bg-mellow-apricot"></span>
-          <span class="h-2 w-full bg-mango-tango"></span>
-          <span class="h-2 w-5/6 bg-liver"></span>
-        </div>
-        <div class="mt-2 flex">
-          <span class="w-5/6">16.0</span>
-          <span class="w-full">18.5</span>
-          <span class="w-5/6">25.0</span>
-          <span>40.0</span>
-        </div>
+      <!-- Dropdowns containing unit options -->
+      <!-- Top Units -->
+      <div @click="closeBmiResults" class="dropdown-container">
+        <TheDropdown
+          :calc-units="weightUnits"
+          unit-type="Weight"
+          :active-unit="bmiData.topActiveUnit"
+          @setActiveUnit="setActiveUnitTop"
+        />
+        <UnitValue
+          dropdown-owner="top"
+          :converter-data="bmiData"
+          @setActiveDropdown="setActiveDropdown"
+        />
       </div>
-      <button
-        @click="closeBmiResults"
-        class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md"
-      >
-        Close
-      </button>
-      <p class="mt-2 text-center text-xs">Powered by Calculate It!</p>
+
+      <!-- Bottom Units -->
+      <div @click="closeBmiResults" class="dropdown-container">
+        <TheDropdown
+          :calc-units="heightUnits"
+          unit-type="Height"
+          :active-unit="bmiData.bottomActiveUnit"
+          @setActiveUnit="setActiveUnitBottom"
+        />
+        <UnitValue
+          dropdown-owner="bottom"
+          :converter-data="bmiData"
+          @setActiveDropdown="setActiveDropdown"
+        />
+      </div>
     </div>
-  </div>
-  <div
-    v-else-if="!hasBMI && hasOutOfRangeBMI"
-    class="flex flex-col justify-end"
-  >
-    <div class="px-8 py-4 text-center">
-      <p>Oops! Something went wrong.</p>
-      <p>Please check your units and retry.</p>
-      <button
-        @click="closeBmiResults"
-        class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md"
-      >
-        Close
-      </button>
-      <p class="mt-2 text-center text-xs">Powered by Calculate It!</p>
+
+    <!-- The Buttons -->
+    <div
+      v-if="!hasBMI && !hasOutOfRangeBMI"
+      class="buttons-container"
+      ref="buttonsContainerRef"
+    >
+      <ConverterButtons
+        mode="bmi"
+        @appendNumber="appendNumber"
+        @clear="clear"
+        @backspace="backspace"
+        @calculateBMI="calculateBMI"
+      />
+    </div>
+    <div v-else-if="hasBMI && !hasOutOfRangeBMI">
+      <div class="px-8 py-4">
+        <!-- BMI Results Wrapper -->
+        <div
+          class="flex justify-center items-center gap-3 pb-2 border-b-4 border-sandy-brown"
+        >
+          <h2 class="text-6xl">{{ userBMI }}</h2>
+          <div class="flex flex-col items-center">
+            <span class="text-3xl">BMI</span>
+            <span class="text-sm">{{ bmiRange }}</span>
+          </div>
+        </div>
+
+        <!-- Information Wrapper -->
+        <div>
+          <h3 class="hidden md:block mt-3 text-xl text-center">Information</h3>
+          <div class="mt-5 flex text-center text-sm">
+            <span class="w-5/6">Underweight</span>
+            <span class="w-full">Normal</span>
+            <span class="w-5/6">Overweight</span>
+          </div>
+          <div class="mt-3 flex">
+            <span class="h-2 w-5/6 bg-mellow-apricot"></span>
+            <span class="h-2 w-full bg-mango-tango"></span>
+            <span class="h-2 w-5/6 bg-liver"></span>
+          </div>
+          <div class="mt-2 flex">
+            <span class="w-5/6">16.0</span>
+            <span class="w-full">18.5</span>
+            <span class="w-5/6">25.0</span>
+            <span>40.0</span>
+          </div>
+        </div>
+        <button
+          @click="closeBmiResults"
+          class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md"
+        >
+          Close
+        </button>
+        <p class="mt-2 text-center text-xs">Powered by Calculate It!</p>
+      </div>
+    </div>
+    <div
+      v-else-if="!hasBMI && hasOutOfRangeBMI"
+      class="flex flex-col justify-end"
+    >
+      <div class="px-8 py-4 text-center">
+        <p>Oops! Something went wrong.</p>
+        <p>Please check your units and retry.</p>
+        <button
+          @click="closeBmiResults"
+          class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md"
+        >
+          Close
+        </button>
+        <p class="mt-2 text-center text-xs">Powered by Calculate It!</p>
+      </div>
     </div>
   </div>
 </template>
@@ -138,6 +140,7 @@ const removeListenerForKeyboardInputs = inject(
 const showRippleEffectOnButtons = inject("showRippleEffectOnButtons")
 const storeConverterDataLocally = inject("storeConverterDataLocally")
 const getStoredConverterData = inject("getStoredConverterData")
+const adjustCalculatorHeight = inject("adjustCalculatorHeight")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
@@ -279,10 +282,14 @@ onMounted(() => {
   if (bmiData.topUnitValue === "" && bmiData.bottomUnitValue === "") {
     appendNumber(0)
   }
+
+  window.addEventListener("resize", adjustCalculatorHeight)
+  adjustCalculatorHeight()
 })
 
 onBeforeUnmount(() => {
   removeListenerForKeyboardInputs(bmiData, numberInput, buttonsContainerRef)
+  window.removeEventListener("resize", adjustCalculatorHeight)
 })
 
 /*

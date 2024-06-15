@@ -1,50 +1,52 @@
 <template>
-  <!-- The Output -->
-  <div class="display-container">
-    <!-- Background Text -->
-    <div class="bg-text">
-      <span>{{ $route.name }}</span>
+  <div class="component-wrapper">
+    <!-- The Output -->
+    <div class="display-container">
+      <!-- Background Text -->
+      <div class="bg-text">
+        <span>{{ $route.name }}</span>
+      </div>
+
+      <!-- Dropdowns containing unit options -->
+      <!-- Top Units -->
+      <div class="dropdown-container">
+        <TheDropdown
+          :calc-units="calcUnits"
+          :active-unit="temperatureData.topActiveUnit"
+          @setActiveUnit="setActiveUnitTop"
+        />
+        <UnitValue
+          dropdown-owner="top"
+          :converter-data="temperatureData"
+          @setActiveDropdown="setActiveDropdown"
+        />
+      </div>
+
+      <!-- Bottom Units -->
+      <div class="dropdown-container">
+        <TheDropdown
+          :calc-units="calcUnits"
+          :active-unit="temperatureData.bottomActiveUnit"
+          @setActiveUnit="setActiveUnitBottom"
+        />
+        <UnitValue
+          dropdown-owner="bottom"
+          :converter-data="temperatureData"
+          @setActiveDropdown="setActiveDropdown"
+        />
+      </div>
     </div>
 
-    <!-- Dropdowns containing unit options -->
-    <!-- Top Units -->
-    <div class="dropdown-container">
-      <TheDropdown
-        :calc-units="calcUnits"
-        :active-unit="temperatureData.topActiveUnit"
-        @setActiveUnit="setActiveUnitTop"
-      />
-      <UnitValue
-        dropdown-owner="top"
-        :converter-data="temperatureData"
-        @setActiveDropdown="setActiveDropdown"
+    <!-- The Buttons -->
+    <div class="buttons-container" ref="buttonsContainerRef">
+      <ConverterButtons
+        mode="temp"
+        @appendNumber="appendNumber"
+        @clear="clear"
+        @backspace="backspace"
+        @toggleNegativeValue="toggleNegativeValue"
       />
     </div>
-
-    <!-- Bottom Units -->
-    <div class="dropdown-container">
-      <TheDropdown
-        :calc-units="calcUnits"
-        :active-unit="temperatureData.bottomActiveUnit"
-        @setActiveUnit="setActiveUnitBottom"
-      />
-      <UnitValue
-        dropdown-owner="bottom"
-        :converter-data="temperatureData"
-        @setActiveDropdown="setActiveDropdown"
-      />
-    </div>
-  </div>
-
-  <!-- The Buttons -->
-  <div class="buttons-container" ref="buttonsContainerRef">
-    <ConverterButtons
-      mode="temp"
-      @appendNumber="appendNumber"
-      @clear="clear"
-      @backspace="backspace"
-      @toggleNegativeValue="toggleNegativeValue"
-    />
   </div>
 </template>
 
@@ -75,6 +77,7 @@ const storeConverterDataLocally = inject("storeConverterDataLocally")
 const getStoredConverterData = inject("getStoredConverterData")
 const convertTopUnitToBottomEquiv = inject("convertTopUnitToBottomEquiv")
 const convertBottomUnitToTopEquiv = inject("convertBottomUnitToTopEquiv")
+const adjustCalculatorHeight = inject("adjustCalculatorHeight")
 
 // convert the template ref into a data ref
 const buttonsContainerRef = ref(null)
@@ -307,6 +310,9 @@ onMounted(() => {
   ) {
     appendNumber(0)
   }
+
+  window.addEventListener("resize", adjustCalculatorHeight)
+  adjustCalculatorHeight()
 })
 
 onBeforeUnmount(() => {
@@ -315,6 +321,7 @@ onBeforeUnmount(() => {
     numberInput,
     buttonsContainerRef
   )
+  window.removeEventListener("resize", adjustCalculatorHeight)
 })
 
 /*
