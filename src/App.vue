@@ -20,15 +20,6 @@ const adjustHeight = () => {
   const vh = window.innerHeight * 0.01
   document.documentElement.style.setProperty("--vh", `${vh}px`)
   appContainer.value.style.minHeight = "calc(var(--vh, 1vh) * 100)"
-
-  const calcContainer = document.querySelector(".calculator-container")
-
-  // set the dynamic height for screens smaller than 768px
-  if (window.innerWidth < 768) {
-    calcContainer.style.minHeight = "calc(var(--vh, 1vh) * 100 - 80px)"
-  } else {
-    calcContainer.style.minHeight = "100%"
-  }
 }
 
 onMounted(() => {
