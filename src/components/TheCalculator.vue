@@ -542,6 +542,17 @@ const setNumberOfFractionDigits = (number) => {
   return modifiedNumber
 }
 
+const adjustCalculatorHeight = () => {
+  const calcContainer = document.querySelector(".component-wrapper")
+
+  // set the dynamic height for screens smaller than 768px
+  if (window.innerWidth < 768) {
+    calcContainer.style.minHeight = "calc(var(--vh, 1vh) * 100 - 80px)"
+  } else {
+    calcContainer.style.minHeight = "100%"
+  }
+}
+
 provide("appendNumber", appendNumber)
 provide("removeCommas", removeCommas)
 provide("clearAll", clearAll)
@@ -555,4 +566,5 @@ provide("convertTopUnitToBottomEquiv", convertTopUnitToBottomEquiv)
 provide("convertBottomUnitToTopEquiv", convertBottomUnitToTopEquiv)
 provide("convertResultToExponential", convertResultToExponential)
 provide("setNumberOfFractionDigits", setNumberOfFractionDigits)
+provide("adjustCalculatorHeight", adjustCalculatorHeight)
 </script>
