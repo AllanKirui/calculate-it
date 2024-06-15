@@ -1,7 +1,12 @@
 <template>
   <!-- Calculator Container -->
   <div class="calculator-container">
-    <RouterView />
+    <!-- animate route changes with the transition and component components-->
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
