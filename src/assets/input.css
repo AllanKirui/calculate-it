@@ -127,7 +127,7 @@
 
 /* left and right nav blurs for mobile screens */
 .nav-blur {
-  @apply absolute -top-2 bottom-0 w-3 h-full bg-mellow-apricot blur-sm z-10;
+  @apply absolute top-0 bottom-0 w-3 h-full bg-mellow-apricot blur-sm z-10;
 }
 
 .nav-blur-left {

@@ -8,7 +8,7 @@
       </div>
 
       <!-- Nav Bottom -->
-      <div class="relative mt-3 overflow-x-hidden w-full">
+      <div class="relative md:mt-3 pt-2 md:p-0 overflow-x-hidden w-full">
         <!-- Blurred Left & Right Edges to Hint at Horizontal Scrolling on Mobile Screens -->
         <div class="nav-blur nav-blur-left"></div>
         <div class="nav-blur nav-blur-right"></div>
