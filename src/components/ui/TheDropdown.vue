@@ -47,7 +47,7 @@
           <!-- Close Button Wrapper -->
           <div class="absolute w-full px-5 left-0 right-0 bottom-5">
             <button
-              class="w-full p-2 bg-sandy-brown text-seal-brown rounded-md"
+              class="w-full p-2 bg-neon-carrot text-seal-brown rounded-md"
               @click="close"
             >
               Close

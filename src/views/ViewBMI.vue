@@ -88,7 +88,7 @@
         </div>
         <button
           @click="closeBmiResults"
-          class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md"
+          class="w-full mt-4 p-2 bg-neon-carrot text-seal-brown rounded-md"
         >
           Close
         </button>
@@ -104,7 +104,7 @@
         <p>Please check your units and retry.</p>
         <button
           @click="closeBmiResults"
-          class="w-full mt-4 p-2 bg-sandy-brown text-seal-brown rounded-md"
+          class="w-full mt-4 p-2 bg-neon-carrot text-seal-brown rounded-md"
         >
           Close
         </button>
