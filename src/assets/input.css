@@ -61,6 +61,10 @@
     @apply bg-mango-tango;
   }
 
+  .btn.btn-operators.has-image {
+    @apply flex justify-center items-center;
+  }
+
   .btn.btn-clear .circle {
     @apply bg-navajo-white;
   }
