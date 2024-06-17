@@ -43,7 +43,7 @@ import lengthIcon from "@/assets/img/length.svg"
 import timeIcon from "@/assets/img/time.svg"
 import speedIcon from "@/assets/img/speed.svg"
 import temperatureIcon from "@/assets/img/temperature.svg"
-import currencyIcon from "@/assets/img/currency.svg"
+import aboutIcon from "@/assets/img/about.svg"
 
 const linksData = [
   { routeName: "math", imgSrc: calculatorIcon },
@@ -53,7 +53,7 @@ const linksData = [
   { routeName: "time", imgSrc: timeIcon },
   { routeName: "speed", imgSrc: speedIcon },
   { routeName: "temperature", imgSrc: temperatureIcon },
-  { routeName: "currency", imgSrc: currencyIcon }
+  { routeName: "about", imgSrc: aboutIcon }
 ]
 
 const route = useRoute()
