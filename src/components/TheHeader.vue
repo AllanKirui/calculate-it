@@ -35,15 +35,25 @@ import { useRoute } from "vue-router"
 
 import NavLink from "./NavLink.vue"
 
+// Import the images
+import calculatorIcon from "@/assets/img/calculator.svg"
+import bmiIcon from "@/assets/img/bmi.svg"
+import massIcon from "@/assets/img/mass.svg"
+import lengthIcon from "@/assets/img/length.svg"
+import timeIcon from "@/assets/img/time.svg"
+import speedIcon from "@/assets/img/speed.svg"
+import temperatureIcon from "@/assets/img/temperature.svg"
+import currencyIcon from "@/assets/img/currency.svg"
+
 const linksData = [
-  { routeName: "math", imgSrc: "./src/assets/img/calculator.svg" },
-  { routeName: "bmi", imgSrc: "./src/assets/img/bmi.svg" },
-  { routeName: "mass", imgSrc: "./src/assets/img/mass.svg" },
-  { routeName: "length", imgSrc: "./src/assets/img/length.svg" },
-  { routeName: "time", imgSrc: "./src/assets/img/time.svg" },
-  { routeName: "speed", imgSrc: "./src/assets/img/speed.svg" },
-  { routeName: "temperature", imgSrc: "./src/assets/img/temperature.svg" },
-  { routeName: "currency", imgSrc: "./src/assets/img/currency.svg" }
+  { routeName: "math", imgSrc: calculatorIcon },
+  { routeName: "bmi", imgSrc: bmiIcon },
+  { routeName: "mass", imgSrc: massIcon },
+  { routeName: "length", imgSrc: lengthIcon },
+  { routeName: "time", imgSrc: timeIcon },
+  { routeName: "speed", imgSrc: speedIcon },
+  { routeName: "temperature", imgSrc: temperatureIcon },
+  { routeName: "currency", imgSrc: currencyIcon }
 ]
 
 const route = useRoute()
