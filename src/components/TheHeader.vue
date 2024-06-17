@@ -36,14 +36,14 @@ import { useRoute } from "vue-router"
 import NavLink from "./NavLink.vue"
 
 const linksData = [
-  { routeName: "math", imgSrc: "/img/calculator.svg" },
-  { routeName: "bmi", imgSrc: "/img/bmi.svg" },
-  { routeName: "mass", imgSrc: "/img/mass.svg" },
-  { routeName: "length", imgSrc: "/img/length.svg" },
-  { routeName: "time", imgSrc: "/img/time.svg" },
-  { routeName: "speed", imgSrc: "/img/speed.svg" },
-  { routeName: "temperature", imgSrc: "/img/temperature.svg" },
-  { routeName: "currency", imgSrc: "/img/currency.svg" }
+  { routeName: "math", imgSrc: "./src/assets/img/calculator.svg" },
+  { routeName: "bmi", imgSrc: "./src/assets/img/bmi.svg" },
+  { routeName: "mass", imgSrc: "./src/assets/img/mass.svg" },
+  { routeName: "length", imgSrc: "./src/assets/img/length.svg" },
+  { routeName: "time", imgSrc: "./src/assets/img/time.svg" },
+  { routeName: "speed", imgSrc: "./src/assets/img/speed.svg" },
+  { routeName: "temperature", imgSrc: "./src/assets/img/temperature.svg" },
+  { routeName: "currency", imgSrc: "./src/assets/img/currency.svg" }
 ]
 
 const route = useRoute()
