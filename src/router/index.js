@@ -48,6 +48,11 @@ const router = createRouter({
       name: "temperature",
       component: () => import("../views/ViewTemp.vue")
     },
+    {
+      path: "/calculate-it/about",
+      name: "about",
+      component: () => import("../views/ViewAbout.vue")
+    },
     { path: "/:notFound(.*)", redirect: "/calculate-it/math" },
     { path: "/calculate-it/:notFound(.*)", redirect: "/calculate-it/math" }
   ]
