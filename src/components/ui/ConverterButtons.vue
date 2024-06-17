@@ -12,9 +12,14 @@
     </button>
     <button
       @click="handleClick('backspace', null, $event)"
-      class="btn btn-operators"
+      class="btn btn-operators has-image"
     >
-      &laquo;
+      <img
+        src="@/assets/img/delete.svg"
+        width="28"
+        height="28"
+        alt="delete icon"
+      />
     </button>
     <button
       @click="handleClick('setOperation', '÷', $event)"
@@ -94,9 +99,14 @@
   <button
     v-else-if="mode === 'temp' || mode === 'bmi'"
     @click="handleClick('backspace', null, $event)"
-    class="btn btn-operators row-span-1"
+    class="btn btn-operators row-span-1 has-image"
   >
-    &laquo;
+    <img
+      src="@/assets/img/delete.svg"
+      width="28"
+      height="28"
+      alt="delete icon"
+    />
   </button>
 
   <!-- Row 4 Buttons -->
@@ -142,9 +152,14 @@
   <button
     v-else
     @click="handleClick('backspace', null, $event)"
-    class="btn btn-operators row-span-2"
+    class="btn btn-operators row-span-2 has-image"
   >
-    &laquo;
+    <img
+      src="@/assets/img/delete.svg"
+      width="28"
+      height="28"
+      alt="delete icon"
+    />
   </button>
 
   <!-- Row 5 Buttons -->
