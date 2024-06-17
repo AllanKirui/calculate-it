@@ -7,44 +7,49 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/math"
+      redirect: "/calculate-it/math"
     },
     {
-      path: "/math",
+      path: "/calculate-it",
+      redirect: "/calculate-it/math"
+    },
+    {
+      path: "/calculate-it/math",
       name: "math",
       component: ViewMath
     },
     {
-      path: "/bmi",
+      path: "/calculate-it/bmi",
       name: "bmi",
       component: () => import("../views/ViewBMI.vue")
     },
     {
-      path: "/mass",
+      path: "/calculate-it/mass",
       name: "mass",
       component: () => import("../views/ViewMass.vue")
     },
     {
-      path: "/length",
+      path: "/calculate-it/length",
       name: "length",
       component: () => import("../views/ViewLength.vue")
     },
     {
-      path: "/time",
+      path: "/calculate-it/time",
       name: "time",
       component: () => import("../views/ViewTime.vue")
     },
     {
-      path: "/speed",
+      path: "/calculate-it/speed",
       name: "speed",
       component: () => import("../views/ViewSpeed.vue")
     },
     {
-      path: "/temperature",
+      path: "/calculate-it/temperature",
       name: "temperature",
       component: () => import("../views/ViewTemp.vue")
     },
-    { path: "/:notFound(.*)", redirect: "math" }
+    { path: "/:notFound(.*)", redirect: "/calculate-it/math" },
+    { path: "/calculate-it/:notFound(.*)", redirect: "/calculate-it/math" }
   ]
 })
 
