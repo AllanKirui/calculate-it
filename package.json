@@ -9,6 +9,11 @@
     "deploy": "gh-pages -d dist",
     "preview": "vite preview"
   },
+  "author": {
+    "name": "Allan Kirui",
+    "email": "allan.kirui@outlook.com"
+  },
+  "license": "MIT",
   "dependencies": {
     "@headlessui/vue": "^1.7.16",
     "@heroicons/vue": "^2.0.18",
