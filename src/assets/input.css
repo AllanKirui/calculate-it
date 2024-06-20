@@ -169,7 +169,7 @@
 }
 
 .display-container .bg-text {
-  @apply absolute top-5 md:top-1/2 md:-translate-y-1/2 text-4xl sm:text-5xl md:text-7xl text-pearl-copper;
+  @apply absolute top-5 md:top-1/2 md:-translate-y-1/2 text-5xl md:text-7xl text-pearl-copper;
 }
 
 .buttons-container {
