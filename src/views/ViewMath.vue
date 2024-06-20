@@ -395,8 +395,24 @@ const evaluateExpression = () => {
 
 const storeExpression = () => {
   if (!mathData.expression) return
-  const newExpression = parseExpression(mathData.expression)
-  newExpression.result = mathData.result
+
+  // parseExpression returns an object for two operands and an operation
+  //  or a string for only one operand
+  let newExpression = parseExpression(mathData.expression)
+
+  // if only a single operand was input and evaluated
+  if (typeof newExpression === "string") {
+    const currOperand = newExpression
+
+    newExpression = {
+      prevOperand: "",
+      operator: "",
+      currOperand: currOperand,
+      result: mathData.result
+    }
+  } else {
+    newExpression.result = mathData.result
+  }
 
   // if the history array has existing elements, add more to it
   if (mathData.history && mathData.history[0]) {
@@ -432,6 +448,8 @@ const parseExpression = (expression) => {
       }
     }
   }
+
+  return expression
 }
 
 const storeMathDataLocally = () => {
