@@ -40,7 +40,7 @@
             :class="[
               mathData.hasEvaluated
                 ? 'text-2xl md:text-[26px]'
-                : 'text-3xl md:text-[40px]'
+                : 'text-3xl sm:text-4xl md:text-[40px]'
             ]"
           >
             {{ mathData.expression }}
