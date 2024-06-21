@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import ViewMath from "@/views/ViewMath.vue"
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory("/calculate-it/"),
   routes: [
     {
       path: "/",
