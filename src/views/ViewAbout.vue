@@ -1,10 +1,8 @@
 <template>
-  <div
-    class="relative grid grid-cols-1 grid-rows-2 p-4 md:p-6 text-base sm:text-lg md:text-xl text-center"
-  >
+  <div class="about-wrapper">
     <!-- About Text -->
-    <div class="row-start-1 max-w-md md:max-w-xl mx-auto">
-      <h1 class="text-4xl">Calculate It!</h1>
+    <div class="max-w-md md:max-w-xl mx-auto">
+      <h1 class="text-4xl mt-4">Calculate It!</h1>
       <p class="mt-4">
         From concept to code, creating this calculator app with
         <strong>Vue's Composition API</strong> was a rewarding journey.
@@ -18,7 +16,7 @@
     </div>
 
     <!-- About Links -->
-    <div class="row-start-2 max-w-md md:max-w-xl mx-auto mt-auto">
+    <div class="max-w-md md:max-w-xl mx-auto mt-14">
       <p>
         Designed and coded by
         <a
@@ -37,7 +35,7 @@
           >Vue.js</a
         >.
       </p>
-      <p class="mt-1">
+      <p class="mt-2">
         Inspired by this
         <a
           class="bg-mellow-apricot px-1 hover:bg-neon-carrot duration-200 rounded"
@@ -50,3 +48,18 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { onMounted, onBeforeUnmount, inject } from "vue"
+
+const adjustCalculatorHeight = inject("adjustCalculatorHeight")
+
+onMounted(() => {
+  window.addEventListener("resize", adjustCalculatorHeight)
+  adjustCalculatorHeight()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", adjustCalculatorHeight)
+})
+</script>
