@@ -7,7 +7,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "math"
+      redirect: "/math"
     },
     {
       path: "/math",
@@ -49,7 +49,7 @@ const router = createRouter({
       name: "about",
       component: () => import("../views/ViewAbout.vue")
     },
-    { path: "/:pathMatch(.*)*", redirect: "math" }
+    { path: "/:pathMatch(.*)*", redirect: "/math" }
   ]
 })
 
