@@ -9,7 +9,7 @@
       // Redirect to the app's base URL
       var path = window.location.pathname
       var base = "/calculate-it"
-      var redict = base + "/#" + path.substr(base.length)
+      var redirect = base + "/#" + path.substr(base.length)
       if (!path.startsWith(base)) {
         window.location.href = base
       } else if (path !== base + "/") {
