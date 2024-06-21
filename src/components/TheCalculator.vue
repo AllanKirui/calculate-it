@@ -12,6 +12,9 @@
 
 <script setup>
 import { provide } from "vue"
+import { useRoute } from "vue-router"
+
+const route = useRoute()
 
 /*
   Methods
@@ -548,7 +551,14 @@ const setNumberOfFractionDigits = (number) => {
 }
 
 const adjustCalculatorHeight = () => {
-  const calcContainer = document.querySelector(".component-wrapper")
+  let calcContainer
+
+  if (route.name === "about") {
+    calcContainer = document.querySelector(".about-wrapper")
+  } else {
+    // the rest of the components have a 'component-wrapper' class
+    calcContainer = document.querySelector(".component-wrapper")
+  }
 
   // set the dynamic height for screens smaller than 768px
   if (window.innerWidth < 768) {
