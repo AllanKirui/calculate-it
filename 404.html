@@ -3,27 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Page Not Found</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/title-icon.png" />
+    <title>Calculate It!</title>
 
-    <script type="text/javascript">
-      ;(function () {
-        // Redirect to the app's base URL
-        var path = window.location.pathname
-        var base = "/calculate-it"
-        if (path.startsWith(base)) {
-          // Strip the base URL and redirect to the SPA's entry point
-          var newPath = base + "/#" + path.substr(base.length)
-          if (window.location.href !== window.location.origin + newPath) {
-            window.location.replace(newPath)
-          }
-        } else {
-          window.location.href = base
-        }
-      })()
-    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Viga&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>Page Not Found</h1>
-    <p>Redirecting...</p>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
