@@ -49,7 +49,7 @@ const router = createRouter({
       name: "about",
       component: () => import("../views/ViewAbout.vue")
     },
-    { path: "/:notFound(.*)", redirect: "math" }
+    { path: "/:pathMatch(.*)*", redirect: "math" }
   ]
 })
 
