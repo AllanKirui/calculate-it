@@ -6,16 +6,20 @@
     <title>Page Not Found</title>
 
     <script type="text/javascript">
-      // Redirect to the app's base URL
-      var path = window.location.pathname
-      var base = "/calculate-it"
-      var redirect = base + "/#" + path.substr(base.length)
-      if (!path.startsWith(base)) {
-        window.location.href = base
-      } else if (path !== base + "/") {
-        // Strip the base URL and redirect to the SPA's entry point
-        window.location.href = redirect
-      }
+      ;(function () {
+        // Redirect to the app's base URL
+        var path = window.location.pathname
+        var base = "/calculate-it"
+        if (path.startsWith(base)) {
+          // Strip the base URL and redirect to the SPA's entry point
+          var newPath = base + "/#" + path.substr(base.length)
+          if (window.location.href !== window.location.origin + newPath) {
+            window.location.replace(newPath)
+          }
+        } else {
+          window.location.href = base
+        }
+      })()
     </script>
   </head>
   <body>
