@@ -4,17 +4,17 @@ Having previously built [Vue](https://v3.vuejs.org) apps with the **Options API*
 
 ## Table of contents 📖
 
-- [Overview 🔎](#overview-🔎)
-  - [About the challenge 🤷](#about-the-challenge-🤷)
-  - [Screenshots 📷](#screenshots-📷)
-  - [Links 🔗](#links-🔗)
-  - [Quickstart guide 📜](#quickstart-guide-📜)
-- [My process ⚙](#my-process-⚙)
-  - [Built with 🛠✏📐](#built-with-🛠✏📐)
+- [Overview 🔎](#overview-)
+  - [About the challenge 🤷](#about-the-challenge-)
+  - [Screenshots 📷](#screenshots-)
+  - [Links 🔗](#links-)
+  - [Quickstart guide 📜](#quickstart-guide-)
+- [My process ⚙](#my-process-gear)
+  - [Built with 🛠✏📐](#built-with-hammer_and_wrench-pencil-triangular_ruler)
   - [What I learned 🎓](#what-i-learned-🎓)
-  - [Continued development ⏱](#continued-development-⏱)
-  - [Useful resources 💎](#useful-resources-💎)
-- [Author ✍🏾](#author-✍🏾)
+  - [Continued development ⏱](#continued-development-stopwatch)
+  - [Useful resources 💎](#useful-resources-)
+- [Author ✍🏾](#author-)
 
 <br>
 
@@ -73,7 +73,7 @@ To run the code, you need to follow these steps:
 
 <br/>
 
-## My process ⚙
+## My process :gear:
 
 After getting the hang of the **Composition API**, I searched for project ideas to get hands on practice. I decided that building a calculator app would be a great exercise. The design and functionality were largely inspired by this [Calculator by Xiaomi Inc.](https://play.google.com/store/apps/details?id=com.miui.calculator)
 
@@ -83,7 +83,7 @@ Having captured most of my ideas, I initialized the Vue app and began implementi
 
 <br/>
 
-### Built with 🛠✏📐
+### Built with :hammer_and_wrench: :pencil: :triangular_ruler:
 
 - [Vue](https://v3.vuejs.org) - The Progressive JavaScript Framework
 - [Tailwind](https://tailwindcss.com) - Rapidly build modern websites without ever leaving your HTML
@@ -135,7 +135,8 @@ I'd love to hear from you! Feel free to shoot me an email to say hi. Your feedba
 
 Also, if you encounter any _undocumented features_, please let me know 😉
 
-Website 🌍 - [Allan Kirui](https://allankirui.github.io) &nbsp;&nbsp;&middot;&nbsp;&nbsp; Email 📧 - <allan.kirui@outlook.com>
+Website 🌍 - [Allan Kirui](https://allankirui.github.io)
+<br>Email 📧 - <allan.kirui@outlook.com>
 
 <br>
 
